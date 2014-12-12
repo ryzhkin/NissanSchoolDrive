@@ -1,0 +1,22 @@
+{
+    "project_type":"javascript",
+    "debugMode":1,
+    "showFPS":true,
+    "frameRate":60,
+    "id":"gameCanvas",
+    "renderMode":0,
+    "engineDir":"frameworks/cocos2d-html5",
+    "modules":[
+        "cocos2d"
+    ],
+    "jsList":[
+        "src/lib/htmlparser.js",
+        "src/resource.js",
+        "src/assets.js",
+        "src/loader.js",
+        "src/menu.js",
+        "src/video.js",
+        "src/accelerator.js",
+        "src/app.js"
+    ]
+}
