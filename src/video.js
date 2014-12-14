@@ -22,34 +22,11 @@ var Video = cc.Layer.extend({
 	    }      
 	  ]	
 	},
-	playVideo: function (url) {
-	  switch (cc.sys.platform) {
-	    case cc.sys.WINDOWS: {
-	       cc.log("Windows platform");
-	       break;	
-	    }
-	    case cc.sys.ANDROID: {
-	    	cc.log("ANDROID platform");
-	    	jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "playVideo", "(Ljava/lang/String;)V", url);
-	    	break;	
-	    }
-	    case cc.sys.IPAD:
-	    case cc.sys.IPHONE: {
-	    	cc.log("iOS platform");
-	    	break;	
-	    }
-	    default: {
-	      cc.log("UNKNOW platform"); 	
-	      break; 	
-	    }
-	  }	
-	},
 	touchEvent: function (sender, type) {
 	  switch (type) {
 		case ccui.Widget.TOUCH_BEGAN: {
 			if (typeof(sender.videoURL) == 'string') {
-			  cc.log("Try play video > " + sender.videoURL);
-			  this.playVideo(sender.videoURL);
+			  app.playVideo(sender.videoURL);
 		    }	
 			break;
 		}

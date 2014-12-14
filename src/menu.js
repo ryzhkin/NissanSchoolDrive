@@ -196,6 +196,7 @@ var Menu = cc.Layer.extend({
 		         ] 
 	},
 	init: function (options) {
+	  app.menu = this;
 	  this.menuVideo.areas = this.menuVideo.areas.concat(this.topMenuAreas);
       this.menuLessons.areas = this.menuLessons.areas.concat(this.topMenuAreas);
       this.menuGames.areas = this.menuGames.areas.concat(this.topMenuAreas);

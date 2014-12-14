@@ -22,6 +22,11 @@ var assets = {
   
   // Графические ресурсы к уроку Прохождение поворота
   turnIntroBack: 'res/turn/turn-intro-background.jpg',
+  turnChooseBack: 'res/turn/turn-choose-background.jpg',
+  turnType1: 'res/turn/turn-type1.jpg',
+  turnType2: 'res/turn/turn-type2.jpg',
+  turnType3: 'res/turn/turn-type3.jpg',
+  turnHelp: 'res/turn/turn-help.jpg',
   
   // Графические ресурсы к теории
   theoryAcceleratorBack : 'res/theory/accelerator-bg.jpg',

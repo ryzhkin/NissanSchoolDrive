@@ -147,13 +147,35 @@ var app = {
     				  return false;
     			  }
     		  }, clickArea);
-    				  
+
     	  }
-    	  
-    	}.bind(this));
+
+		  }.bind(this));
 	  }	  
   },
 
+  playVideo: function (url) {
+	  switch (cc.sys.platform) {
+	  case cc.sys.WINDOWS: {
+		  cc.log("Windows platform");
+		  break;	
+	  }
+	  case cc.sys.ANDROID: {
+		  cc.log("ANDROID platform");
+		  jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "playVideo", "(Ljava/lang/String;)V", url);
+		  break;	
+	  }
+	  case cc.sys.IPAD:
+	    case cc.sys.IPHONE: {
+	    	cc.log("iOS platform");
+	    	break;	
+	    }
+	    default: {
+	      cc.log("UNKNOW platform"); 	
+	      break; 	
+	    }
+	  }	
+  },
   openURL: function (url) {
 	if (url !== '') {
       cc.log(url);
