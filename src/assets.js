@@ -28,6 +28,10 @@ var assets = {
   turnType3: 'res/turn/turn-type3.jpg',
   turnHelp: 'res/turn/turn-help.jpg',
   
+  
+  // Спрайт машинки
+  car: 'res/car.png',
+  
   // Графические ресурсы к теории
   theoryAcceleratorBack : 'res/theory/accelerator-bg.jpg',
   theoryTurnBack        : 'res/theory/turn-bg.jpg',

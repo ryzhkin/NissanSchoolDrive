@@ -28,3 +28,24 @@ function leadZero(number, length) {
 	}
 	return number;
 }
+
+/**
+ * Вычисляет растояние между 2 точками с координатами.
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @return {Number}
+ */
+var getDistance = function (x1, y1, x2, y2) {
+	return (Math.pow((Math.pow((x2 - x1), 2) +  Math.pow((y2 - y1), 2)), 0.5));
+}
+
+//Вычисляет длинну маршрута
+var getPathDistance = function (path) {
+	var s = 0;
+	for (var i = 0; i < Math.floor(path.length/4)*4; i +=2) {
+		s += getDistance(path[i], path[i + 1], path[i + 2], path[i + 3]);
+	}
+	return s;
+}
