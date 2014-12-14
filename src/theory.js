@@ -72,7 +72,7 @@ var Theory = cc.Layer.extend({
 	  this.onBack = options.onBack;
 	  app.renderMenu(this, this.menuTheory, true);
 	  // Create the scrollview
-	  var maxH = 10000;
+	  var maxH = 15000;
 	  var scrollView = new ccui.ScrollView();
 	  scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
 	  scrollView.setTouchEnabled(true);
@@ -196,6 +196,7 @@ var Theory = cc.Layer.extend({
 					  comment: function( text ) {
 					  }
 				  }); 
+				  currentY = currentY - 50;
 				  panel.setPosition(0,  - currentY);
 				  scrollView.setInnerContainerSize(cc.size(1456, (maxH - currentY)));
 				  this.scrollView = scrollView;

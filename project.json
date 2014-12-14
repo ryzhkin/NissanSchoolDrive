@@ -17,7 +17,9 @@
         "src/loader.js",
         "src/menu.js",
         "src/video.js",
+        "src/theory.js",
         "src/accelerator.js",
+        "src/turn.js",
         "src/app.js"
     ]
 }
