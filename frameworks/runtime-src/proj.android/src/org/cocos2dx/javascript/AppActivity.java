@@ -91,8 +91,13 @@ public class AppActivity extends Cocos2dxActivity{
 
     public static void playVideo(String url) {
          
-      Intent intent = new Intent(Intent.ACTION_VIEW);
+      //Intent intent = new Intent(Intent.ACTION_VIEW);
+      Intent intent = new Intent("android.intent.action.VIEW"); 
       intent.setData(Uri.parse(url));
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+      intent.putExtra ("oneshot", 0);  
+      intent.putExtra ("configchange", 0);  
+
       intent.setDataAndType(Uri.parse(url), "video/mp4");
       //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       baseContext.startActivity(intent);
@@ -117,5 +122,14 @@ public class AppActivity extends Cocos2dxActivity{
   //*/
 
     }
+
+    public static void openURL(String url) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      //intent.setData(Uri.parse(url));
+      //intent.setDataAndType(Uri.parse(url), "video/mp4");
+      baseContext.startActivity(intent);
+    }
+
+
     
 }

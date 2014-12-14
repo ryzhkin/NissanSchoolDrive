@@ -152,6 +152,71 @@ var app = {
     	  
     	}.bind(this));
 	  }	  
+  },
+
+  openURL: function (url) {
+	if (url !== '') {
+      cc.log(url);
+      switch (cc.sys.platform) {
+      case cc.sys.WINDOWS: {
+    	  cc.log("Windows platform");
+    	  break;	
+      }
+      case cc.sys.ANDROID: {
+    	  cc.log("ANDROID platform");
+    	  jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "openURL", "(Ljava/lang/String;)V", url);
+    	  break;	
+      }
+      case cc.sys.IPAD:
+      case cc.sys.IPHONE: {
+    	  cc.log("iOS platform");
+    	  break;	
+      }
+      default: {
+    	  cc.log("UNKNOW platform"); 	
+    	  break; 	
+      }
+      }	
+	}  
+  },
+  share: function(type, text) {
+	 var url   = '';
+	 var purl  = 'http://www.nissan.ru';
+	 var ptitle = 'Школа вождения Nissan!';
+	 var pimg   = 'http://imagizer.imageshack.us/v2/150x100q90/673/3QJVT1.png'; 
+	 switch (type) {
+	   case 'fb': {
+		 url  = 'http://www.facebook.com/sharer.php?s=100';
+		 url += '&p[title]='     + encodeURIComponent(ptitle);
+		 url += '&p[summary]='   + encodeURIComponent(text);
+		 url += '&p[url]='       + encodeURIComponent(purl);
+		 url += '&p[images][0]=' + encodeURIComponent(pimg); 
+		 break;  
+	   }
+	   case 'vk': {
+		 url  = 'http://vkontakte.ru/share.php?';
+		 url += 'url='          + encodeURIComponent(purl);
+		 url += '&title='       + encodeURIComponent(ptitle);
+		 url += '&description=' + encodeURIComponent(text);
+		 url += '&image='       + encodeURIComponent(pimg);
+		 url += '&noparse=true';  
+ 	     break;  
+	   }
+	   case 'tw': {
+		 url  = 'http://twitter.com/share?';
+		 url += 'text='      + encodeURIComponent(ptitle);
+		 url += '&url='      + encodeURIComponent(purl);
+		 url += '&counturl=' + encodeURIComponent(purl);   
+		 break;  
+	   }
+	   case 'od': {
+		 url  = 'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1';
+		 url += '&st.comments=' + encodeURIComponent(text);
+		 url += '&st._surl='    + encodeURIComponent(purl);  
+		 break;  
+	   }
+	 }
+	 this.openURL(url);
   }
 }
 

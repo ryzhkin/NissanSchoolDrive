@@ -14,3 +14,17 @@ clearAllIntervals = function () {
     intervalCount = 0;
     intervalTracking = [];
 }
+
+/**
+ * Число в строку с ведущими нулями
+ * @param number  - число
+ * @param length - кол-во ведущих нулей
+ * @return {*}
+ */
+function leadZero(number, length) {
+	length = (typeof(length) == 'undefined')?2:length;
+	while(number.toString().length < length){
+		number = '0' + number;
+	}
+	return number;
+}

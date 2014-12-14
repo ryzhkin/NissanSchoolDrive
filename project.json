@@ -11,6 +11,7 @@
     ],
     "jsList":[
         "src/lib/htmlparser.js",
+        "src/lib/tools.js",
         "src/resource.js",
         "src/assets.js",
         "src/loader.js",

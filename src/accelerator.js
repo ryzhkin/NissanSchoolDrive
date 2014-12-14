@@ -11,36 +11,36 @@ var Accelerator = cc.Layer.extend({
 	    	w: 306,
 	    	h: 306,
 	    	click: function () {
-	    	  app.accelerator.game();  
+	    		app.accelerator.game();  
 	    	}	
 		},
 		{
-	    	x: 3072/2 - 135,
-	    	y: 1536 - 1174 - 306,
-	    	w: 306,
-	    	h: 306,
-	    	click: function () {
-	    	  app.accelerator.theory();              
-	    	}	
-	    },
-	    {
-	    	x: 3072/2 + 215,
-	    	y: 1536 - 1174 - 306,
-	    	w: 306,
-	    	h: 306,
-	    	click: function () {
-	    	  app.menu = new Menu();	
-	    	  app.runStage(app.menu, 2);
-	    	}	
-	    }
-	  ]
+			x: 3072/2 - 135,
+			y: 1536 - 1174 - 306,
+			w: 306,
+			h: 306,
+			click: function () {
+				app.accelerator.theory();              
+			}	
+		},
+		{
+			x: 3072/2 + 215,
+			y: 1536 - 1174 - 306,
+			w: 306,
+			h: 306,
+			click: function () {
+				app.menu = new Menu();	
+				app.runStage(app.menu, 2);
+			}	
+		}
+		]
 	},
 	menuTheory: {
 		back  : assets.theoryAcceleratorBack,
 		areas : [
-	           {
-	        	   x: 3072/2 -953,
-	        	   y: 1536 - 410 - 270,
+		         {
+		           x: 3072/2 -953,
+		           y: 1536 - 410 - 270,
 	        	   w: 270,
 	        	   h: 270,
 	        	   click: function () {
@@ -72,7 +72,6 @@ var Accelerator = cc.Layer.extend({
 	           }
 	           ]
 	},
-	
 	menuHelp: {
 		back: assets.acceleratorHelpBack,
 		areas: [
@@ -98,18 +97,17 @@ var Accelerator = cc.Layer.extend({
 
 		        ]
 	},
-
 	menuGame: {
 		back: assets.acceleratorGameBack,
 		areas:[
 		       {
 		    	   x     : 1536 - 955,
-         y     : 1536 - 420 - 268,
-         w     : 268,
-         h     : 268,
-         click : function () {
-        	 app.accelerator.help();
-         }
+		    	   y     : 1536 - 420 - 268,
+		    	   w     : 268,
+		    	   h     : 268,
+		    	   click : function () {
+		    		   app.accelerator.help();
+		    	   }
 		       },
 		       {
 		    	   x     : 1536 - 955,
@@ -143,7 +141,64 @@ var Accelerator = cc.Layer.extend({
       ]
 	},
 	menuResult: {
-	  back: assets.acceleratorResult	
+	  back: assets.acceleratorResult,
+	  areas: [
+	    {
+	    	x: 1536 - 953,
+	        y: 1536 - 410 - 270,
+	        w: 270,
+	        h: 270,
+	        click: function () {
+	          app.menu = new Menu();	
+		      app.runStage(app.menu, 2);
+	        }
+	    },
+	    {
+	    	x: 1536 - 953,
+	        y: 1536 - 750 - 270,
+	        w: 270,
+	        h: 270,
+	        click: function () {
+	          app.accelerator.game();
+	        }
+	    },
+	    {
+	    	x: 1536 - 260,
+	        y: 1536 - 1165 - 99,
+	        w: 99,
+	        h: 99,
+	        click: function () {
+	          app.share('fb', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
+	        }
+	    },
+	    {
+	    	x: 1536 - 133,
+	        y: 1536 - 1165 - 99,
+	        w: 99,
+	        h: 99,
+	        click: function () {
+	          app.share('vk', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
+	        }
+	    },
+	    {
+	    	x: 1536 - 6,
+	        y: 1536 - 1165 - 99,
+	        w: 99,
+	        h: 99,
+	        click: function () {
+	          app.share('tw', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
+	        }
+	    },
+	    {
+	    	x: 1536 + 121,
+	        y: 1536 - 1165 - 99,
+	        w: 99,
+	        h: 99,
+	        click: function () {
+	          app.share('od', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
+	        }
+	    }
+	  ]
 	},
 	
 	init: function () {
@@ -174,10 +229,11 @@ var Accelerator = cc.Layer.extend({
 			break;
 		}
 	},
-	theory: function () {
-	  app.renderMenu(this, this.menuTheory, true);
 	
-  	  // Create the scrollview
+	theory: function () {
+		app.renderMenu(this, this.menuTheory, true);
+
+		// Create the scrollview
 	  var maxH = 10000;
 
 
@@ -185,7 +241,7 @@ var Accelerator = cc.Layer.extend({
 	  scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
 	  scrollView.setTouchEnabled(true);
 	  scrollView.setContentSize(cc.size(1456, 1044));
-		scrollView.setInnerContainerSize(cc.size(1456, maxH));
+	  scrollView.setInnerContainerSize(cc.size(1456, maxH));
 		scrollView.x = 932;
 		scrollView.y = 134;
 		this.addChild(scrollView);
@@ -196,8 +252,8 @@ var Accelerator = cc.Layer.extend({
 		scroll.setPositionY(1150);
 		this.addChild(scroll);
 		this.scroll = scroll;
-		
-		
+
+
 		scrollView.addTouchEventListener(this.touchEvent, this);
 		
 		var panel = new ccui.Layout();
@@ -337,11 +393,11 @@ var Accelerator = cc.Layer.extend({
 	  
 	  /*cc.log('minAngle = ' + minAngle);	
 	  cc.log('maxAngle = ' + maxAngle);*/
-	  
+
 	  //minAngle = /*(-1)*minAngle + 90*/180 + 30 - 45;
 	  //maxAngle = /*(-1)*maxAngle + 90*/180 + 30;
-		//minAngle = 165;
-		//maxAngle = 210;
+	  //minAngle = 165;
+	  //maxAngle = 210;
 	  var dAngle = 5;
 	  var verts = [];	
 	  verts.push(cc.p(x, y));
@@ -365,7 +421,7 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 0,
 		anchorY: 1	 
   	 });
-  	 this.addChild(lightYellow);
+  	 this.menu.addChild(lightYellow);
   	 
   	var lightGreen = new cc.Sprite(assets.acceleratorGreenLight);
   	lightGreen.attr({
@@ -375,7 +431,7 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 0,
 		anchorY: 1	 
  	 });
- 	 this.addChild(lightGreen);
+ 	 this.menu.addChild(lightGreen);
  	 
  	var lightRed = new cc.Sprite(assets.acceleratorRedLight);
   	lightRed.attr({
@@ -385,7 +441,7 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 0,
 		anchorY: 1	 
  	 });
- 	 this.addChild(lightRed);
+ 	 this.menu.addChild(lightRed);
  	 
  	 var arrowTah = new cc.Sprite(assets.acceleratorArrowTah);
   	 arrowTah.attr({
@@ -395,7 +451,7 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 6/12,
 		anchorY: 1 - 106/116
  	 });
- 	 this.addChild(arrowTah);
+ 	 this.menu.addChild(arrowTah);
  	 
  	 
  	 var arrowSpeed = new cc.Sprite(assets.acceleratorArrowSpeed);
@@ -406,7 +462,7 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 7/14,
 		anchorY: 1 - 112/123
  	 });
- 	 this.addChild(arrowSpeed);
+ 	 this.menu.addChild(arrowSpeed);
  	 
  	 var pedal = new cc.Sprite(assets.acceleratorPedal);
  	 pedal.attr({
@@ -415,7 +471,7 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 0,
 		anchorY: 1
  	 });
- 	 this.addChild(pedal);
+ 	 this.menu.addChild(pedal);
  	 
  	 
  	this.updateTah = function () {
@@ -434,7 +490,7 @@ var Accelerator = cc.Layer.extend({
     var deltaLimit = 45; 
     
  	var limit = new cc.DrawNode();
- 	this.addChild(limit);
+ 	this.menu.addChild(limit);
  	this.drawSector(limit, app.localX(1536 -220), app.localY(1536 - 1076), 150, startLimit,  startLimit + deltaLimit);
     
 
@@ -483,9 +539,17 @@ var Accelerator = cc.Layer.extend({
      }.bind(this), 500); 	 
     },
     result: function (time) {
-    	console.log('Stop Game');
-    	//app.clearStage();
-    	//this.removeAllChildren(true);  
-    	app.renderMenu(this, this.menuResult, true);
+      app.renderMenu(this, this.menuResult, true);
+      var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
+      console.log('Stop Game = ' + timeStr);
+      var line = new cc.LabelTTF(
+    		  timeStr,
+    		  'res/fonts/nissanagmed.ttf',
+			  190
+	  );
+	  line.setPosition(1536 - 454 - 100 - 50, 1536 - 684);
+	  line.setAnchorPoint(0, 1);
+	  line.setColor(cc.color(198, 22, 51, 255));
+      this.menu.addChild(line);
     }
 });
