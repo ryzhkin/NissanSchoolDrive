@@ -39,6 +39,7 @@ var app = {
   },
   // Clear stage
   clearStage: function () {
+	  clearAllIntervals();
 	  this.game.stage.removeAllChildren(true);  
   },
   // Run stage
@@ -66,9 +67,11 @@ var app = {
   renderMenu: function (layer, menu, debug) {
 	  //debug = false;
 	  if (typeof(layer.menu) == 'undefined') {
+		clearAllIntervals();  
 		layer.menu = new cc.Layer();  
 		layer.addChild(layer.menu);
 	  } else {
+		clearAllIntervals();  
 		layer.menu.removeAllChildren(true);  
 	  }
 	  

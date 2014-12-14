@@ -7,7 +7,20 @@ var assets = {
   menuGamesBack    : 'res/menu/menu-games.png',
   menuSiteBack     : 'res/menu/menu-site.png',
   videoBack        : 'res/video/video-background.jpg',
-  acceleratorIntroBack  : 'res/accelerator/accelerator-intro-background.jpg',
+  
+  // Графические ресурсы к уроку Управление газом
+  acceleratorIntroBack   : 'res/accelerator/accelerator-intro-background.jpg',
+  acceleratorGameBack    : 'res/accelerator/accelerator-game-background.jpg',
+  acceleratorHelpBack    : 'res/accelerator/accelerator-help-background.jpg',
+  acceleratorGreenLight  : 'res/accelerator/accelerator-green-light.png',
+  acceleratorRedLight    : 'res/accelerator/accelerator-red-light.png',
+  acceleratorYellowLight : 'res/accelerator/accelerator-yellow-light.png',
+  acceleratorArrowTah    : 'res/accelerator/accelerator-arrow.png',
+  acceleratorArrowSpeed  : 'res/accelerator/accelerator-arrow2.png',
+  acceleratorPedal       : 'res/accelerator/accelerator-pedal.png',
+  acceleratorResult      : 'res/accelerator/accelerator-result.jpg',
+  
+  // Графические ресурсы к теории
   theoryAcceleratorBack : 'res/theory/accelerator-bg.jpg',
   theoryTurnBack        : 'res/theory/turn-bg.jpg',
   theorySlalomBack      : 'res/theory/slalom-bg.jpg'
