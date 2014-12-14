@@ -20,6 +20,9 @@ var assets = {
   acceleratorPedal       : 'res/accelerator/accelerator-pedal.png',
   acceleratorResult      : 'res/accelerator/accelerator-result.jpg',
   
+  // Графические ресурсы к уроку Прохождение поворота
+  turnIntroBack: 'res/turn/turn-intro-background.jpg',
+  
   // Графические ресурсы к теории
   theoryAcceleratorBack : 'res/theory/accelerator-bg.jpg',
   theoryTurnBack        : 'res/theory/turn-bg.jpg',
