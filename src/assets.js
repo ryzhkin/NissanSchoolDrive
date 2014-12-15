@@ -34,6 +34,10 @@ var assets = {
   rollIntroBack : 'res/roll/roll-intro.jpg',
   rollGameBack  : 'res/roll/roll-game.jpg',
   
+  //Графические ресурсы к уроку Прохождение круга
+  circleIntroBack : 'res/circle/circle-intro.jpg',
+  circleGameBack  : 'res/circle/circle-game.jpg',
+  
   
   
   //Графические ресурсы к уроку Управляемый занос

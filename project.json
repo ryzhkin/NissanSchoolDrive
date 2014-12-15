@@ -20,6 +20,7 @@
         "src/accelerator.js",
         "src/turn.js",
         "src/roll.js",
+        "src/circle.js",
         "src/slalom.js",
         "src/app.js"
     ]

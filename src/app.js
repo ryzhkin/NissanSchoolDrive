@@ -201,10 +201,14 @@ var app = {
 		}
   },
   
-  moveByPath: function (path, sprite, time, onSuccess) {
+  moveByPath: function (path, sprite, time, onSuccess, forCircle) {
 		var action = cc.cardinalSplineTo(time, path, 0);
 		//action.easing(cc.easeIn(time));
 		action.easing(cc.easeInOut(time));
+		
+		//action.speed = -10;
+		
+		
 		  
 		var prevCarPosition = cc.p(sprite.x, sprite.y);
 		var prevAngle = sprite.rotation;
@@ -215,6 +219,11 @@ var app = {
 				var d = getDistance(p.x, p.y, prevCarPosition.x, prevCarPosition.y);
 				if (d > 20) {
 					var alpha = 180 - (180/Math.PI)*Math.acos((prevCarPosition.y - p.y)/d);
+					if (forCircle == true && (alpha - prevAngle) < 0 && Math.abs(alpha - prevAngle) > 5 ) {
+					  cc.log('gop');	
+					  alpha = 180 + (180/Math.PI)*Math.acos((prevCarPosition.y - p.y)/d);	
+					}
+					cc.log(alpha);
 					if (Math.abs(alpha - prevAngle) < 40) {
 					  sprite.rotation = alpha;
 					  prevAngle = alpha;	
