@@ -80,3 +80,34 @@ var getPathPointsDistance = function (path) {
 	s = getPathDistance(p);
 	return s;
 }
+
+// Немного векторной алгебры
+var alg = {
+		v2f: function (x, y) {
+			return {
+				x: x,
+				y: y
+			}	
+		},
+		v2fLength: function (v) {
+			return (Math.pow((Math.pow(v.x, 2) +  Math.pow(v.y, 2)), 0.5));	
+		},	
+		v2fMult: function (p, floatVar) {
+			return {
+				x: p.x*floatVar,
+				y: p.y*floatVar
+			} 
+		},
+		v2fNormalize : function (v) {
+			return this.v2fMult(v, 1.0 / this.v2fLength(v));	
+		},
+		v2fMultVectors: function (v1, v2) {
+			return (v1.x*v2.x + v1.y*v2.y);
+		},
+		v2fAngelVectors: function (v1, v2) {
+			v1 = this.v2fNormalize(v1);
+			v2 = this.v2fNormalize(v2);
+			var angel = (180/Math.PI*Math.acos(this.v2fMultVectors(v1, v2)));
+			return (!isNaN(angel))?angel:90;
+		}
+}

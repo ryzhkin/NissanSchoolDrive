@@ -252,7 +252,7 @@ var Turn = cc.Layer.extend({
 	  var path = [];
 	  var oldX = car.x;
 	  var oldY = car.y;
-	  var mDelta = 2;
+	  var mDelta = 20;
 	  
 	  
 	  var pathLine = new cc.DrawNode();
@@ -288,7 +288,7 @@ var Turn = cc.Layer.extend({
 				path.push(location);
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
-			    app.moveByPath(path, car, 7, function () {
+				app.moveByPathConstant(path, car, 7, function () {
 					cc.log('Final !!!');  
 					var origDistancePath = getPathDistance(track.path);
 					var userDistancePath = getPathPointsDistance(path);
