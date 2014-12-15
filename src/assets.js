@@ -45,6 +45,7 @@ var assets = {
   
   // Графические ресурсы к игре Память
   memoryIntroBack : 'res/memory/memory-background.jpg',
+  memoryQuestions : 'res/memory/memory-questions.jpg',
   
   
   // Спрайт машинки
