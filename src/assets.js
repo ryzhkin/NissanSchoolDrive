@@ -38,12 +38,10 @@ var assets = {
   circleIntroBack : 'res/circle/circle-intro.jpg',
   circleGameBack  : 'res/circle/circle-game.jpg',
   
-  
-  
   //Графические ресурсы к уроку Управляемый занос
   slalomIntroBack : 'res/slalom/slalom-intro.jpg',
   slalomGameBack  : 'res/slalom/slalom-game.jpg',
-  
+  slalomHelp      : 'res/slalom/slalom-help.jpg',
   
   // Спрайт машинки
   car: 'res/car.png',
