@@ -19,6 +19,8 @@
         "src/theory.js",
         "src/accelerator.js",
         "src/turn.js",
+        "src/roll.js",
+        "src/slalom.js",
         "src/app.js"
     ]
 }

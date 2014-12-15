@@ -96,8 +96,7 @@ var Menu = cc.Layer.extend({
 	        	 w: 278,
 	        	 click: function () {
 	        	   cc.log('Go to lesson #1');	
-	        	   app.accelerator = new Accelerator();
-	        	   app.runStage(app.accelerator);
+	        	   app.runStage(new Accelerator());
 	        	 }
 	         },
 	         {
@@ -112,13 +111,14 @@ var Menu = cc.Layer.extend({
 	         },
 	         {
 	        	 x: 1382,
-    	 y: 146,
-    	 h: 388,
-    	 w: 278,
-    	 click: function () {
-    	   cc.log('Go to lesson #3');	 
-    	 }
-       },
+    	         y: 146,
+    	         h: 388,
+    	         w: 278,
+    	         click: function () {
+    	            cc.log('Go to lesson #3');
+    	            app.runStage(new Roll());
+    	         }
+             },
        {
       	 x: 1704,
       	 y: 146,

@@ -173,6 +173,7 @@ var Accelerator = cc.Layer.extend({
 	},
 	
 	init: function () {
+	  app.accelerator = this;	
 	  app.renderMenu(this, this.menuIntro, true);
 	},
 	help: function () {

@@ -30,12 +30,24 @@ var assets = {
   turnResult: 'res/turn/turn-result.jpg',
   
   
+  //Графические ресурсы к уроку Прохождение связки поворотов
+  rollIntroBack : 'res/roll/roll-intro.jpg',
+  rollGameBack  : 'res/roll/roll-game.jpg',
+  
+  
+  
+  //Графические ресурсы к уроку Управляемый занос
+  slalomIntroBack : 'res/slalom/slalom-intro.jpg',
+  slalomGameBack  : 'res/slalom/slalom-game.jpg',
+  
+  
   // Спрайт машинки
   car: 'res/car.png',
   
   // Графические ресурсы к теории
   theoryAcceleratorBack : 'res/theory/accelerator-bg.jpg',
   theoryTurnBack        : 'res/theory/turn-bg.jpg',
+  theoryRollBack        : 'res/theory/turn-bg.jpg',
   theorySlalomBack      : 'res/theory/slalom-bg.jpg'
 };
 

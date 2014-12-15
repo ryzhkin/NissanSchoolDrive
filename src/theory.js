@@ -155,6 +155,11 @@ var Theory = cc.Layer.extend({
 							  //currentY = currentY - 10;	
 							  break;	
 						  }	
+						  case 'n': {
+							  cc.log('Разрыв!');
+							  currentY = currentY - 35;	
+							  break;	
+						  }	
 						  default: {
 							  txt = '';	
 							  break;	
