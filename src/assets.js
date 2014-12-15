@@ -27,6 +27,7 @@ var assets = {
   turnType2: 'res/turn/turn-type2.jpg',
   turnType3: 'res/turn/turn-type3.jpg',
   turnHelp: 'res/turn/turn-help.jpg',
+  turnResult: 'res/turn/turn-result.jpg',
   
   
   // Спрайт машинки

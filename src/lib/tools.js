@@ -45,7 +45,19 @@ var getDistance = function (x1, y1, x2, y2) {
 var getPathDistance = function (path) {
 	var s = 0;
 	for (var i = 0; i < Math.floor(path.length/4)*4; i +=2) {
-		s += getDistance(path[i], path[i + 1], path[i + 2], path[i + 3]);
+		var d = getDistance(path[i], path[i + 1], path[i + 2], path[i + 3]);
+		s += (!isNaN(parseFloat(d)))?d:0;
 	}
+	return s;
+}
+
+var getPathPointsDistance = function (path) {
+	var s = 0;
+	var p = [];
+	for (var i = 0; i < path.length; i++) {
+	  p.push(path[i].x);
+	  p.push(path[i].y);
+	}
+	s = getPathDistance(p);
 	return s;
 }

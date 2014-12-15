@@ -352,7 +352,7 @@ var Accelerator = cc.Layer.extend({
     		  'res/fonts/nissanagmed.ttf',
 			  190
 	  );
-	  line.setPosition(1536 - 454 - 100 - 50, 1536 - 684);
+      line.setPosition(app.localX(1536 - 454), app.localY(1536 - 684));
 	  line.setAnchorPoint(0, 1);
 	  line.setColor(cc.color(198, 22, 51, 255));
       this.menu.addChild(line);

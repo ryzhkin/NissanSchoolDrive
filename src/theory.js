@@ -52,7 +52,7 @@ var Theory = cc.Layer.extend({
 
 			var p = 100 - Math.round((Math.abs(this.scrollView.getInnerContainer().getPositionY())/this.scrollView.getInnerContainerSize().height)*100);
 			//cc.log(p + ' %');
-			this.scroll.setPositionY(1150 - 920*(p/100));
+			this.scroll.setPositionY(app.localY(1150 - 920*(p/100)));
 			break;
 		case ccui.Widget.TOUCH_ENDED:
 			//cc.log("Touch Up");
@@ -72,20 +72,20 @@ var Theory = cc.Layer.extend({
 	  this.onBack = options.onBack;
 	  app.renderMenu(this, this.menuTheory, true);
 	  // Create the scrollview
-	  var maxH = 15000;
+	  var maxH = 10000;
 	  var scrollView = new ccui.ScrollView();
 	  scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
 	  scrollView.setTouchEnabled(true);
-	  scrollView.setContentSize(cc.size(1456, 1044));
-	  scrollView.setInnerContainerSize(cc.size(1456, maxH));
-	  scrollView.x = 932;
-	  scrollView.y = 134;
+	  scrollView.setContentSize(cc.size(1456 + 100, 1044));
+	  scrollView.setInnerContainerSize(cc.size(1456 + 100, maxH));
+	  scrollView.x = app.localX(932);
+	  scrollView.y = app.localY(134);
 	  this.addChild(scrollView);
 
 	  var scroll = new ccui.ImageView();
 	  scroll.loadTexture("res/theory/scroll.jpg");
-	  scroll.setPositionX(2270);
-	  scroll.setPositionY(1150);
+	  scroll.setPositionX(app.localX(2270 + 171));
+	  scroll.setPositionY(app.localY(1150));
 	  this.addChild(scroll);
 	  this.scroll = scroll;
 
@@ -128,8 +128,8 @@ var Theory = cc.Layer.extend({
 						  }
 						  case 'h2': {
 							  txtH = 35;
-							  buttomPadding = 0;
-							  topPadding = 40;
+							  buttomPadding = 10;
+							  topPadding = 50;
 							  break;	
 						  }
 						  case 'li': {
