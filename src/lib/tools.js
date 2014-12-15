@@ -1,3 +1,22 @@
+/**
+ * Перемешивает члены массива случайным образом
+ * @param b
+ * @return {*}
+ */
+Array.prototype.shuffle = function( b ) {
+	var i = this.length, j, t;
+	while( i )
+	{
+		j = Math.floor( ( i-- ) * Math.random() );
+		t = b && typeof this[i].shuffle!=='undefined' ? this[i].shuffle() : this[i];
+		this[i] = this[j];
+		this[j] = t;
+	}
+
+	return this;
+};
+
+
 var intervalTracking = new Array();
 var intervalCount=0;
 

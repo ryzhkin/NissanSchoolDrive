@@ -150,7 +150,8 @@ var Menu = cc.Layer.extend({
            h: 388,
            w: 278,
            click: function () {
-             cc.log('Go to game #1');	 
+             cc.log('Go to game #1');
+             app.runStage(new Memory());
            }
          },
          {

@@ -22,6 +22,7 @@
         "src/roll.js",
         "src/circle.js",
         "src/slalom.js",
+        "src/memory.js",
         "src/app.js"
     ]
 }
