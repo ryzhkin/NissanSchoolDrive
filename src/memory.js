@@ -26,8 +26,8 @@ var Memory = cc.Layer.extend({
       app.renderMenu(this, this.menuIntro, true);
 	},
 	game: function (tracks) {
-	  //tracks.shuffle(true);
-	  var track = tracks[0];
+	  tracks.shuffle(true);
+	  var track = tracks[0]; 
 	  this.menuGame.back = 'res/memory/' + track.track; 	
 	  app.renderMenu(this, this.menuGame, true);
 	  var car = new cc.Sprite(assets.car);

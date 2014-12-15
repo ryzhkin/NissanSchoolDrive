@@ -135,8 +135,9 @@ var Theory = cc.Layer.extend({
 						  case 'li': {
 							  fontName = 'res/fonts/nissanaglig.ttf';
 							  txtH = 35;
-							  buttomPadding = 5;
+							  buttomPadding = 10;
 							  leftPadding   = 50;
+							  currentY = currentY - 35;	
 							  if (prevTag == 'li') {
 								  liCounter++;
 							  } else {
