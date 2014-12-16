@@ -3,20 +3,23 @@ var GameScene = cc.Scene.extend({
 	stage: null,
 	ctor: function () {
  	  this._super();
-	  this.stage = new cc.Layer();  
-	  this.addChild(this.stage, 1);
+ 	  this.stage = new cc.Layer();  
+ 	  this.addChild(this.stage, 1);
 	},
 	onEnter: function () {
 		this._super();
-	}
-
+		//this.scheduleUpdate();
+	}/*,
+	update: function (dt) {
+      cc.log('update  ...');  
+    }*/
 });
 
 
 var app = {
-	 game: null,		
-	 // Init Application
-	 init: function () {
+  game: null,		
+  // Init Application
+  init: function () {
 	 this.game = new GameScene();
 	 cc.director.runScene(this.game);
 	 
@@ -37,8 +40,6 @@ var app = {
 	 
 	 /*this.menu = new Menu();
 	 this.runStage(this.menu);	*/	
-	 
-	
   },
   // Clear stage
   clearStage: function () {

@@ -23,6 +23,7 @@
         "src/circle.js",
         "src/slalom.js",
         "src/memory.js",
+        "src/reaction.js",
         "src/app.js"
     ]
 }

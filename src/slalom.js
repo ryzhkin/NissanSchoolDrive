@@ -241,7 +241,7 @@ var Slalom = cc.Layer.extend({
          x           : app.localX(2190),
          y           : app.localY(292),
          radius      : 264,
-         maxVelocity : 10
+         maxVelocity : 15
       });
       
       cc.eventManager.addListener({
@@ -273,6 +273,7 @@ var Slalom = cc.Layer.extend({
       }, this.menu);
 
       var origDistancePath = getPathDistance(track.path);
+      
       var gameTick = setIntervalG(function() {
     	  var prevPosition = {
     	    x: car.x,
@@ -307,6 +308,8 @@ var Slalom = cc.Layer.extend({
              
            }  
       }.bind(this), 1000/60);
+      //*/
+      
 	},
 	result: function (percent) {
 		app.renderMenu(this, this.menuResult, true);	

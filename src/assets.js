@@ -48,6 +48,24 @@ var assets = {
   memoryQuestions : 'res/memory/memory-questions.jpg',
   memorySelect    : 'res/memory/memory-option-select.png',
   
+  // Графические ресурсы к игре Реакция
+  reactionIntroBack : 'res/reaction/reaction-background.jpg',
+  reactionGameBack  : 'res/reaction/reaction-game-background.jpg',
+  reactionCarCenter : 'res/reaction/reaction-car-center.png',
+  reactionCarLeft   : 'res/reaction/reaction-car-left.png',
+  reactionCarRight  : 'res/reaction/reaction-car-right.png',
+  reactionBaner     : 'res/reaction/reaction-banerX2.png',
+  reactionLight1    : 'res/reaction/reaction-light1.png',
+  reactionLight2    : 'res/reaction/reaction-light2.png',
+  reactionLight3    : 'res/reaction/reaction-light3.png',
+  reactionLight4    : 'res/reaction/reaction-light4.png',
+  reactionLight5    : 'res/reaction/reaction-light5.png',
+  reactionPanel     : 'res/reaction/reaction-panel.png',
+  reactionPedalLeft : 'res/reaction/reaction-pedal-left.png',
+  reactionPedalRight: 'res/reaction/reaction-pedal-right.png',
+  reactionResult1   : 'res/reaction/reaction-result1.jpg',
+  reactionResult2   : 'res/reaction/reaction-result2.jpg',
+  
   // Спрайт машинки
   car: 'res/car.png',
   
