@@ -281,6 +281,7 @@ var app = {
 	  case cc.sys.IPAD:
 	    case cc.sys.IPHONE: {
 	    	cc.log("iOS platform");
+	    	jsb.reflection.callStaticMethod("RootViewController", "openVideoWithUrl:", url);
 	    	break;	
 	    }
 	    default: {
@@ -305,6 +306,7 @@ var app = {
       case cc.sys.IPAD:
       case cc.sys.IPHONE: {
     	  cc.log("iOS platform");
+    	  jsb.reflection.callStaticMethod("RootViewController", "openLinkWithUrl:", url);
     	  break;	
       }
       default: {
