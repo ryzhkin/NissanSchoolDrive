@@ -110,7 +110,9 @@ var app = {
 				  x: this.localX(area.x),
 				  y: this.localY(area.y),
 				  height  : area.h,
-				  width   : area.w
+				  width   : area.w,
+				  //tag     : area.tag,
+				  options : area.options
 			  });
 
 
@@ -122,7 +124,7 @@ var app = {
   	    	cc.color(255, 13, 255, (debug == true)?255:1) 
   	      );
     	  
-    	  if (typeof(area.click) == 'function') {
+			  if (typeof(area.click) == 'function') {
     		  /*
     		  cc.eventManager.addListener({
     			  event: cc.EventListener.MOUSE,
@@ -147,7 +149,7 @@ var app = {
     				  //Check the click area
     				  if (cc.rectContainsPoint(rect, locationInNode)) {       
     					  //cc.log("sprite began... x = " + locationInNode.x + ", y = " + locationInNode.y);
-    					  area.click();
+    					  area.click(target);
     					  return true;
     				  }
     				  return false;
