@@ -111,3 +111,19 @@ var alg = {
 			return (!isNaN(angel))?angel:90;
 		}
 }
+
+var help = {
+		extend: function(destination, source) {
+		    for (var property in source)
+		        destination[property] = source[property];
+		    return destination;
+		},
+		hexToRgb: function (hex) {
+			var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+			return result ? {
+				r: parseInt(result[1], 16),
+				g: parseInt(result[2], 16),
+				b: parseInt(result[3], 16)
+			} : null;
+		}
+}

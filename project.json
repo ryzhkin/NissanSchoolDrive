@@ -7,11 +7,14 @@
     "renderMode":0,
     "engineDir":"frameworks/cocos2d-html5",
     "modules":[
-        "cocos2d"
+        "cocos2d",
+        "chipmunk",
+        "box2d"
     ],
     "jsList":[
         "src/lib/htmlparser.js",
         "src/lib/tools.js",
+        "src/lib/Box2dWeb-2.1.a.3.min.js",
         "src/assets.js",
         "src/loader.js",
         "src/menu.js",
@@ -24,6 +27,7 @@
         "src/slalom.js",
         "src/memory.js",
         "src/reaction.js",
+        "src/coordination.js",
         "src/app.js"
     ]
 }

@@ -66,6 +66,12 @@ var assets = {
   reactionResult1   : 'res/reaction/reaction-result1.jpg',
   reactionResult2   : 'res/reaction/reaction-result2.jpg',
   
+  
+  // Графические ресурсы к игре Координация
+  coordinationIntroBack : 'res/coordination/coordination-background.jpg',
+  coordinationGameBack  : 'res/coordination/coordination-game-background.jpg',
+  
+  
   // Спрайт машинки
   car: 'res/car.png',
   

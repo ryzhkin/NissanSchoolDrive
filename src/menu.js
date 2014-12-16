@@ -46,8 +46,10 @@ var Menu = cc.Layer.extend({
 	h: 432,
 	w: 432,
 	click: function () {
-		cc.log('Go to site');	 
+		cc.log('Go to site');
+		
 		app.renderMenu(app.menu, app.menu.menuSite, true);
+		app.openURL('http://www.nissan.ru');
 	}
 }            
 ],
@@ -170,7 +172,8 @@ var Menu = cc.Layer.extend({
 	       h: 388,
 	       w: 278,
 	       click: function () {
-	         cc.log('Go to game #3');	 
+	         cc.log('Go to game #3');
+	         app.runStage(new Coordination());
 	       }
          },
          {
