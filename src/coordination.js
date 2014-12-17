@@ -17,7 +17,27 @@ var Coordination = cc.Layer.extend({
 		        ]
 	},
 	menuGame: {
-		back: assets.coordinationGameBack	
+		back: assets.coordinationGameBack,
+		areas: [
+          {
+	        x: 534,
+	        y: 698,
+	        h: 360,
+	        w: 360,
+	        click: function () {
+	          app.coordination.applyForce('left');
+	        }	
+          },
+          {
+        	  x: 2191,
+        	  y: 698,
+        	  h: 360,
+        	  w: 360,
+        	  click: function () {
+       		    app.coordination.applyForce('right');
+        	  }	
+          }
+		]
 	},
 	init: function (options) {
 	  app.coordination = this;
@@ -255,6 +275,102 @@ var Coordination = cc.Layer.extend({
 			  offsetRegX : 0
 		  }
 	  });
+	  
+	  // UI
+	  var leftControl = new cc.Sprite('res/coordination/low/left_control.png');
+	  leftControl.attr({
+		 scale    : scaleFactor,
+		 x        : app.localX(710),
+		 y        : app.localY(878)
+	  });
+	  this.worldLayer.addChild(leftControl);
+	  
+	  var leftControl2 = new cc.Sprite('res/coordination/low/left_control2.png');
+	  leftControl2.attr({
+		  visible  : false,
+		  scale    : scaleFactor,
+		  x        : app.localX(710),
+		  y        : app.localY(878)
+	  });
+	  this.worldLayer.addChild(leftControl2);
+	  
+	  var rightControl = new cc.Sprite('res/coordination/low/right_control.png');
+	  rightControl.attr({
+		  scale    : scaleFactor,
+		  x        : app.localX(2366),
+		  y        : app.localY(878)
+	  });
+	  this.worldLayer.addChild(rightControl);
+	  
+	  var rightControl2 = new cc.Sprite('res/coordination/low/right_control2.png');
+	  rightControl2.attr({
+		  visible  : false,
+		  scale    : scaleFactor,
+		  x        : app.localX(2366),
+		  y        : app.localY(878)
+	  });
+	  this.worldLayer.addChild(rightControl2);
+	  
+	  
+	  
+	  /**
+	   * Приложить силу к системе
+	   * @param type - тип силы: left, right
+	   */
+	  this.applyForce = function (type, extraForce) {
+		  var delta = 20;
+		  if (type == 'left') {
+			  cc.log('LEFT !');
+			  leftControl.visible = false;
+			  leftControl2.visible = true;
+
+			  rightControl.visible = true;
+			  rightControl2.visible = false;
+
+			  board.body.ApplyImpulse(this.world.vector(0, 50*scaleFactor + ((typeof(extraForce) == 'number')?extraForce:0)), this.world.vector(board.body.GetPosition().x + ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y));
+		  } else {
+			  cc.log('RIGHT !');
+			  leftControl.visible = true;
+			  leftControl2.visible = false;
+
+			  rightControl.visible = false;
+			  rightControl2.visible = true;
+			  board.body.ApplyImpulse(this.world.vector(0, 50*scaleFactor + ((typeof(extraForce) == 'number')?extraForce:0)), this.world.vector(board.body.GetPosition().x - ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y));
+		  }
+	  }
+
+	  cc.inputManager.setAccelerometerEnabled(true);
+	  cc.eventManager.addListener({
+		  event: cc.EventListener.ACCELERATION,
+		  callback: function(acc, event){
+			  //  Processing logic here 
+			  //cc.log(acc.x);
+        	  
+        	  // Уровень нейтрального положения
+             /* var zeroLevel = 0.7;
+              var direction = 'left';
+              if (acc.y > 0) {
+                direction = 'right';
+              }
+              if (acc.y < -zeroLevel || acc.y > zeroLevel) {
+            	this.applyForce(direction, Math.abs(acc.y)*app.scaleFactor*10);
+              } else {
+                // Нейтральное положение
+            	
+              }*/
+              
+          }.bind(this)
+      }, this); 
+	  
+	  
+	  /*
+	   leftControl1.visible = true;
+  	   rightControl1.visible = true;  
+
+  	   leftControl2.visible = false;
+  	   rightControl2.visible = false;
+  	   */
+	  
 	  
 	  this.scheduleUpdate();
 	},

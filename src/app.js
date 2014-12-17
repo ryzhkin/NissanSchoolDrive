@@ -44,6 +44,7 @@ var app = {
   // Clear stage
   clearStage: function () {
 	  clearAllIntervals();
+	  cc.eventManager.removeAllListeners();
 	  this.game.stage.removeAllChildren(true);
 	  this.game.cleanup();
 	  cc.spriteFrameCache.removeSpriteFrames();
