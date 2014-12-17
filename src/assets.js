@@ -68,8 +68,9 @@ var assets = {
   
   
   // Графические ресурсы к игре Координация
-  coordinationIntroBack : 'res/coordination/coordination-background.jpg',
-  coordinationGameBack  : 'res/coordination/coordination-game-background.jpg',
+  coordinationIntroBack   : 'res/coordination/coordination-background.jpg',
+  coordinationGameBack    : 'res/coordination/coordination-game-background.jpg',
+  coordinationResultBack  : 'res/coordination/coordination-game-result.jpg',
   
   
   // Спрайт машинки

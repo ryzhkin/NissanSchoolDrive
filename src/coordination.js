@@ -11,7 +11,7 @@ var Coordination = cc.Layer.extend({
 		        	h: 140,
 		        	w: 396,
 		        	click: function () {
-	        		  app.coordination.game();  
+		        		app.coordination.game();  
 		        	}	
 		        }      
 		        ]
@@ -19,13 +19,13 @@ var Coordination = cc.Layer.extend({
 	menuGame: {
 		back: assets.coordinationGameBack,
 		areas: [
-          {
-	        x: 534,
-	        y: 698,
-	        h: 360,
+		        {
+		        	x: 534,
+		        	y: 698,
+		        	h: 360,
 	        w: 360,
 	        click: function () {
-	          app.coordination.applyForce('left');
+	        	app.coordination.applyForce('left');
 	        }	
           },
           {
@@ -34,10 +34,69 @@ var Coordination = cc.Layer.extend({
         	  h: 360,
         	  w: 360,
         	  click: function () {
-       		    app.coordination.applyForce('right');
+        		  app.coordination.applyForce('right');
         	  }	
           }
-		]
+          ]
+	},
+	menuResult: {
+		back: assets.coordinationResultBack,
+		areas: [
+		        {
+		        	x: 1536 - 450,
+		        	y: 1536 - 996 - 140,
+		        	h: 140,
+		        	w: 402,
+		        	click: function () {
+		        		app.coordination.game();
+		        	} 	 
+		        },
+		        {
+		        	x: 1536 + 54,
+		        	y: 1536 - 996 - 140,
+		        	h: 140,
+		        	w: 402,
+		        	click: function () {
+		        		app.runStage(new Menu(), 3);
+		        	} 	 
+		        },
+		        {
+		        	x: 1536 -206,
+		        	y: 1536 - 806 - 86,
+		        	h: 86,
+		        	w: 86,
+		        	click: function () {
+		        		app.share('fb', 'Я прошел игру "Координация" в Школе вождения Nissan!');
+		        	}
+		        },
+		        {
+		        	x: 1536 - 94,
+		        	y: 1536 - 806 - 86,
+		        	h: 86,
+		        	w: 86,
+		        	click: function () {
+		        		app.share('vk', 'Я прошел игру "Координация" в Школе вождения Nissan!');
+		        	}
+		        },
+		        {
+	    	 x: 1536 +20,
+	         y: 1536 - 806 - 86,
+	         h: 86,
+	         w: 86,
+	         click: function () {
+	           app.share('tw', 'Я прошел игру "Координация" в Школе вождения Nissan!');
+	         }
+	     },
+	     {
+	    	 x: 1536 +130,
+	         y: 1536 - 806 - 86,
+	         h: 86,
+	         w: 86,
+	         click: function () {
+	           app.share('od', 'Я прошел игру "Координация" в Школе вождения Nissan!');
+	         }
+	     }
+	  ]
 	},
 	init: function (options) {
 	  app.coordination = this;
@@ -50,9 +109,9 @@ var Coordination = cc.Layer.extend({
 	  var scaleFactor = 1536/640;
 	  
 	  this.worldLayer = new cc.Layer();  
-	  this.addChild(this.worldLayer);	
+	  this.menu.addChild(this.worldLayer);	
 	  this.world = new physicWorld(this.worldLayer, {
-		debug    : true
+		//debug    : true
 	  });
 	  
 	  // Земля - нижняя грань
@@ -348,28 +407,77 @@ var Coordination = cc.Layer.extend({
 		  event: cc.EventListener.ACCELERATION,
 		  callback: function(acc, event){
 			  this.accelerometerX = acc.x;
-          }.bind(this)
+		  }.bind(this)
       }, this); 
 	  
 	 
-	  var accelerometerTime = setIntervalG(function () {
-		  if (this.accelerometerX < -zeroLevel || this.accelerometerX > zeroLevel) {
-		    //cc.log('accelerometerX = ' + this.accelerometerX);  
-		    this.applyForce((this.accelerometerX < 0)?'left':'right', Math.abs(this.accelerometerX*10)*scaleFactor);
-		  }	else {
-		    leftControl.visible = true;
-			rightControl.visible = true;  
-
-			leftControl2.visible = false;
-			rightControl2.visible = false;	  
-		  }	  
-	  }.bind(this), 1000/2);
 	  
+	  
+	  
+	  
+	  
+	  // Запуск игры
 	  this.scheduleUpdate();
+	  
+	  this.pauseTime = 0;
+	  var startTime = new Date();
+	  var resultTime = 0;
+	  var stopGame = false;
+	  var gameTimer = setIntervalG(function () {
+		  // Реакция на изминения ориентации устройства
+		  if (this.accelerometerX < -zeroLevel || this.accelerometerX > zeroLevel) {
+			  //cc.log('accelerometerX = ' + this.accelerometerX);  
+			  this.applyForce((this.accelerometerX < 0)?'left':'right', Math.abs(this.accelerometerX*10)*scaleFactor);
+		  }	else {
+			  leftControl.visible = true;
+			  rightControl.visible = true;  
+
+			  leftControl2.visible = false;
+			  rightControl2.visible = false;	  
+		  }	  
+
+		  // Условие окончания игры
+		  if (
+				  (flag.body.GetPosition().y*this.world.BOX2D_METER_TO_PIXELS <  2*136*scaleFactor) 
+				  //|| (bigWeel.body.GetPosition().y*g.BOX2D_METER_TO_PIXELS > (jQuery('#gameCanvas').height() - (37 + 86/2)*scaleFactor))	  
+		  ) {
+			 clearAllIntervals();
+			 resultTime = new Date() - startTime - this.pauseTime;
+			 setTimeout(function () {
+			   this.unscheduleUpdate();   
+               this.result(resultTime);
+             }.bind(this), 5000);
+			 
+		  }
+		  
+	  }.bind(this), 1000/2);
 	},
 	update: function (dt) {
 	  if (this.world !== null) {
 		this.world.step(dt);  
 	  }	
+	},
+	result: function (time) {
+		 if (time/1000 < 10) {
+		   this.menuResult.back = 'res/coordination/result3.jpg';
+		 } else
+		 if (time/1000 < 15) {
+		   this.menuResult.back = 'res/coordination/result2.jpg';
+	     } else {
+	       this.menuResult.back = 'res/coordination/result1.jpg'; 
+	     }
+		
+		 app.renderMenu(this, this.menuResult, true);
+	     var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
+	      console.log('Stop Game = ' + timeStr);
+	      var line = new cc.LabelTTF(
+	    		  timeStr,
+	    		  'res/fonts/nissanagmed.ttf',
+				  90
+		  );
+	      line.setPosition(app.localX(1536), app.localY(980));
+		  line.setAnchorPoint(0.5, 0.5);
+		  line.setColor(cc.color(146, 146, 146, 255));
+	      this.menu.addChild(line);
 	}
 });
