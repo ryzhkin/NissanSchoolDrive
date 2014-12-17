@@ -73,6 +73,8 @@ var app = {
   },
   // Render Menu
   renderMenu: function (layer, menu, debug) {
+	  cc.spriteFrameCache.removeSpriteFrames();
+	  cc.textureCache.removeAllTextures();
 	  debug = false;
 	  if (typeof(layer.menu) == 'undefined') {
 		  //clearAllIntervals();  

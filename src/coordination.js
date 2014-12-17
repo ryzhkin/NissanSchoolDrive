@@ -517,14 +517,14 @@ var Coordination = cc.Layer.extend({
 	  }	
 	},
 	result: function (time) {
-		 cc.log(2);
+		 //this.menuResult.back = 'res/coordination/coordination-game-result1.jpg';
 		 if (time/1000 < 10) {
-		   this.menuResult.back = 'res/coordination/result3.jpg';
+		   //this.menuResult.back = 'res/coordination/result3.jpg';
 		 } else
 		 if (time/1000 < 15) {
-		   this.menuResult.back = 'res/coordination/result2.jpg';
+		   //this.menuResult.back = 'res/coordination/result2.jpg';
 	     } else {
-	       this.menuResult.back = 'res/coordination/result1.jpg'; 
+	       //this.menuResult.back = 'res/coordination/result1.jpg'; 
 	     }
 		 cc.log(3);
 		 var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
@@ -541,5 +541,25 @@ var Coordination = cc.Layer.extend({
 		  line.setAnchorPoint(0.5, 0.5);
 		  line.setColor(cc.color(146, 146, 146, 255));
 	      this.menu.addChild(line);
+	      
+	      
+	     /* var r11 = new cc.Sprite('res/coordination/r11.png');
+	      r11.attr({
+	    	  x        : app.localX(1240),
+	    	  y        : app.localY(1056),
+	    	  anchorX  : 0,
+	    	  anchorY  : 0
+	      });
+	      this.menu.addChild(r11);
+	      
+	      var r12 = new cc.Sprite('res/coordination/r12.png');
+	      r12.attr({
+	    	  x        : app.localX(999),
+	    	  y        : app.localY(732),
+	    	  anchorX  : 0,
+	    	  anchorY  : 0
+	      });
+	      this.menu.addChild(r12);*/
+	      
 	}
 });
