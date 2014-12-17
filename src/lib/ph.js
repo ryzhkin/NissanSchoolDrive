@@ -178,6 +178,17 @@ var physicWorld = function (layer, options) {
 
 			// Полигон ....
 			if (objOptions.shape.polygon.length >= 6) {
+				var verts = [];
+				for (var i = 0; i < objOptions.shape.polygon.length; i +=2) {
+					verts.push(cc.p(objOptions.shape.polygon[i], objOptions.shape.polygon[i + 1]));	
+				}	
+				shape.drawPoly(verts, 
+				                cc.color(defColorFill.r, defColorFill.g, defColorFill.b, 100), 
+				                1, 
+				                cc.color(defColorBorder.r, defColorBorder.g, defColorBorder.b, 255));
+				
+				
+				
 				/*shape.graphics.moveTo(objOptions.shape.polygon[0], objOptions.shape.polygon[1]);
 					for (var i = 2; i < objOptions.shape.polygon.length; i +=2) {
 						shape.graphics.lineTo(objOptions.shape.polygon[i], objOptions.shape.polygon[i + 1]);
@@ -267,7 +278,7 @@ var physicWorld = function (layer, options) {
 				var sX = objOptions.shape.polygon[0];
 				var sY = objOptions.shape.polygon[1];
 				for (var i = 0; i < objOptions.shape.polygon.length; i +=2) {
-					objOptions.shape.polygon[i] = objOptions.shape.polygon[i] - sX;
+					objOptions.shape.polygon[i]     = objOptions.shape.polygon[i] - sX;
 					objOptions.shape.polygon[i + 1] = objOptions.shape.polygon[i + 1] - sY;
 				}
 				var vertices = [];
