@@ -1,194 +1,3 @@
-var physicWorld = function (layer, options) {
-	/*if (typeof(options) == 'undefined') {
-		options = {
-				gravity : [0, 9.8]		  
-		}	
-	}
-	if (typeof(options.gravity) == 'undefined') {
-		options.gravity = [0, 9.8];	
-	}*/
-	
-	this.options = help.extend({
-	  gravity : [0, 9.8]	
-	}, options);
-	
-	
-	// Короткие псевдонимы основных объектов физического движка Box2D
-	var b2AABB  = Box2D.Collision.b2AABB;
-	var b2World = Box2D.Dynamics.b2World;
-	var b2Vec2 = Box2D.Common.Math.b2Vec2;
-	var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
-	var b2Body = Box2D.Dynamics.b2Body;
-	var b2BodyDef = Box2D.Dynamics.b2BodyDef;
-	var b2FixtureDef = Box2D.Dynamics.b2FixtureDef;
-	var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
-	var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
-	var b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef;
-	var b2ContactListener = Box2D.Dynamics.b2ContactListener;
-	var BOX2D_PIXELS_TO_METER = 1/30;                    // Для перевода пиксельных координат в метровые координаты - умножаем все на *BOX2D_PIXELS_TO_METER
-	var BOX2D_METER_TO_PIXELS = 30; // Для перевода метровых координат в пиксельные координаты - умножаем все на * BOX2D_METER_TO_PIXELS
-
-	this.BOX2D_PIXELS_TO_METER = BOX2D_PIXELS_TO_METER;
-	this.BOX2D_METER_TO_PIXELS = BOX2D_METER_TO_PIXELS;
-
-	// Типы обьектов физического мира
-	this.objType = {
-			Static    : b2Body.b2_staticBody,    // статический - не подвижный, монолитный объект, но он влияет на динамический объекты
-			Kinematic : b2Body.b2_kinematicBody, // киниматический - объект, который движется по заданной траиктории и на него не действуют дргуие силы, но он влияет на динамический объекты
-			Dynamic   : b2Body.b2_dynamicBody    // динамический - объект на него влияют все физические факторы миры, он взаимодейсвует со всеми типами объектов
-	};//*/
-	
-	
-	// Создаем наш мир.
-	this.world =  new b2World(
-			new b2Vec2(this.options.gravity[0], this.options.gravity[1])//new b2Vec2(0, 10)   // Вектор гравитации. Задается ускорение свободного падения, равное 10 виртуальным метрам в секунду по оси Y.
-			,true               // doSleep флаг. Разрешает не обсчитывать в текущий момент неактивные элементы. Это очень сильно сказывается на скорости работы.
-	);
-	
-	this.vector = function(x, y) {
-		return new Box2D.Common.Math.b2Vec2(x, y);
-	};
-	
-	/**
-	 * Синхронизируем объекты движка рендринга eseal и текущие состояние объектов физического движка box2D
-	 */
-	this.updateEsealObjects = function () {
-		for (var i = 0; i < this.esealObjects.length; i++) {
-			this.esealObjects[i].x = this.esealObjects[i].body.GetPosition().x * BOX2D_METER_TO_PIXELS;
-			this.esealObjects[i].y = this.esealObjects[i].body.GetPosition().y * BOX2D_METER_TO_PIXELS;
-			this.esealObjects[i].rotation = this.esealObjects[i].body.GetAngle() * (180 / Math.PI);
-		}
-	}
-	
-	/**
-	 * Добавляем объект в движок рендринга eseal
-	 * @param body - экземпляр объекта физического движка eseal
-	 * @param objOptions - начальные параметры объекта
-	 */
-	this.addObjEseal = function (body, objOptions) {
-		var defColorFill = "#C0C0C1";
-		var defColorBorder = "#808082";
-
-		if (objOptions.type == this.objType.Static) {
-			var defColorFill = "#A1D4A2";
-			var defColorBorder = "#143014";
-		}
-
-		if (objOptions.type == this.objType.Dynamic) {
-			var defColorFill = "#D86165";
-			var defColorBorder = "#96484A";
-		}
-
-		if (objOptions.type == this.objType.Kinematic) {
-			var defColorFill = "#F2D843";
-			var defColorBorder = "#AA982E";
-		}
-		var objectEseal = null;
-		// Добавляем объекты eseal
-		if (this.options.eseal == true) {
-			// Если определина тексутра спрайта - добавляем его
-			if (typeof(objOptions.bitmap) !== 'undefined') {
-				var sprite = new cc.Sprite(objOptions.bitmap);
-				var bitmapOptions = {
-						scaleX     : 1,
-						scaleY     : 1,
-						rotation   : 0,
-						x          : 0,
-						y          : 0,
-						offsetRegX : 0, // смещение центра тяжести - используется в том случае когда текстура спрайта не совпадает с физической геометрией
-						offsetRegY : 0  // смещение центра тяжести - используется в том случае когда текстура спрайта не совпадает с физической геометрией
-				};
-				bitmapOptions = jQuery().extend(true, bitmapOptions, objOptions.bitmapOptions);
-				// Если у нас пропорциональное масштабирование
-				if (typeof(bitmapOptions.scale) !== 'undefined') {
-					bitmapOptions.scaleX = bitmapOptions.scale;
-					bitmapOptions.scaleY = bitmapOptions.scale;
-				}
-				// Круг ...
-				if ((objOptions.shape.radius > 0) && (objOptions.shape.box.length == 0) && (objOptions.shape.polygon.length == 0)) {
-					bitmapOptions = jQuery().extend(true, bitmapOptions, {
-						regX     : objOptions.shape.radius/bitmapOptions.scaleX + bitmapOptions.offsetRegX,
-						regY     : objOptions.shape.radius/bitmapOptions.scaleY + bitmapOptions.offsetRegY
-					}
-					);
-				}
-				// Прямоугольник ...
-				if (objOptions.shape.box.length == 2) {
-					bitmapOptions = jQuery().extend(true, bitmapOptions, {
-						regX     : (objOptions.shape.box[0]/2)/bitmapOptions.scaleX + bitmapOptions.offsetRegX,
-						regY     : (objOptions.shape.box[1]/2)/bitmapOptions.scaleY + bitmapOptions.offsetRegY
-					}
-					);
-				}
-
-				// Полигон ....
-				if (objOptions.shape.polygon.length >= 6) {
-					bitmapOptions = jQuery().extend(true, bitmapOptions, {
-						regX     : bitmapOptions.offsetRegX,
-						regY     : bitmapOptions.offsetRegY
-					}
-					);
-				}
-
-				sprite.set(bitmapOptions);
-				sprite.body = body;
-				this.esealObjects.push(sprite);
-				this.easelStage.addChild(sprite);
-				objectEseal = sprite;
-			}
-
-			// Добавляем дебаг информацию для eseal
-			if ((this.options.debug == true) || ((typeof(objOptions.bitmap) == 'undefined') && (this.options.showEmptyEsealObjects == true)) && body.GetType() !== this.objType.Static) {
-				// this.easelStage
-				var shape = new createjs.Shape();
-				shape.alpha = 0.5;
-				shape.graphics.setStrokeStyle(1).beginStroke(defColorBorder).beginFill(defColorFill);
-				// Круг ...
-				if ((objOptions.shape.radius > 0) && (objOptions.shape.box.length == 0) && (objOptions.shape.polygon.length == 0)) {
-					shape.graphics.drawCircle(0, 0, objOptions.shape.radius);
-				}
-
-				// Прямоугольник ...
-				if (objOptions.shape.box.length == 2) {
-					shape.graphics.drawRect( -objOptions.shape.box[0]/2, -objOptions.shape.box[1]/2, objOptions.shape.box[0], objOptions.shape.box[1]);
-				}
-
-				// Полигон ....
-				if (objOptions.shape.polygon.length >= 6) {
-					shape.graphics.moveTo(objOptions.shape.polygon[0], objOptions.shape.polygon[1]);
-					for (var i = 2; i < objOptions.shape.polygon.length; i +=2) {
-						shape.graphics.lineTo(objOptions.shape.polygon[i], objOptions.shape.polygon[i + 1]);
-					}
-					shape.graphics.closePath();
-				}
-
-				shape.graphics.endStroke();
-				shape.body = body;
-				this.esealObjects.push(shape);
-				this.easelStage.addChild(shape);
-
-				if (typeof(sprite) == 'undefined') {
-					objectEseal = shape;
-				}
-			} //*/
-			this.updateEsealObjects();
-		}
-		return (objectEseal);
-	}
-	
-	
-	
-	
-	
-    	
-	
-	
-/*	this.space = new cp.Space();
-	this.space.gravity = cp.v(0, -9.8);
-	cc.PhysicsSprite
-*/
-}	
-
 var Coordination = cc.Layer.extend({
 	ctor: function () {
 	  this._super();
@@ -218,10 +27,124 @@ var Coordination = cc.Layer.extend({
 	game: function () {
 	  app.renderMenu(this, this.menuGame, true);
 	  
-	  this.world = new cc.Layer();  
-	  this.addChild(this.world);	
-	  var g = new physicWorld(this.world, {
-		//debug    : true
-	  });	
+	  var scaleFactor = 1536/640;
+	  
+	  this.worldLayer = new cc.Layer();  
+	  this.addChild(this.worldLayer);	
+	  this.world = new physicWorld(this.worldLayer, {
+		debug    : true
+	  });
+	  
+	  // Земля - нижняя грань
+	  this.world.addObj({
+		  type: this.world.objType.Static,
+		  //type: this.world.objType.Dynamic,
+		  pos: {
+			  x: app.localX(1536),
+			  y: app.localY(37/2)
+		  },
+		  shape: {
+			  box: [3072, 37]
+		  }
+	  });
+	  
+	  // Нижнее большое колесо
+	  var bigWeel = this.world.addObj({
+		  physic: {
+			  density: 50.5,
+			  friction: 0.200,
+			  restitution: 0.2
+		  },
+		  pos: {
+			  x: app.localX(1536),
+			  y: app.localY(37 + (86)*scaleFactor)
+		  },
+		  shape: {
+			  radius: 86*scaleFactor 
+		  },
+		  bitmap: 'res/coordination/low/wheel1.png',
+		  bitmapOptions: {
+			  scale  : scaleFactor
+		  }
+	  });
+	  
+	  // Нижняя полка
+	  var board = this.world.addObj({
+		  physic: {density: 30.12,friction: 5.150},
+		  pos: {
+			  x: app.localX(1536),
+			  y: app.localY(37 + (2*86 + 36/2 - 16)*scaleFactor)
+		  },
+		  shape: {
+			  box: [380*scaleFactor, 5*scaleFactor]
+		  },
+		  bitmap: 'res/coordination/low/board1.png',
+		  bitmapOptions: {
+			scale      : scaleFactor,
+			offsetRegY : 16
+		  }
+	  });
+	  
+	  
+	  // Левая маленькая канистра
+	  var jar1 = this.world.addObj({
+		  physic: {density: 0.4, friction: 15},
+		  pos: {
+			  x: app.localX(1350),
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2)*scaleFactor)
+		  },
+		  shape: {
+			  box: [35*scaleFactor, (78 - 5)*scaleFactor]
+		  },
+		  bitmap: 'res/coordination/low/small_jar.png',
+		  bitmapOptions: {
+			  scale      : scaleFactor,
+			  offsetRegX : 17
+		  }
+	  });
+	  
+	  // Левая красная канистра
+	  var jar2 = this.world.addObj({
+		  physic: {density: 0.52, friction: 15},
+		  pos: {
+			  x: app.localX(1224),
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2)*scaleFactor + 28)
+		  },
+		  shape: {
+			  box: [66*scaleFactor, 93*scaleFactor]
+		  },
+		  bitmap: 'res/coordination/low/red_jar.png',
+		  bitmapOptions: {
+			scale      : scaleFactor
+		  }
+	  });
+	  
+	  // Маленькое колесо
+	  this.world.addObj({
+		  physic: {density: 0.52, friction: 15},
+		  pos: {
+			  x: app.localX(1536),
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 55 + 2)*scaleFactor)
+		  },
+		  shape: {
+			  radius: 55*scaleFactor
+		  },
+		  bitmap: 'res/coordination/low/wheel2.png',
+		  bitmapOptions: {
+			  scale      : scaleFactor
+		  }
+	  });
+	  
+	
+		
+	  
+	  
+	  
+	  //this.scheduleUpdate();
+	},
+	update: function (dt) {
+	  if (this.world !== null) {
+		this.world.step(dt);  
+	  }	
 	}
 });

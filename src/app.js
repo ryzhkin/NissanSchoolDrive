@@ -120,7 +120,7 @@ var app = {
 			  clickArea.drawRect(
   	    	cc.p(0, 0), 
   	    	cc.p(area.w, area.h),			
-  	    	cc.color(0, 0, 0, 1), 
+  	    	cc.color(255, 255, 255, 0.01), 
   	    	1, 
   	    	cc.color(255, 13, 255, (debug == true)?255:1) 
   	      );

@@ -113,10 +113,16 @@ var alg = {
 }
 
 var help = {
-		extend: function(destination, source) {
-		    for (var property in source)
-		        destination[property] = source[property];
-		    return destination;
+		extend: function(target, source) {
+			target = target || {};
+			for (var prop in source) {
+				if (typeof source[prop] === 'object') {
+					target[prop] = this.extend(target[prop], source[prop]);
+				} else {
+					target[prop] = source[prop];
+				}
+			}
+			return target;
 		},
 		hexToRgb: function (hex) {
 			var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
