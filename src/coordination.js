@@ -320,7 +320,7 @@ var Coordination = cc.Layer.extend({
 	  this.applyForce = function (type, extraForce) {
 		  var delta = 20;
 		  if (type == 'left') {
-			  cc.log('LEFT !');
+			  //cc.log('LEFT !');
 			  leftControl.visible = false;
 			  leftControl2.visible = true;
 
@@ -329,7 +329,7 @@ var Coordination = cc.Layer.extend({
 
 			  board.body.ApplyImpulse(this.world.vector(0, 50*scaleFactor + ((typeof(extraForce) == 'number')?extraForce:0)), this.world.vector(board.body.GetPosition().x + ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y));
 		  } else {
-			  cc.log('RIGHT !');
+			  //cc.log('RIGHT !');
 			  leftControl.visible = true;
 			  leftControl2.visible = false;
 
@@ -339,38 +339,31 @@ var Coordination = cc.Layer.extend({
 		  }
 	  }
 
+	  // Текущее значение аксилирометра
+	  this.accelerometerX = 0;
+	  // Уровень нейтрального положения
+	  var zeroLevel = 0.07;
 	  cc.inputManager.setAccelerometerEnabled(true);
 	  cc.eventManager.addListener({
 		  event: cc.EventListener.ACCELERATION,
 		  callback: function(acc, event){
-			  //  Processing logic here 
-			  //cc.log(acc.x);
-        	  
-        	  // Уровень нейтрального положения
-             /* var zeroLevel = 0.7;
-              var direction = 'left';
-              if (acc.y > 0) {
-                direction = 'right';
-              }
-              if (acc.y < -zeroLevel || acc.y > zeroLevel) {
-            	this.applyForce(direction, Math.abs(acc.y)*app.scaleFactor*10);
-              } else {
-                // Нейтральное положение
-            	
-              }*/
-              
+			  this.accelerometerX = acc.x;
           }.bind(this)
       }, this); 
 	  
-	  
-	  /*
-	   leftControl1.visible = true;
-  	   rightControl1.visible = true;  
+	 
+	  var accelerometerTime = setIntervalG(function () {
+		  if (this.accelerometerX < -zeroLevel || this.accelerometerX > zeroLevel) {
+		    //cc.log('accelerometerX = ' + this.accelerometerX);  
+		    this.applyForce((this.accelerometerX < 0)?'left':'right', Math.abs(this.accelerometerX*10)*scaleFactor);
+		  }	else {
+		    leftControl.visible = true;
+			rightControl.visible = true;  
 
-  	   leftControl2.visible = false;
-  	   rightControl2.visible = false;
-  	   */
-	  
+			leftControl2.visible = false;
+			rightControl2.visible = false;	  
+		  }	  
+	  }.bind(this), 1000/2);
 	  
 	  this.scheduleUpdate();
 	},
