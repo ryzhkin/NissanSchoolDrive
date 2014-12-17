@@ -73,13 +73,13 @@ var app = {
   },
   // Render Menu
   renderMenu: function (layer, menu, debug) {
-	  //debug = false;
+	  debug = false;
 	  if (typeof(layer.menu) == 'undefined') {
-		  clearAllIntervals();  
+		  //clearAllIntervals();  
 		  layer.menu = new cc.Layer();  
 		  layer.addChild(layer.menu);
 	  } else {
-		  clearAllIntervals();  
+		  //clearAllIntervals();  
 		  layer.menu.removeAllChildren(true);  
 	  }
 
@@ -102,7 +102,7 @@ var app = {
 
 	  }
 	  if (typeof(menu.areas) !== 'undefined') {
-		  cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+		  //cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
 		  menu.areas.forEach(function (area) {
 
 			  var clickArea = new cc.DrawNode();

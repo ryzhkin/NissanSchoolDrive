@@ -27,17 +27,63 @@ var Coordination = cc.Layer.extend({
 	        click: function () {
 	        	app.coordination.applyForce('left');
 	        }	
-          },
-          {
-        	  x: 2191,
-        	  y: 698,
-        	  h: 360,
-        	  w: 360,
+		        },
+		        {
+		        	x: 2191,
+		        	y: 698,
+		        	h: 360,
+		        	w: 360,
         	  click: function () {
         		  app.coordination.applyForce('right');
         	  }	
-          }
+          },
+ 	     // Пауза
+          {
+        	  x: 1536 - 250/2,
+ 	    	 y: 1536 - 140,
+ 	    	 h: 140,
+ 	    	 w: 250,
+ 	    	 click: function () {
+ 	    		 cc.log('PAUSE!!!');
+ 	    		 app.coordination.pause();
+ 	    	 }
+ 	     }
           ]
+	},
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+	  areas: [
+	    {
+	    	x: 1536 -488,
+	    	y: 1536 - 483 - 278,
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    		app.coordination.pauseLayer.removeFromParent(true);  
+	    		app.coordination.scheduleUpdate();
+	    		app.coordination.pauseTime += new Date() - app.coordination.startPause;
+	    	}
+	    },
+	    {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		      h: 278,
+		      w: 278,
+		      click: function () {
+		    	  app.runStage(new Menu(), 3);
+		      }
+		    },
+		    {
+		    	x: 1536 + 291,
+			      y: 1536 - 483 - 278,
+			      h: 278,
+			      w: 278,
+			      click: function () {
+			    	  app.coordination.pauseLayer.removeFromParent(true);  
+			    	  app.coordination.game();
+			      }
+			    }
+	  ]
 	},
 	menuResult: {
 		back: assets.coordinationResultBack,
@@ -103,6 +149,13 @@ var Coordination = cc.Layer.extend({
 	  app.renderMenu(this, this.menuIntro, true);
 	},
 	world: null,
+	pause: function () {
+	  this.unscheduleUpdate();
+	  this.startPause = new Date();
+	  this.pauseLayer = new cc.Layer();
+	  this.addChild(this.pauseLayer);
+	  app.renderMenu(this.pauseLayer, this.menuPause, true);
+	},
 	game: function () {
 	  app.renderMenu(this, this.menuGame, true);
 	  
@@ -290,7 +343,7 @@ var Coordination = cc.Layer.extend({
 		  },
 		  shape: {
 			  box: [117*scaleFactor, 136*scaleFactor]
-			  //polygon: [0, 0, 117*scaleFactor, 59*scaleFactor, 0, 118*scaleFactor]
+		  //polygon: [0, 0, 117*scaleFactor, 59*scaleFactor, 0, 118*scaleFactor]
 		  },
 		  bitmap: 'res/coordination/low/flag.png',
 		  bitmapOptions: {
@@ -299,7 +352,7 @@ var Coordination = cc.Layer.extend({
 			  offsetRegY : 117/2,
 		  }
 	  });
-	  
+
 	  // Верхняя покрышка
 	  this.world.addObj({
 		  physic: {friction: 5, density: 0.1},
@@ -371,6 +424,16 @@ var Coordination = cc.Layer.extend({
 	  this.worldLayer.addChild(rightControl2);
 	  
 	  
+	  // Пауза
+	  var pause = new cc.Sprite('res/coordination/pause.png');
+	  pause.attr({
+		  x        : app.localX(1536),
+		  y        : app.localY(1536 - 69/2)
+	  });
+	  this.worldLayer.addChild(pause);
+	  
+	  
+	  
 	  
 	  /**
 	   * Приложить силу к системе
@@ -410,11 +473,6 @@ var Coordination = cc.Layer.extend({
 		  }.bind(this)
       }, this); 
 	  
-	 
-	  
-	  
-	  
-	  
 	  
 	  // Запуск игры
 	  this.scheduleUpdate();
@@ -439,11 +497,12 @@ var Coordination = cc.Layer.extend({
 		  // Условие окончания игры
 		  if (
 				  (flag.body.GetPosition().y*this.world.BOX2D_METER_TO_PIXELS <  2*136*scaleFactor) 
-				  //|| (bigWeel.body.GetPosition().y*g.BOX2D_METER_TO_PIXELS > (jQuery('#gameCanvas').height() - (37 + 86/2)*scaleFactor))	  
 		  ) {
+			 cc.eventManager.removeListeners(cc.EventListener.ACCELERATION);
 			 clearAllIntervals();
 			 resultTime = new Date() - startTime - this.pauseTime;
 			 setTimeout(function () {
+			   cc.log(1); 
 			   this.unscheduleUpdate();   
                this.result(resultTime);
              }.bind(this), 5000);
@@ -458,6 +517,7 @@ var Coordination = cc.Layer.extend({
 	  }	
 	},
 	result: function (time) {
+		 cc.log(2);
 		 if (time/1000 < 10) {
 		   this.menuResult.back = 'res/coordination/result3.jpg';
 		 } else
@@ -466,11 +526,13 @@ var Coordination = cc.Layer.extend({
 	     } else {
 	       this.menuResult.back = 'res/coordination/result1.jpg'; 
 	     }
-		
+		 cc.log(3);
+		 var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
+	     console.log('Stop Game = ' + timeStr);
+	     
 		 app.renderMenu(this, this.menuResult, true);
-	     var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
-	      console.log('Stop Game = ' + timeStr);
-	      var line = new cc.LabelTTF(
+	    
+	     var line = new cc.LabelTTF(
 	    		  timeStr,
 	    		  'res/fonts/nissanagmed.ttf',
 				  90
