@@ -73,6 +73,14 @@ var assets = {
   coordinationResultBack  : 'res/coordination/coordination-game-result.jpg',
   
   
+  // Графические ресурсы к игре Переферийное зрение
+  visionIntroBack   : 'res/vision/vision-background.jpg',
+  
+  
+  // Графические ресурсы к игре Закрепление навыков
+  complexIntroBack   : 'res/complex/complex-background.jpg',
+  complexSorryBack   : 'res/complex/sorry.jpg',
+  
   // Спрайт машинки
   car: 'res/car.png',
   

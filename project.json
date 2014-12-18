@@ -29,6 +29,8 @@
         "src/memory.js",
         "src/reaction.js",
         "src/coordination.js",
+        "src/vision.js",
+        "src/complex.js",
         "src/app.js"
     ]
 }

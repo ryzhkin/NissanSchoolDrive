@@ -89,9 +89,9 @@ var Menu = cc.Layer.extend({
 	      ]
     },
     menuLessons: {
-	  back  : assets.menuLessonsBack,
-	  areas : [
-	           {
+    	back  : assets.menuLessonsBack,
+    	areas : [
+    	         {
 	        	   x: 740,
 	        	 y: 146,
 	        	 h: 388,
@@ -182,7 +182,8 @@ var Menu = cc.Layer.extend({
  	       h: 388,
  	       w: 278,
  	       click: function () {
- 	         cc.log('Go to game #4');	 
+ 	         cc.log('Go to game #4');
+ 	         app.runStage(new Vision());
  	       }
          },
         {
@@ -191,7 +192,8 @@ var Menu = cc.Layer.extend({
           h: 388,
           w: 278,
           click: function () {
-           cc.log('Go to game #5');	 
+           cc.log('Go to game #5');
+           app.runStage(new Complex());
           }
         }
   	  ] 
