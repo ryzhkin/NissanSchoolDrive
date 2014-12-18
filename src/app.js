@@ -113,28 +113,41 @@ var app = {
 	  if (typeof(menu.areas) !== 'undefined') {
 		  //cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
 		  menu.areas.forEach(function (area) {
+			  if (typeof(area.img) == 'string') {
+				var clickArea = new cc.Sprite(area.img);
+				layer.menu.addChild(clickArea);
+				clickArea.attr({
+					x: this.localX(area.x),
+					y: this.localY(area.y),
+					height  : area.h,
+					width   : area.w,
+					//tag     : area.tag,
+					options : area.options
+				});
+              } else {
+            	  var clickArea = new cc.DrawNode();
+            	  layer.menu.addChild(clickArea);
 
-			  var clickArea = new cc.DrawNode();
-			  layer.menu.addChild(clickArea);
-
-			  clickArea.attr({
-				  x: this.localX(area.x),
-				  y: this.localY(area.y),
-				  height  : area.h,
-				  width   : area.w,
-				  //tag     : area.tag,
-				  options : area.options
-			  });
+            	  clickArea.attr({
+            		  x: this.localX(area.x),
+            		  y: this.localY(area.y),
+            		  height  : area.h,
+            		  width   : area.w,
+            		  //tag     : area.tag,
+            		  options : area.options
+            	  });
 
 
-			  clickArea.drawRect(
-  	    	cc.p(0, 0), 
-  	    	cc.p(area.w, area.h),			
-  	    	cc.color(255, 255, 255, 0.01), 
-  	    	1, 
-  	    	cc.color(255, 13, 255, (debug == true)?255:1) 
-  	      );
-    	  
+            	  clickArea.drawRect(
+            			  cc.p(0, 0), 
+            			  cc.p(area.w, area.h),			
+            			  cc.color(255, 255, 255, 0.01), 
+            			  1, 
+            			  cc.color(255, 13, 255, (debug == true)?255:1) 
+            	  );
+  
+              }
+			      	  
 			  if (typeof(area.click) == 'function') {
     		  /*
     		  cc.eventManager.addListener({
