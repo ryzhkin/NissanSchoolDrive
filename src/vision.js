@@ -451,6 +451,7 @@ var Vision = cc.Layer.extend({
       
       // Таймер
       var second = 20;
+      var second = 2;
       
       // Таймер - Основа
       var timeLine1 = leadZero(Math.floor(second/(60*60)), 2) + ":" + leadZero(Math.floor(second/60), 2) + ":";
@@ -556,6 +557,93 @@ var Vision = cc.Layer.extend({
 	  cc.log(percent + '%');
 	  
 	  app.renderMenu(this, this.menuResult, true);
+	  
+	  var line = new cc.LabelTTF(
+			  percent + '%',
+			  'res/fonts/nissanagmed.ttf',
+			  120
+	  );
+	  line.setPosition(app.localX(1728), app.localY(1000));
+	  line.setAnchorPoint(0, 1);
+	  line.setColor(cc.color(0, 0, 0, 255));
+	  this.menu.addChild(line);
+	  
+	  var line = new cc.LabelTTF(
+			  'Отмечено флагов ' + userCounts[0] + '/' + counts[0],
+			  'res/fonts/nissanagmed.ttf',
+			  38
+	  );
+	  line.setPosition(app.localX(1038), app.localY(1096));
+	  line.setAnchorPoint(0, 1);
+	  line.setColor(cc.color(198, 22, 51, 255));
+	  this.menu.addChild(line);
+	  
+	  var line = new cc.LabelTTF(
+			  'Отмечено пит-стопов ' + userCounts[1] + '/' + counts[1],
+			  'res/fonts/nissanagmed.ttf',
+			  38
+	  );
+	  line.setPosition(app.localX(1038), app.localY(1096 - 60));
+	  line.setAnchorPoint(0, 1);
+	  line.setColor(cc.color(198, 22, 51, 255));
+	  this.menu.addChild(line);
+	  
+	  var line = new cc.LabelTTF(
+			  'Отмечено кафе ' + userCounts[2] + '/' + counts[2],
+			  'res/fonts/nissanagmed.ttf',
+			  38
+	  );
+	  line.setPosition(app.localX(1038), app.localY(1096 - 60- 60));
+	  line.setAnchorPoint(0, 1);
+	  line.setColor(cc.color(198, 22, 51, 255));
+	  this.menu.addChild(line);
+
+	  var line = new cc.LabelTTF(
+			  'Отмечено заправок ' + userCounts[3] + '/' + counts[3],
+			  'res/fonts/nissanagmed.ttf',
+			  38
+	  );
+	  line.setPosition(app.localX(1038), app.localY(1096 - 60- 60- 60));
+	  line.setAnchorPoint(0, 1);
+	  line.setColor(cc.color(198, 22, 51, 255));
+	  this.menu.addChild(line);
+	  
+	  var line1 = '';
+	  var line2 = '';
+	 
+	  if (percent <= 35) {
+	    line1 = 'Вы немного рассеяны.';
+	    line2 = 'Сосредоточьтесь и попробуйте снова.';
+	  } else {
+		  if (percent <= 65) {
+			  line1 = 'Хорошая реакция, но вы еще можете улучшить результат! ';
+			  line2 = 'Пройдите игру заново или проверьте себя на других тестах.';
+		  } else {
+			  line1 = 'Отличный результат! Реакция, достойная гонщика! ';
+			  line2 = 'Проверьте себя на других тестах.';
+		  }
+	  }
+	  
+	  var line = new cc.LabelTTF(
+			  line1,
+			  'res/fonts/nissanagmed.ttf',
+			  38
+	  );
+	  line.setPosition(app.localX(1536), app.localY(792));
+	  line.setAnchorPoint(0.5, 0.5);
+	  line.setColor(cc.color(0, 0, 0, 255));
+	  this.menu.addChild(line);
+	  
+	  var line = new cc.LabelTTF(
+			  line2,
+			  'res/fonts/nissanagmed.ttf',
+			  38
+	  );
+	  line.setPosition(app.localX(1536), app.localY(746));
+	  line.setAnchorPoint(0.5, 0.5);
+	  line.setColor(cc.color(0, 0, 0, 255));
+	  this.menu.addChild(line);
+
 	  
 	  
 	  this.pointFlagCount   = 0;
