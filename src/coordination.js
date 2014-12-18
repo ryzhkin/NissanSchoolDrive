@@ -387,13 +387,13 @@ var Coordination = cc.Layer.extend({
 			  offsetRegX : 0
 		  }
 	  });
-	  
+
 	  // UI
 	  var leftControl = new cc.Sprite('res/coordination/low/left_control.png');
 	  leftControl.attr({
-		 scale    : scaleFactor,
-		 x        : app.localX(710),
-		 y        : app.localY(878)
+		  scale    : scaleFactor,
+		  x        : app.localX(710),
+		  y        : app.localY(878)
 	  });
 	  this.worldLayer.addChild(leftControl);
 	  
@@ -405,7 +405,7 @@ var Coordination = cc.Layer.extend({
 		  y        : app.localY(878)
 	  });
 	  this.worldLayer.addChild(leftControl2);
-	  
+
 	  var rightControl = new cc.Sprite('res/coordination/low/right_control.png');
 	  rightControl.attr({
 		  scale    : scaleFactor,
@@ -465,14 +465,16 @@ var Coordination = cc.Layer.extend({
 	  this.accelerometerX = 0;
 	  // Уровень нейтрального положения
 	  var zeroLevel = 0.07;
-	  cc.inputManager.setAccelerometerEnabled(true);
-	  cc.eventManager.addListener({
+	  
+	  setTimeout(function () {
+	    cc.inputManager.setAccelerometerEnabled(true);
+	    cc.eventManager.addListener({
 		  event: cc.EventListener.ACCELERATION,
 		  callback: function(acc, event){
 			  this.accelerometerX = acc.x;
 		  }.bind(this)
-      }, this); 
-	  
+        }, this); 
+	  }.bind(this), 1500);
 	  
 	  // Запуск игры
 	  this.scheduleUpdate();
@@ -517,22 +519,38 @@ var Coordination = cc.Layer.extend({
 	  }	
 	},
 	result: function (time) {
-		 //this.menuResult.back = 'res/coordination/coordination-game-result1.jpg';
+		 var title = '';
+		 var line1 = '';
+		 var line2 = '';
+		 
 		 if (time/1000 < 10) {
-		   //this.menuResult.back = 'res/coordination/result3.jpg';
+		   var title = 'Увы!';
+		   var line1 = 'Вам пока не удалось удержать равновесие достаточно долго.';
+		   var line2 = 'Попробуйте еще раз или проверьте себя на других играх.';	 
 		 } else
 		 if (time/1000 < 15) {
-		   //this.menuResult.back = 'res/coordination/result2.jpg';
+ 	       var title = 'Неплохо!';
+		   var line1 = 'Однако, вы еще можете улучшить результат!';
+		   var line2 = 'Пройдите игру заново или проверьте себя на других тестах.';	 
 	     } else {
-	       //this.menuResult.back = 'res/coordination/result1.jpg'; 
-	     }
-		 cc.log(3);
+           /*	       
+           var title = 'Отличный результат!';
+		   var line1 = 'С чувством равновесия у вас все в порядке,';
+		   var line2 = 'а как насчет остальных навыков? Проверьте себя на других тестах.';
+           */	     
+    	   var title = 'Отличный результат!';
+	       var line1 = 'С чувством равновесия у вас все в порядке.';
+	       var line2 = '';		 
+	    }
+		 
+		 
+
 		 var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
 	     console.log('Stop Game = ' + timeStr);
 	     
 		 app.renderMenu(this, this.menuResult, true);
 	    
-	     var line = new cc.LabelTTF(
+	      var line = new cc.LabelTTF(
 	    		  timeStr,
 	    		  'res/fonts/nissanagmed.ttf',
 				  90
@@ -543,23 +561,40 @@ var Coordination = cc.Layer.extend({
 	      this.menu.addChild(line);
 	      
 	      
-	     /* var r11 = new cc.Sprite('res/coordination/r11.png');
-	      r11.attr({
-	    	  x        : app.localX(1240),
-	    	  y        : app.localY(1056),
-	    	  anchorX  : 0,
-	    	  anchorY  : 0
-	      });
-	      this.menu.addChild(r11);
+	      var line = new cc.LabelTTF(
+	    		  title,
+	    		  'res/fonts/nissanagmed.ttf',
+				  56
+		  );
+	      line.setPosition(app.localX(1536), app.localY(1095));
+		  line.setAnchorPoint(0.5, 0.5);
+		  line.setColor(cc.color(198, 22, 51, 255));
+	      this.menu.addChild(line);
 	      
-	      var r12 = new cc.Sprite('res/coordination/r12.png');
-	      r12.attr({
-	    	  x        : app.localX(999),
-	    	  y        : app.localY(732),
-	    	  anchorX  : 0,
-	    	  anchorY  : 0
-	      });
-	      this.menu.addChild(r12);*/
+	      
+	      var line = new cc.LabelTTF(
+	    		  line1,
+	    		  'res/fonts/nissanagmed.ttf',
+				  38
+		  );
+	      line.setPosition(app.localX(1536), app.localY(828));
+		  line.setAnchorPoint(0.5, 0.5);
+		  line.setColor(cc.color(0, 0, 0, 255));
+	      this.menu.addChild(line);
+	      
+	      var line = new cc.LabelTTF(
+	    		  line2,
+	    		  'res/fonts/nissanagmed.ttf',
+				  38
+		  );
+	      line.setPosition(app.localX(1536), app.localY(879));
+		  line.setAnchorPoint(0.5, 0.5);
+		  line.setColor(cc.color(0, 0, 0, 255));
+	      this.menu.addChild(line);
+	      
+	      
+	      
+	     
 	      
 	}
 });
