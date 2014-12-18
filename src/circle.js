@@ -180,22 +180,21 @@ var Circle = cc.Layer.extend({
 		var pathLine = new cc.DrawNode();
 		this.menu.addChild(pathLine);
 
-
+		var endGame = false;
+		setTimeout(function () {
 		cc.eventManager.addListener({
 			event: cc.EventListener.TOUCH_ONE_BY_ONE,
 			// When "swallow touches" is true, then returning 'true' from the onTouchBegan method will "swallow" the touch event, preventing other listeners from using it.
 			swallowTouches: true,
 			//onTouchBegan event callback function                      
 			onTouchBegan: function (touch, event) { 
-				path = [];
-				path.push(cc.p(car.x, car.y));
-				//path.push(cc.p(car.x + 5*Math.cos((Math.PI/180)*car.rotation), car.y + 5*Math.sin((Math.PI/180)*car.rotation)));
-				var location = touch.getLocation(); 
+				  var location = touch.getLocation(); 
 				  oldX = location.x;
 				  oldY = location.y;
 				  return true;
 			  },
 			  onTouchMoved: function (touch, event) {
+				 if (endGame == false) {
 				  var location = touch.getLocation(); 
 				  // Рисуем линию
 				  pathLine.drawDot(location, 25, cc.color(255, 131, 22, 20));
@@ -204,13 +203,16 @@ var Circle = cc.Layer.extend({
 				    oldX = location.x;
 				    oldY = location.y;  
 				  }
+				 } 
 			  },
 			  onTouchEnded: function (touch, event) {
+				if (endGame == false) { 
+				endGame = true;
 				var location = touch.getLocation();
 				path.push(location);
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
-				app.moveByPathConstant(path, car, 7, function () {
+				app.moveByPathConstantSpeed(path, car, 300, function () {
 					cc.log('Final !!!');  
 					var origDistancePath = getPathDistance(track.path);
 					var userDistancePath = getPathPointsDistance(path);
@@ -228,8 +230,10 @@ var Circle = cc.Layer.extend({
 					cc.log('Percent = ' + percent + '%');
 					this.result(percent);
 				}.bind(this), true);
+				}
 			  }.bind(this)	  
 	  }, this.menu);
+	  }.bind(this), 1000);
 	  
 	},
 	result: function (percent) {

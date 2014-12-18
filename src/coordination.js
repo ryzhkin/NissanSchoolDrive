@@ -154,7 +154,7 @@ var Coordination = cc.Layer.extend({
 	  this.startPause = new Date();
 	  this.pauseLayer = new cc.Layer();
 	  this.addChild(this.pauseLayer);
-	  app.renderMenu(this.pauseLayer, this.menuPause, true);
+	  app.renderMenu(this.pauseLayer, this.menuPause, false);
 	},
 	game: function () {
 	  app.renderMenu(this, this.menuGame, true);

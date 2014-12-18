@@ -56,10 +56,10 @@ var Turn = cc.Layer.extend({
 		        },
 		        {
 		        	x: 1536 - 416,
-	    	y: 1536 - 574 - 365,
-	    	w: 365,
-	    	h: 365,
-	    	click: function () {
+		        	y: 1536 - 574 - 365,
+		        	w: 365,
+		        	h: 365,
+		        	click: function () {
 	    		cc.loader.loadJson("res/data/turn.json", function(error, data) {
 	    			app.turn.game(2, data[1]);  
 	    		});
@@ -138,7 +138,7 @@ var Turn = cc.Layer.extend({
             h: 270,
             click: function () {
             	cc.loader.loadJson("res/data/turn.json", function(error, data) {
-	    			app.turn.game(app.turn.currentTrack, data[app.turn.currentTrack - 1]);  
+            		app.turn.game(app.turn.currentTrack, data[app.turn.currentTrack - 1]);  
 	    		}); 
             }
        }
@@ -216,7 +216,6 @@ var Turn = cc.Layer.extend({
 	help: function () {
 	  app.renderMenu(this, this.menuHelp, true);
 	},
-	
 	preparePath: function (path) {
 		var points = [];
 		var i = 0;
@@ -227,9 +226,8 @@ var Turn = cc.Layer.extend({
 		}	
 		return points;
 	},
-	
-	
 	game: function (type, track) {
+		
 	  this.currentTrack = type;	
 	  this.menuGame.back = 'res/turn/turn-type' + type + '.jpg';
 	  app.renderMenu(this, this.menuGame, true);
@@ -258,22 +256,27 @@ var Turn = cc.Layer.extend({
 	  var pathLine = new cc.DrawNode();
 	  this.menu.addChild(pathLine);
     
-		
+	  
+	  
+	  var endGame = false;	
+	 
+	  setTimeout(function () {
 	  cc.eventManager.addListener({
 			  event: cc.EventListener.TOUCH_ONE_BY_ONE,
 			  // When "swallow touches" is true, then returning 'true' from the onTouchBegan method will "swallow" the touch event, preventing other listeners from using it.
 			  swallowTouches: true,
 			  //onTouchBegan event callback function                      
-			  onTouchBegan: function (touch, event) { 
-				  path = [];
-				  path.push(cc.p(car.x, car.y));
-				  path.push(cc.p(car.x + 5*Math.cos((Math.PI/180)*car.rotation), car.y + 5*Math.sin((Math.PI/180)*car.rotation)));
+			  onTouchBegan: function (touch, event) {
+				/*if (endGame == false) */{ 
+				  cc.log('onTouchStart');
 				  var location = touch.getLocation(); 
 				  oldX = location.x;
 				  oldY = location.y;
-				  return true;
+				} 
+			    return true;
 			  },
 			  onTouchMoved: function (touch, event) {
+				if (endGame == false) {
 				  var location = touch.getLocation(); 
 				  // Рисуем линию
 				  pathLine.drawDot(location, 25, cc.color(255, 131, 22, 20));
@@ -282,13 +285,16 @@ var Turn = cc.Layer.extend({
 				    oldX = location.x;
 				    oldY = location.y;  
 				  }
+				}
 			  },
 			  onTouchEnded: function (touch, event) {
+			   if (endGame == false) {  
+				endGame = true;  
 				var location = touch.getLocation();
 				path.push(location);
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
-				app.moveByPathConstant(path, car, 7, function () {
+				app.moveByPathConstantSpeed(path, car, 300, function () {
 					cc.log('Final !!!');  
 					var origDistancePath = getPathDistance(track.path);
 					var userDistancePath = getPathPointsDistance(path);
@@ -306,8 +312,10 @@ var Turn = cc.Layer.extend({
 					cc.log('Percent = ' + percent + '%');
 					this.result(percent);
 				}.bind(this));
+			   }
 			  }.bind(this)	  
 	  }, this.menu);
+	  }.bind(this), 1000);
 	},
 	result: function (percent) {
 	  app.renderMenu(this, this.menuResult, true);	

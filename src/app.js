@@ -72,16 +72,22 @@ var app = {
     return y;
   },
   // Render Menu
-  renderMenu: function (layer, menu, debug) {
+  
+  renderMenu: function (layer, menu, clearEvents, debug) {
+	  debug = false;
+	  if (typeof(clearEvents) == 'undefined') {
+		clearEvents = true;  
+	  }
+	  if (clearEvents == true) {
+	    clearAllIntervals();
+	    cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+	  }
 	  cc.spriteFrameCache.removeSpriteFrames();
 	  cc.textureCache.removeAllTextures();
-	  debug = false;
 	  if (typeof(layer.menu) == 'undefined') {
-		  //clearAllIntervals();  
 		  layer.menu = new cc.Layer();  
 		  layer.addChild(layer.menu);
 	  } else {
-		  //clearAllIntervals();  
 		  layer.menu.removeAllChildren(true);  
 	  }
 
@@ -268,6 +274,12 @@ var app = {
 		}  
 	  }));
 	  sprite.runAction(new cc.Sequence(moves));  
+  },
+  
+  moveByPathConstantSpeed : function (path, sprite, speed, onSuccess) {
+	 var pathLength = getPathPointsDistance(path); 
+	 var time = pathLength/speed;
+	 this.moveByPathConstant(path, sprite, time, onSuccess);
   },
   
   playVideo: function (url) {

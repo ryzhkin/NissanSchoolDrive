@@ -241,7 +241,7 @@ var Slalom = cc.Layer.extend({
          x           : app.localX(2190),
          y           : app.localY(292),
          radius      : 264,
-         maxVelocity : 15
+         maxVelocity : (cc.sys.platform == cc.sys.IPAD || cc.sys.platform == cc.sys.IPHONE)?30:15
       });
       
       cc.eventManager.addListener({
