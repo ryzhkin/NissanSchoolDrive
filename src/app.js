@@ -75,7 +75,7 @@ var app = {
   
   renderMenu: function (layer, menu, clearEvents, debug) {
 	  debug = false;
-	  debug = true;
+	  //debug = true;
 	  if (typeof(clearEvents) == 'undefined') {
 		clearEvents = true;  
 	  }
@@ -185,7 +185,6 @@ var app = {
 		  }.bind(this));
 	  }	  
   },
-
   
   preparePathPoints: function (path) {
 		var points = [];

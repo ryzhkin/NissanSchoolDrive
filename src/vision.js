@@ -38,37 +38,152 @@ var Vision = cc.Layer.extend({
 		        		app.vision.pointGasCount++;
 		        	}
 		        },
-		   {
-			 x: 1536 + 724,
-			 y: 1536 - 1306 - 185,
-			 h: 185,
-			 w: 185,
-			 click: function () {
-			   cc.log('pointFood');	 
-			   app.vision.pointFoodCount++;
-			 }
-		},
-		   {
-			 x: 1536 - 944,
-			 y: 1536 - 1306 - 185,
-			 h: 185,
-			 w: 185,
-			 click: function () {
-			   cc.log('pointFlag');	
-			   app.vision.pointFlagCount++;
-			 }
-		}
-	  ]	
+		        {
+		        	x: 1536 + 724,
+		        	y: 1536 - 1306 - 185,
+		        	h: 185,
+		        	w: 185,
+		        	click: function () {
+		        		cc.log('pointFood');	 
+		        		app.vision.pointFoodCount++;
+		        	}
+		        },
+		        {
+		        	x: 1536 - 944,
+		        	y: 1536 - 1306 - 185,
+		        	h: 185,
+		        	w: 185,
+		        	click: function () {
+		        		cc.log('pointFlag');	
+		        		app.vision.pointFlagCount++;
+		        	}
+		        },
+		 	     // Пауза
+		          {
+		        	  x: 1536 - 250/2,
+		 	    	 y: 1536 - 140,
+		 	    	 h: 140,
+		 	    	 w: 250,
+		 	    	 click: function () {
+		 	    		 cc.log('PAUSE!!!');
+		 	    		 app.vision.pause();
+		 	    	 }
+		 	     }
+		        ]	
 	},
 	menuResult: {
-      back: assets.visionResultBack		
+		back: assets.visionResultBack,
+		areas: [
+		        {
+		        	x: 1536 - 450,
+		        	y: 1536 - 1072 - 140,
+		        	h: 140,
+		        	w: 402,
+		        	click: function () {
+		        		app.vision.pointFlagCount   = 0;
+		        		app.vision.pointRepairCount = 0;
+		        		app.vision.pointGasCount    = 0;
+		        		app.vision.pointFoodCount   = 0;	
+		        		app.vision.game();
+		        	} 	 
+		        },
+		        {
+		        	x: 1536 + 54,
+		        	y: 1536 - 1072 - 140,
+		        	h: 140,
+		        	w: 402,
+		        	click: function () {
+		        		app.runStage(new Menu(), 3);
+		        	} 	 
+		        },
+		        {
+		        	x: 1536 -206,
+		        	y: 1536 - 882 - 86,
+		        	h: 86,
+		        	w: 86,
+		        	click: function () {
+		        		app.share('fb', 'Я прошел игру "Периферическое зрение" в Школе вождения Nissan!');
+		        	}
+		        },
+		        {
+		        	x: 1536 - 94,
+		        	y: 1536 - 882 - 86,
+		        	h: 86,
+		        	w: 86,
+		        	click: function () {
+		        		app.share('vk', 'Я прошел игру "Периферическое зрение" в Школе вождения Nissan!');
+		        	}
+		        },
+		        {
+	    	 x: 1536 +20,
+	         y: 1536 - 882 - 86,
+	         h: 86,
+	         w: 86,
+	         click: function () {
+	        	 app.share('tw', 'Я прошел игру "Периферическое зрение" в Школе вождения Nissan!');
+	         }
+		        },
+		        {
+		        	x: 1536 +130,
+		        	y: 1536 - 882 - 86,
+		        	h: 86,
+		        	w: 86,
+		        	click: function () {
+		        		app.share('od', 'Я прошел игру "Периферическое зрение" в Школе вождения Nissan!');
+		        	}
+		        }      
+
+
+		        ]
 	},
-	
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		        {
+		        	x: 1536 -488,
+	    	y: 1536 - 483 - 278,
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    		app.vision.pauseLayer.removeFromParent(true);  
+	    		app.vision.inPause = false;
+	    	}
+	    },
+	    {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		      h: 278,
+		      w: 278,
+		      click: function () {
+		    	  app.runStage(new Menu(), 3);
+		      }
+		    },
+		    {
+		    	x: 1536 + 291,
+			      y: 1536 - 483 - 278,
+			      h: 278,
+			      w: 278,
+			      click: function () {
+			    	  app.vision.pauseLayer.removeFromParent(true);  
+			    	  app.vision.game();
+			      }
+			    }
+	  ]
+	},
 	init: function (options) {
 	  app.vision = this;
 	  app.renderMenu(this, this.menuIntro, true);
 	},
 	inPause: false,
+	
+	pause: function () {
+	  this.inPause = true;	
+	  this.pauseLayer = new cc.Layer();
+	  this.addChild(this.pauseLayer);
+	  app.renderMenu(this.pauseLayer, this.menuPause, false);
+	},
+	
+	
 	
 	
 	// Анимирование серии картинок
@@ -189,7 +304,7 @@ var Vision = cc.Layer.extend({
 	            	   ex     : 720,
 	            	   ey     : 1110,
 	            	   escale : 0.1,
-	            	  
+	            	   
 	                   speed  : 2000
 	                 },
 	                
@@ -282,6 +397,10 @@ var Vision = cc.Layer.extend({
 	                  }//*/
 	                  ],
 
+	                  
+	                  
+	                  
+	                  
 	// Загрузка массива спрайтов с начальными параметрами
 	loadSprites: function (items, visible) {
 		for (var i = 0; i < items.length; i++) {
@@ -375,6 +494,11 @@ var Vision = cc.Layer.extend({
 	  
 	  var trees  = this.trees.slice(0);
       var points = this.points.slice(0);
+      for (var i = 0; i < points.length; i++) {
+          points[i].count = 0;
+          points[i].speed = 2000;
+          if (typeof(points[i].sprite) !== 'undefined') delete points[i].sprite;
+       }
 	  
 	  // ----------------------------------------------
 	  var scaleFactor = 1536/640;
@@ -444,6 +568,21 @@ var Vision = cc.Layer.extend({
  	  
       // Загружаем знаки
       this.loadSprites(points, false);
+      
+      
+      setTimeout(function () {
+          if (this.inPause == false) {
+          points.foreach(function (point) {
+              point.speed = 800;
+          });
+          setTimeout(function () {
+              points.foreach(function (point) {
+                  point.speed = 600;
+              });
+          }.bind(this), 4000);
+          }
+      }.bind(this), 5000);
+      
 
       // Запускаем знаки
       //this.runSprite(points, 0);
@@ -451,7 +590,7 @@ var Vision = cc.Layer.extend({
       
       // Таймер
       var second = 20;
-      var second = 2;
+     
       
       // Таймер - Основа
       var timeLine1 = leadZero(Math.floor(second/(60*60)), 2) + ":" + leadZero(Math.floor(second/60), 2) + ":";
@@ -510,6 +649,18 @@ var Vision = cc.Layer.extend({
           anchorY : 1  
       });
       this.menu.addChild(b);
+      
+      
+     // Пауза
+	  var pause = new cc.Sprite('res/coordination/pause.png');
+	  pause.attr({
+		  x        : app.localX(1536),
+		  y        : app.localY(1536 - 69/2)
+	  });
+	  this.menu.addChild(pause);
+      
+      
+      
       
       // Запускаем Таймер
       var timerID = setIntervalG(function () {
