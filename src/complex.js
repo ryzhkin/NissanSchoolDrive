@@ -24,8 +24,7 @@ var Complex = cc.Layer.extend({
 		app.renderMenu(this, this.menuIntro, true);
 	},
 	game: function (track) {
-		
 	  app.renderMenu(this, this.menuGame, true);
-		
+	 // cc.audioEngine.playMusic('res/song.mp3', false);
 	}
 });

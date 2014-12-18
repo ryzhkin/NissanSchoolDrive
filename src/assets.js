@@ -75,7 +75,8 @@ var assets = {
   
   // Графические ресурсы к игре Переферийное зрение
   visionIntroBack   : 'res/vision/vision-background.jpg',
-  
+  visionGameBack    : 'res/vision/vision-game-background.jpg',
+  visionGameBackX2  : 'res/vision/vision-game-backgroundX2.jpg',
   
   // Графические ресурсы к игре Закрепление навыков
   complexIntroBack   : 'res/complex/complex-background.jpg',

@@ -1,4 +1,14 @@
 /**
+ * Случайное целое из диапазона min, max
+ * @param min
+ * @param max
+ * @return {Number}
+ */
+function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
  * Перемешивает члены массива случайным образом
  * @param b
  * @return {*}
