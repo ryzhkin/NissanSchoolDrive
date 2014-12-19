@@ -332,7 +332,7 @@ var Complex = cc.Layer.extend({
         		'res/fonts/nissanagmed.ttf',
         		87
         );
-        timerSec.setPosition(app.localX(1536 - 1002 ), app.localY(1536 - 209 - 100));
+        timerSec.setPosition(app.localX(1536 - 1002 ), app.localY(1536 - 209 - 80));
         timerSec.setAnchorPoint(0, 0);
         timerSec.setColor(cc.color(help.hexToRgb('#ffffff').r, help.hexToRgb('#ffffff').g, help.hexToRgb('#ffffff').b, 255));
         this.worldLayer.addChild(timerSec);
@@ -431,7 +431,7 @@ var Complex = cc.Layer.extend({
         		  // Условие финиша
         		  if (currentCheckPoint == 2) {
         			 cc.log('Нормальный финиш!');
-    				 result.result((new Date() - startTime - this.pauseTime));
+    				 this.result((new Date() - startTime - this.pauseTime));
         		  } else {
         			pointGas.visible = true;
         			pointGas.x = app.localX(1536 + track.checkPoints[currentCheckPoint][0]);
