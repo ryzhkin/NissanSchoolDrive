@@ -164,6 +164,7 @@ var Coordination = cc.Layer.extend({
 	  this.worldLayer = new cc.Layer();  
 	  this.menu.addChild(this.worldLayer);	
 	  this.world = new physicWorld(this.worldLayer, {
+		gravity  : [0, -15], 
 		//debug    : true
 	  });
 	  
@@ -223,7 +224,7 @@ var Coordination = cc.Layer.extend({
 		  physic: {density: 0.4, friction: 15},
 		  pos: {
 			  x: app.localX(1350),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2)*scaleFactor)
+			  y: app.localY(37 + (2*86 + 36/2 - 15 + 75/2)*scaleFactor)
 		  },
 		  shape: {
 			  box: [35*scaleFactor, (78 - 5)*scaleFactor]
@@ -240,7 +241,7 @@ var Coordination = cc.Layer.extend({
 		  physic: {density: 0.52, friction: 15},
 		  pos: {
 			  x: app.localX(1224),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2)*scaleFactor + 28)
+			  y: app.localY(37 + (2*86 + 36/2 + 75/2 - 5)*scaleFactor/* + 28*/)
 		  },
 		  shape: {
 			  box: [66*scaleFactor, 93*scaleFactor]
@@ -251,6 +252,7 @@ var Coordination = cc.Layer.extend({
 		  }
 	  });
 	  
+	 
 	  // Маленькое колесо
 	  this.world.addObj({
 		  physic: {density: 0.52, friction: 15},
@@ -273,7 +275,7 @@ var Coordination = cc.Layer.extend({
 		  physic: {density: 0.700009094, friction: 15},
 		  pos: {
 			  x: app.localX(1834),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2)*scaleFactor + 37)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2 + 15)*scaleFactor/* + 37*/)
 		  },
 		  shape: {
 			  box: [71*scaleFactor, 101*scaleFactor]
@@ -289,7 +291,7 @@ var Coordination = cc.Layer.extend({
 		  physic: {density: 0.52, friction: 15},
 		  pos: {
 			  x: app.localX(1536),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2)*scaleFactor)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 7)*scaleFactor)
 		  },
 		  shape: {
 			  box: [380*scaleFactor, 10*scaleFactor]
@@ -300,13 +302,13 @@ var Coordination = cc.Layer.extend({
 			  offsetRegY : 16
 		  }
 	  });
-	  
+	 
 	  // Верхний - левый конус
 	  this.world.addObj({
 		  physic: {density: 0.2},
 		  pos: {
 			  x: app.localX(1224 + 33*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2)*scaleFactor + 10)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 12)*scaleFactor/* + 10*/)
 		  },
 		  shape: {
 			  polygon: [66*scaleFactor, 0, 33*scaleFactor, 64*scaleFactor, 0, 0]
@@ -318,13 +320,13 @@ var Coordination = cc.Layer.extend({
 			  offsetRegX : 0
 		  }
 	  });
-		
+      
 	  // Нижняя покрышка
 	  this.world.addObj({
 		  physic: {friction: 5, density: 0.425},
 		  pos: {
 			  x: app.localX(1536),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73/2 + 2)*scaleFactor + 10)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73/2 + 11)*scaleFactor/* + 10*/)
 		  },
 		  shape: {
 			  box: [176*scaleFactor, (73)*scaleFactor]
@@ -339,7 +341,7 @@ var Coordination = cc.Layer.extend({
 		  physic: {friction: 2, density: 0.01},
 		  pos: {
 			  x: app.localX(1536 + 136/2*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65 + 117/2 + 10)*scaleFactor + 10)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65 + 117/2 + 18)*scaleFactor/* + 10*/)
 		  },
 		  shape: {
 			  box: [117*scaleFactor, 136*scaleFactor]
@@ -352,13 +354,14 @@ var Coordination = cc.Layer.extend({
 			  offsetRegY : 117/2,
 		  }
 	  });
+	  
 
 	  // Верхняя покрышка
 	  this.world.addObj({
 		  physic: {friction: 5, density: 0.1},
 		  pos: {
 			  x: app.localX(1536 + (178/8)*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65/2)*scaleFactor + 10)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65/2 + 8)*scaleFactor/* + 10*/)
 		  },
 		  shape: {
 			  box: [178*scaleFactor, (79 - 15)*scaleFactor]
@@ -375,7 +378,7 @@ var Coordination = cc.Layer.extend({
 		  physic: {density: 0.02},
 		  pos: {
 			  x: app.localX(1870 + 33*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2)*scaleFactor + 10)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 12)*scaleFactor/* + 10*/)
 		  },
 		  shape: {
 			  polygon: [66*scaleFactor, 0, 33*scaleFactor, 64*scaleFactor, 0, 0]
@@ -387,6 +390,10 @@ var Coordination = cc.Layer.extend({
 			  offsetRegX : 0
 		  }
 	  });
+	  
+	  //*/
+	  
+	  
 
 	  // UI
 	  var leftControl = new cc.Sprite('res/coordination/low/left_control.png');
@@ -464,7 +471,7 @@ var Coordination = cc.Layer.extend({
 	  // Текущее значение аксилирометра
 	  this.accelerometerX = 0;
 	  // Уровень нейтрального положения
-	  var zeroLevel = 0.07;
+	  var zeroLevel = 0.04;
 	  
 	  setTimeout(function () {
 	    cc.inputManager.setAccelerometerEnabled(true);
