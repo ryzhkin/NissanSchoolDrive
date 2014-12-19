@@ -22,15 +22,15 @@ var app = {
   init: function () {
 	 this.game = new GameScene();
 	 cc.director.runScene(this.game);
-	 
+
 	 this.winsize = cc.winSize;
 	 this.center  = cc.p(this.winsize.width / 2, this.winsize.height / 2);
-	 
-	 
+
+
 	 this.loader = new Loader();
-	 
+
 	 this.runStage(this.loader, {
-	   assets: g_assets,
+		 assets: g_assets,
 	   onSuccess: function () {
 		 cc.log('Success loaded ...');
 		 this.menu = new Menu();
@@ -185,6 +185,17 @@ var app = {
 		  }.bind(this));
 	  }	  
   },
+  
+  preparePath: function (path) {
+		var points = [];
+		var i = 0;
+		while (i < path.length) {
+		  points.push(this.localX(path[i]));
+		  points.push(this.localY(1536 - path[i + 1]));
+		  i += 2;
+		}	
+		return points;
+ },
   
   preparePathPoints: function (path) {
 		var points = [];
