@@ -20,7 +20,7 @@ var Complex = cc.Layer.extend({
 		        ]
 	},
 	menuGame: {
-		back: assets.complexSorryBack,
+		back: assets.complexIntroBack,
 		areas: [
 		        {
 		        	x: (1536 -968),
