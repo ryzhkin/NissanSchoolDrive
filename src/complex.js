@@ -1,49 +1,3 @@
-var joystickComplex = {
-		x           : 0,
-		y           : 0,
-		radius      : 100,
-		maxVelocity : 3,
-		active      : false,
-		init: function (options) {
-			this.x      = options.x;
-			this.y      = options.y;
-			this.radius = options.radius;
-			this.maxVelocity = options.maxVelocity;
-			this.active = false;
-		},
-		get: function (inputX, inputY) {
-			var result = {
-					velocity : 0,
-					angle    : 0
-			};
-			var sign = this.x - inputX;
-			var xa = 0;
-			var ya = 10;
-			var xb = inputX - this.x;
-			var yb = inputY - this.y;
-			var a  = Math.acos((xa*xb + ya*yb) / Math.sqrt(( Math.pow(xa, 2) + Math.pow(ya, 2)) * ( Math.pow(xb, 2) + Math.pow(yb, 2))));
-			a  = a*180/Math.PI - 90;
-			a  = ((sign < 0)?(180 - a):a);
-			result.angle = (-1)*(a);
-			
-			var d = getDistance(this.x, this.y, inputX, inputY);
-			if (d > this.radius) {
-				d = this.radius;
-			}
-			result.velocity = (this.maxVelocity/this.radius)*d*1;
-			return result;
-		},
-		check: function (inputX, inputY) {
-			var d = getDistance(this.x, this.y, inputX, inputY);
-			if (d <= this.radius) {
-				return true;
-			} else {
-				return false;
-			}
-
-		}
-};
-
 var Complex = cc.Layer.extend({
 	ctor: function () {
 		this._super();
@@ -66,7 +20,18 @@ var Complex = cc.Layer.extend({
 		        ]
 	},
 	menuGame: {
-		back: assets.complexSorryBack
+		back: assets.complexSorryBack,
+		areas: [
+		  {
+			  x: (1536 -968),
+			  y: (1536 - 1104 - 408),
+			  h: 408,
+			  w: 408,
+			  click: function () {
+				app.complex.toFuel();
+			  }
+		  }      
+		]
 	},	
 	init: function (options) {
 		app.complex = this;
@@ -131,14 +96,16 @@ var Complex = cc.Layer.extend({
 
 
 	game: function (tracks) {
+		var scaleFactor = 1536/640;
 		//tracks.shuffle(true);
 		var track = tracks[0]; 
 		this.track = track;
+		// Вычисляем длинну маршрута
+		track.s = getPathDistance(track.path);		
+	
 
 		this.menuGame.back = 'res/complex/' + track.track; 	
 		app.renderMenu(this, this.menuGame, true);
-		var scaleFactor = 1536/640;
-		track.s = getPathDistance(track.path);
 
 
 		this.worldLayer = new cc.Layer();  
@@ -147,12 +114,16 @@ var Complex = cc.Layer.extend({
 			gravity     : [0, 0],
 			debug    : true
 		});
+		// Границы трассы
+		track.limit1 = app.preparePath(track.limit1);
+		track.limit2 = app.preparePath(track.limit2);
+		
 		// Добавляем физические ограничения трассы
 		track.limitFinish = app.preparePath(track.limitFinish);
 
 		// Линия финиша
 		if (track.limitFinish.length >= 4) {
-			var finish = this.segmentLimit(this.world, track.limitFinish[2], track.limitFinish[3], track.limitFinish[0], track.limitFinish[1]);
+			//var finish = this.segmentLimit(this.world, track.limitFinish[2], track.limitFinish[3], track.limitFinish[0], track.limitFinish[1]);
 		}
 
 		// Линии отбойников
@@ -338,12 +309,9 @@ var Complex = cc.Layer.extend({
         	}.bind(this)	  
         }, this.menu);
         
-        // ЗАПУСК ИГРЫ!!!        
+               
         // Текущая контрольная точка
         var currentCheckPoint = 0;
-
-        
-
         // Переодически синхронизируем скрость линейную скорость авто и спидометр
         setIntervalG(function () {
         	//cc.log(((car.velocity*30)/joystick.maxVelocity)*100 + '%');
@@ -376,13 +344,89 @@ var Complex = cc.Layer.extend({
           carSx = car.objectEseal.x;
           carSy = car.objectEseal.y;
           if (startedGame == true) {
+        	  // Условие провала фольстарт
+        	  if (light4.visible == false) {
+        		light5.visible = true;
+        		cc.log('Result = -1, Условие провала Фальстарт!');
+        		//this.result(-1);
+        	  }
+        	  currentFull =  100 - (carS/((track.s)/1.5))*100;
+        	  arrowFull.rotation = 1.7*currentFull - 85;
+        	  // Условие провала через заправку
+        	  if (currentFull < 0) {
+        		  cc.log('Result = -2, Условие провала через заправку');
+        		  //this.result(-2);
+        	  }
+        	  // Условие провала - выход с трассы
+        	  if ((isPointInPoly(car.objectEseal.x, car.objectEseal.y, track.limit1) == false) || (isPointInPoly(car.objectEseal.x, car.objectEseal.y, track.limit2) == true)) {
+        		  cc.log('Result = -2, Условие провала - выход с трассы');
+        		  //this.result(-2);
+        	  }
         	  
+        	  if (currentCheckPoint > 2) currentCheckPoint = 2;
+        	  var d = getDistance(car.objectEseal.x, car.objectEseal.y, app.localX(1536 + track.checkPoints[currentCheckPoint][0]), app.localY(1536 - track.checkPoints[currentCheckPoint][1]));
+        	  if (d <= 172) {
+        		  // Условие финиша
+        		  if (currentCheckPoint == 2) {
+        			 cc.log('Нормальный финиш!');
+    				 //result.result((new Date() - startTime - complex.pauseTime));
+        		  } else {
+        			pointGas.visible = true;
+        			pointGas.x = app.localX(1536 + track.checkPoints[currentCheckPoint][0]);
+        			pointGas.y = app.localY(1536 - track.checkPoints[currentCheckPoint][1]);
+        		  }  
+        	  }	else {
+        		pointGas.visible = false;  
+        	  }  
           }
         }.bind(this), 1000/60);
+        
+        // Заправка
+        // Действие - заправка авто
+        this.toFuel = function () {
+        	if (pointGas.visible == true) {
+        		cc.log('Действие - заправка авто');
+        		cc.log('currentCheckPoint = ' + currentCheckPoint);
+        		carS = 0;
+        		pointGas.visible = false;
+        		currentFull = 100;
+        		//arrowFull.runAction(cc.rotateTo(3,  85,  85));
+        		currentCheckPoint += 1;
+        	}
+        }
+        
+        
+        
+        
+        // ЗАПУСК ИГРЫ!!! 
+        var startTime = new Date();
+        setTimeout(function () {
+        	light1.visible = true;
+        	setTimeout(function () {
+        		light2.visible = true;
+        		setTimeout(function () {
+        			light3.visible = true;
+        			setTimeout(function () {
+        				light4.visible = true;
+        				// Запускаем Таймер
+        				startTime = new Date();
+        				setIntervalG(function () {
+        					/*if (complex.g.isPause() == false)*/ {
+        						var time = new Date() - startTime;
+        						var minute = Math.floor(time/(60*1000));
+        						var second = Math.floor((time - minute*(60*1000))/1000);
+        						var msecond = time - minute*(60*1000) - second*1000;
+        						timerSec.setString(leadZero(minute, 2) + ':' + leadZero(second, 2) + ':' + leadZero(msecond, 3));
+        					}
+        				}, 150);
+        			}.bind(this), Math.random()*5000);
+        		}.bind(this), 500);
+        	}.bind(this), 500);
+        }.bind(this), 2000);	
 	  
 	  
-	  // Запуск игры
-	  this.scheduleUpdate();
+	    // Запуск физики
+	    this.scheduleUpdate();
 	},
 	update: function (dt) {
 		  if (this.world !== null) {
@@ -390,3 +434,50 @@ var Complex = cc.Layer.extend({
 		  }	
 	},
 });
+
+
+var joystickComplex = {
+		x           : 0,
+		y           : 0,
+		radius      : 100,
+		maxVelocity : 3,
+		active      : false,
+		init: function (options) {
+			this.x      = options.x;
+			this.y      = options.y;
+			this.radius = options.radius;
+			this.maxVelocity = options.maxVelocity;
+			this.active = false;
+		},
+		get: function (inputX, inputY) {
+			var result = {
+					velocity : 0,
+					angle    : 0
+			};
+			var sign = this.x - inputX;
+			var xa = 0;
+			var ya = 10;
+			var xb = inputX - this.x;
+			var yb = inputY - this.y;
+			var a  = Math.acos((xa*xb + ya*yb) / Math.sqrt(( Math.pow(xa, 2) + Math.pow(ya, 2)) * ( Math.pow(xb, 2) + Math.pow(yb, 2))));
+			a  = a*180/Math.PI - 90;
+			a  = ((sign < 0)?(180 - a):a);
+			result.angle = (-1)*(a);
+
+			var d = getDistance(this.x, this.y, inputX, inputY);
+			if (d > this.radius) {
+				d = this.radius;
+			}
+			result.velocity = (this.maxVelocity/this.radius)*d*1;
+			return result;
+		},
+		check: function (inputX, inputY) {
+			var d = getDistance(this.x, this.y, inputX, inputY);
+			if (d <= this.radius) {
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+};

@@ -143,6 +143,25 @@ var getPathDistance = function (path) {
 	return s;
 }
 
+function isPointInPoly(x, y, path){
+	var pt = {
+			x: x,
+			y: y
+	};
+	var poly = [];
+	for (var i = 0; i < path.length; i +=2) {
+		poly.push({
+			x: path[i],
+			y: path[i + 1]
+		});
+	}
+	for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+		((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
+		&& (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+		&& (c = !c);
+	return c;
+}
+
 var getPathPointsDistance = function (path) {
 	var s = 0;
 	var p = [];
