@@ -24,8 +24,8 @@ var joystickComplex = {
 			var a  = Math.acos((xa*xb + ya*yb) / Math.sqrt(( Math.pow(xa, 2) + Math.pow(ya, 2)) * ( Math.pow(xb, 2) + Math.pow(yb, 2))));
 			a  = a*180/Math.PI - 90;
 			a  = ((sign < 0)?(180 - a):a);
-			result.angle = a;//(-1)*(a + 90);
-
+			result.angle = (-1)*(a);
+			
 			var d = getDistance(this.x, this.y, inputX, inputY);
 			if (d > this.radius) {
 				d = this.radius;
@@ -189,19 +189,127 @@ var Complex = cc.Layer.extend({
         car.body.SetLinearDamping(10);
         car.body.SetAngularDamping(10);
         car.body.SetAngle(track.rotation*Math.PI/180);
+        car.angle    = track.rotation;
+        car.velocity = 0;
         car.update = function (input) {
         	this.angle    = (-1)*input.angle;
-        	this.velocity = input.velocity;
+        	this.velocity = input.velocity/30;
         }
         
         var joystick = joystickComplex;
         joystick.init({
         	x           : app.localX(2298),
         	y           : app.localY(1536 - 1307),
-        	radius      : 264,
-        	maxVelocity : (cc.sys.platform == cc.sys.IPAD || cc.sys.platform == cc.sys.IPHONE)?30:15
+        	radius      : 220,
+        	maxVelocity : (cc.sys.platform == cc.sys.IPAD || cc.sys.platform == cc.sys.IPHONE)?16:8
         });
         
+        /*
+        var shape = new cc.DrawNode();
+        this.worldLayer.addChild(shape);
+        this.world.drawSector(shape, app.localX(2298), app.localY(1536 - 1307), 220, 0, 360, cc.color(255, 255, 255, 100), cc.color(55, 55, 55, 255));
+        //*/
+        
+        // Добавляем элементы UI: светофор, стрелки приборов
+        var light1 = new cc.Sprite('res/complex/complex-gray-light.png');
+        light1.attr({
+        	visible  : false,
+        	x        : app.localX(1536 - 995),
+        	y        : app.localY(1536 - 82),
+        	anchorX  : 0,
+        	anchorY  : 1
+        });
+        this.worldLayer.addChild(light1);
+        var light2 = new cc.Sprite('res/complex/complex-gray-light.png');
+        light2.attr({
+        	visible  : false,
+        	x        : app.localX(1536 - 995 + 76),
+        	y        : app.localY(1536 - 82),
+        	anchorX  : 0,
+        	anchorY  : 1
+        });
+        this.worldLayer.addChild(light2);
+        var light3 = new cc.Sprite('res/complex/complex-yellow-light.png');
+        light3.attr({
+        	visible  : false,
+        	x        : app.localX(1536 - 995 + 76 + 76),
+        	y        : app.localY(1536 - 82),
+        	anchorX  : 0,
+        	anchorY  : 1
+        });
+        this.worldLayer.addChild(light3);
+        var light4 = new cc.Sprite('res/complex/complex-green-light.png');
+        light4.attr({
+        	visible  : false,
+        	x        : app.localX(1536 - 995 + 76 + 76 + 76),
+        	y        : app.localY(1536 - 82),
+        	anchorX  : 0,
+        	anchorY  : 1
+        });
+        this.worldLayer.addChild(light4);
+        var light5 = new cc.Sprite('res/complex/complex-red-light.png');
+        light5.attr({
+        	visible  : false,
+        	x        : app.localX(1536 - 995 + 76 + 76 + 76 + 70),
+        	y        : app.localY(1536 - 82),
+        	anchorX  : 0,
+        	anchorY  : 1
+        });
+        this.worldLayer.addChild(light5);
+        var pointGas = new cc.Sprite('res/complex/complex-point-gas.png');
+        pointGas.attr({
+        	visible  : false,
+        	x        : app.localX(1536 + track.checkPoints[0][0]),
+        	y        : app.localY(1536 - track.checkPoints[0][1]),
+        	anchorX  : 0.5,
+        	anchorY  : 0.5,
+        	scale    : scaleFactor
+        });
+        this.worldLayer.addChild(pointGas);
+        var arrowSpeed = new cc.Sprite('res/complex/complex-arrow-left.png');
+        arrowSpeed.attr({
+        	rotation : -150,
+        	x        : app.localX(1536 - 298),
+        	y        : app.localY(1536 - 1411),
+        	anchorX  : 0.5,
+        	anchorY  : 0.3846153846153846
+        });
+        this.worldLayer.addChild(arrowSpeed);
+        var arrowFull = new cc.Sprite('res/complex/complex-arrow-center.png');
+        arrowFull.attr({
+        	rotation : 85,
+        	x        : app.localX(1536 - 11),
+        	y        : app.localY(1536 - 1347),
+        	anchorX  : 0.5,
+        	anchorY  : 0.3806451612903226
+        });
+        this.worldLayer.addChild(arrowFull);
+        var arrowTax = new cc.Sprite('res/complex/complex-arrow-right.png');
+        arrowTax.attr({
+        	rotation : -120,
+        	x        : app.localX(1536 + 288),
+        	y        : app.localY(1536 - 1408),
+        	anchorX  : 0.5,
+        	anchorY  : 0.3814432989690722
+        });
+        this.worldLayer.addChild(arrowTax);
+        // Таймер - Секунды
+        var timerSec = new cc.LabelTTF(
+        		'00:00:000',
+        		'res/fonts/nissanagmed.ttf',
+        		87
+        );
+        timerSec.setPosition(app.localX(1536 - 1002 ), app.localY(1536 - 209 - 100));
+        timerSec.setAnchorPoint(0, 0);
+        timerSec.setColor(cc.color(help.hexToRgb('#ffffff').r, help.hexToRgb('#ffffff').g, help.hexToRgb('#ffffff').b, 255));
+        this.worldLayer.addChild(timerSec);
+
+        
+        
+        
+        
+        // Флаг говорящий о старте игры (начало ввода контрольной информации)
+        var startedGame = false;
         cc.eventManager.addListener({
         	event: cc.EventListener.TOUCH_ONE_BY_ONE,
         	// When "swallow touches" is true, then returning 'true' from the onTouchBegan method will "swallow" the touch event, preventing other listeners from using it.
@@ -210,9 +318,9 @@ var Complex = cc.Layer.extend({
         	onTouchBegan: function (touch, event) { 
         		var location = touch.getLocation();
         		if (joystick.check(location.x, location.y)) {
+        			startedGame = true;
         			joystick.active = true;
         			car.update(joystick.get(location.x, location.y));
-        			cc.log('YES');
         		} else {
         			car.velocity = 0;
         		}
@@ -230,55 +338,47 @@ var Complex = cc.Layer.extend({
         	}.bind(this)	  
         }, this.menu);
         
+        // ЗАПУСК ИГРЫ!!!        
+        // Текущая контрольная точка
+        var currentCheckPoint = 0;
+
+        
+
+        // Переодически синхронизируем скрость линейную скорость авто и спидометр
+        setIntervalG(function () {
+        	//cc.log(((car.velocity*30)/joystick.maxVelocity)*100 + '%');
+        	var p = ((car.velocity*30)/joystick.maxVelocity);
+        	var a1 = p*300 - 150;
+        	arrowSpeed.runAction(cc.rotateTo(0.5, a1, a1));
+        	var a2 = p*240 - 120;
+        	arrowTax.runAction(cc.rotateTo(0.5, a2, a2));
+        }, 600);
+        // Текущее кол-во топлива в авто
+        var currentFull = 100;
+        // Интегральная длинна маршрута, которую проехал автомобиль
+        var carS = 0;
+        var carSx = car.objectEseal.x;
+        var carSy = car.objectEseal.y;
+       
+        
         var gameTick = setIntervalG(function() {
+          var a = car.angle*Math.PI/180;
+          car.body.SetAngle(a);
         	
-        	car.body.SetAngle(car.angle);
-        	/*var position = car.body.GetPosition();
-        	position.x +=  (-1)*car.velocity*Math.cos(car.angle);
-        	position.y +=  (-1)*car.velocity*Math.sin(car.angle);
-        	car.body.SetPosition(position);*/
-        	
-        	/*var prevPosition = {
-        			x: car.x,
-        			y: car.y
-        	}
-
-        	car.rotation = car.angle;
-        	car.y += car.velocity * Math.cos(Math.PI / 180 * car.angle);
-        	car.x += car.velocity * Math.sin(Math.PI / 180 * car.angle);
-
-        	// Расчитываем интегральную длинну маршрута, которую проехал автомобиль
-        	car.distancePath += getDistance(prevPosition.x, prevPosition.y, car.x, car.y);
-*/
-        	
-        	
-        	
-        	
-        	
-        	/*if (car.x >= app.localX(track.finish.x)) {
-        		clearInterval(gameTick);
-        		// Условие финиша
-        		cc.log('Условие финиша');
-
-        		//console.log('origDistancePath = ' + origDistancePath);
-        		//console.log('carDistancePath = ' + car.distancePath);
-
-
-        		if (car.distancePath > origDistancePath) {
-        			var tmp = car.distancePath;
-        			car.distancePath = origDistancePath;
-        			origDistancePath = tmp;
-        		}
-
-        		var percent = Math.round((car.distancePath / origDistancePath)*100);
-        		cc.log('Percent = ' + percent + '%');
-        		this.result(percent);
-
-        	}*/  
+          var position = car.body.GetPosition();
+          position.x +=  (-1)*car.velocity*Math.cos(a);
+          position.y +=  (-1)*car.velocity*Math.sin(a);
+          car.body.SetPosition(position);
+          
+          // Расчет игровых параметров
+          // Расчитываем интегральную длинну маршрута, которую проехал автомобиль
+          carS += getDistance(car.objectEseal.x, car.objectEseal.y, carSx, carSy);
+          carSx = car.objectEseal.x;
+          carSy = car.objectEseal.y;
+          if (startedGame == true) {
+        	  
+          }
         }.bind(this), 1000/60);
-        
-        
-	  
 	  
 	  
 	  // Запуск игры
