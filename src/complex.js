@@ -32,6 +32,68 @@ var Complex = cc.Layer.extend({
 			  }
 		  }      
 		]
+	},
+	menuResult: {
+		back: assets.complexResultBack,
+		areas:[
+{
+	x: 1536 - 450,
+	y: 1536 - 1101 - 140,
+	h: 140,
+	w: 402,
+	click: function () {
+		cc.loader.loadJson("res/data/complex.json", function(error, data) {
+			app.complex.game(data);  
+		});
+	} 	 
+},
+{
+	x: 1536 + 54,
+	y: 1536 - 1101 - 140,
+	h: 140,
+	w: 402,
+	click: function () {
+		app.runStage(new Menu(), 3);
+	} 	 
+},
+{
+	x: 1536 -206,
+	y: 1536 - 921 - 86,
+	h: 86,
+	w: 86,
+	click: function () {
+		app.share('fb', 'Я прошел игру "Закрепление всех навыков" в Школе вождения Nissan!');
+	}
+},
+{
+	x: 1536 - 94,
+	y: 1536 - 921 - 86,
+	h: 86,
+	w: 86,
+	click: function () {
+		app.share('vk', 'Я прошел игру "Закрепление всех навыков" в Школе вождения Nissan!');
+	}
+},
+{
+	x: 1536 +20,
+	y: 1536 - 921 - 86,
+	h: 86,
+	w: 86,
+	click: function () {
+		app.share('tw', 'Я прошел игру "Закрепление всех навыков" в Школе вождения Nissan!');
+	}
+},
+{
+	x: 1536 +130,
+	y: 1536 - 921 - 86,
+	h: 86,
+	w: 86,
+	click: function () {
+		app.share('od', 'Я прошел игру "Закрепление всех навыков" в Школе вождения Nissan!');
+	}
+}         
+		       
+		]
 	},	
 	init: function (options) {
 		app.complex = this;
@@ -97,7 +159,7 @@ var Complex = cc.Layer.extend({
 
 	game: function (tracks) {
 		var scaleFactor = 1536/640;
-		//tracks.shuffle(true);
+		tracks.shuffle(true);
 		var track = tracks[0]; 
 		this.track = track;
 		// Вычисляем длинну маршрута
@@ -320,6 +382,7 @@ var Complex = cc.Layer.extend({
         	arrowSpeed.runAction(cc.rotateTo(0.5, a1, a1));
         	var a2 = p*240 - 120;
         	arrowTax.runAction(cc.rotateTo(0.5, a2, a2));
+        	arrowFull.runAction(cc.rotateTo(0.5,  1.7*currentFull - 85,  1.7*currentFull - 85));
         }, 600);
         // Текущее кол-во топлива в авто
         var currentFull = 100;
@@ -348,19 +411,18 @@ var Complex = cc.Layer.extend({
         	  if (light4.visible == false) {
         		light5.visible = true;
         		cc.log('Result = -1, Условие провала Фальстарт!');
-        		//this.result(-1);
+        		this.result(-1);
         	  }
         	  currentFull =  100 - (carS/((track.s)/1.5))*100;
-        	  arrowFull.rotation = 1.7*currentFull - 85;
         	  // Условие провала через заправку
         	  if (currentFull < 0) {
         		  cc.log('Result = -2, Условие провала через заправку');
-        		  //this.result(-2);
+        		  this.result(-2);
         	  }
         	  // Условие провала - выход с трассы
         	  if ((isPointInPoly(car.objectEseal.x, car.objectEseal.y, track.limit1) == false) || (isPointInPoly(car.objectEseal.x, car.objectEseal.y, track.limit2) == true)) {
         		  cc.log('Result = -2, Условие провала - выход с трассы');
-        		  //this.result(-2);
+        		  this.result(-2);
         	  }
         	  
         	  if (currentCheckPoint > 2) currentCheckPoint = 2;
@@ -369,7 +431,7 @@ var Complex = cc.Layer.extend({
         		  // Условие финиша
         		  if (currentCheckPoint == 2) {
         			 cc.log('Нормальный финиш!');
-    				 //result.result((new Date() - startTime - complex.pauseTime));
+    				 result.result((new Date() - startTime - this.pauseTime));
         		  } else {
         			pointGas.visible = true;
         			pointGas.x = app.localX(1536 + track.checkPoints[currentCheckPoint][0]);
@@ -390,7 +452,6 @@ var Complex = cc.Layer.extend({
         		carS = 0;
         		pointGas.visible = false;
         		currentFull = 100;
-        		//arrowFull.runAction(cc.rotateTo(3,  85,  85));
         		currentCheckPoint += 1;
         	}
         }
@@ -399,6 +460,7 @@ var Complex = cc.Layer.extend({
         
         
         // ЗАПУСК ИГРЫ!!! 
+        this.pauseTime = 0;
         var startTime = new Date();
         setTimeout(function () {
         	light1.visible = true;
@@ -419,20 +481,96 @@ var Complex = cc.Layer.extend({
         						timerSec.setString(leadZero(minute, 2) + ':' + leadZero(second, 2) + ':' + leadZero(msecond, 3));
         					}
         				}, 150);
+
+        				//this.result(-2);
+
         			}.bind(this), Math.random()*5000);
         		}.bind(this), 500);
         	}.bind(this), 500);
         }.bind(this), 2000);	
-	  
-	  
-	    // Запуск физики
-	    this.scheduleUpdate();
+
+
+        // Запуск физики
+        this.scheduleUpdate();
 	},
 	update: function (dt) {
-		  if (this.world !== null) {
-				this.world.step(dt);  
-		  }	
+		if (this.world !== null) {
+			this.world.step(dt);  
+		}	
 	},
+	result: function (time) {
+		this.unscheduleUpdate();
+		app.renderMenu(this, this.menuResult, true);
+
+		var title = '';
+		var line1 = '';
+		var line2 = '';
+		switch (time) {
+		case -1: {
+			title = 'Фальстарт!';
+			line1 = 'Вы были дисквалифицированы.';
+			line2 = 'Сосредоточьтесь и попробуйте еще раз или пройдите другие тесты.';
+			break;
+		}
+		case -2: {
+			title = 'Увы!';
+			line1 = 'Вы сошли с трассы или не успели заправиться.';
+			line2 = 'Сосредоточьтесь и попробуйте еще раз или пройдите другие тесты.';  
+            break;
+          }
+          default: {
+        	var timeStr = '';
+        	if (time > 0) {
+        	  timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
+        	  var line = new cc.LabelTTF(
+        			  timeStr,
+     				 'res/fonts/nissanagmed.ttf',
+     				 90
+     			   );
+     	      line.setPosition(app.localX(1536), app.localY(999));
+     	      line.setAnchorPoint(0.5, 0.5);
+     	      line.setColor(cc.color(149, 149, 149, 255));
+     	      this.menu.addChild(line);
+        	} 
+  			title = 'Финиш!';
+		  	line1 = 'Возможно, вы сможете пройти ее еще быстрее!';
+		  	line2 = 'Попробуйте улучшить свой результат или пройдите другие тесты.';  
+            break;
+          }
+       }
+	   var line = new cc.LabelTTF(
+		 title,
+		 'res/fonts/nissanagmed.ttf',
+		 56
+	   );
+	   line.setPosition(app.localX(1536), app.localY(1119));
+	   line.setAnchorPoint(0.5, 0.5);
+	   line.setColor(cc.color(198, 22, 51, 255));
+	   this.menu.addChild(line);
+	   
+	   var line = new cc.LabelTTF(
+				 line1,
+				 'res/fonts/nissanagmed.ttf',
+				 38
+			   );
+	   line.setPosition(app.localX(1536), app.localY(885));
+	   line.setAnchorPoint(0.5, 0.5);
+	   line.setColor(cc.color(0, 0, 0, 255));
+	   this.menu.addChild(line);
+	   
+	   var line = new cc.LabelTTF(
+				 line2,
+				 'res/fonts/nissanagmed.ttf',
+				 38
+			   );
+	   line.setPosition(app.localX(1536), app.localY(834));
+	   line.setAnchorPoint(0.5, 0.5);
+	   line.setColor(cc.color(0, 0, 0, 255));
+	   this.menu.addChild(line);
+
+	  
+	}
+	
 });
 
 

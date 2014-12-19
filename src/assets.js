@@ -81,6 +81,7 @@ var assets = {
   
   // Графические ресурсы к игре Закрепление навыков
   complexIntroBack   : 'res/complex/complex-background.jpg',
+  complexResultBack  : 'res/complex/complex-result.jpg',
   complexSorryBack   : 'res/complex/sorry.jpg',
   
   // Спрайт машинки
