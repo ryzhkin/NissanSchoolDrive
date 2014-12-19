@@ -234,7 +234,7 @@ var Complex = cc.Layer.extend({
 		this.menu.addChild(this.worldLayer);	
 		this.world = new physicWorld(this.worldLayer, {
 			gravity     : [0, 0],
-			debug    : true
+			//debug    : true
 		});
 		// Границы трассы
 		track.limit1 = app.preparePath(track.limit1);
