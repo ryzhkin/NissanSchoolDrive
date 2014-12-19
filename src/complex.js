@@ -14,7 +14,7 @@ var Complex = cc.Layer.extend({
 		        		cc.loader.loadJson("res/data/complex.json", function(error, data) {
 		        			app.complex.game(data);  
 		        		});
-		        		  
+
 		        	}	
 		        }      
 		        ]
@@ -22,14 +22,25 @@ var Complex = cc.Layer.extend({
 	menuGame: {
 		back: assets.complexSorryBack,
 		areas: [
-		  {
-			  x: (1536 -968),
-			  y: (1536 - 1104 - 408),
-			  h: 408,
-			  w: 408,
-			  click: function () {
-				app.complex.toFuel();
-			  }
+		        {
+		        	x: (1536 -968),
+		        	y: (1536 - 1104 - 408),
+		        	h: 408,
+		        	w: 408,
+		        	click: function () {
+		        		app.complex.toFuel();
+		        	}
+		        }, {
+		        	x: 1536 - 250/2,
+		        	y: 1536 - 140,
+		        	h: 140,
+		        	w: 250,
+		        	click: function () {
+		        		cc.log('PAUSE!!!');
+		        		app.complex.pause();
+	 	      }
+	 	    	  
+			  
 		  }      
 		]
 	},
@@ -95,6 +106,55 @@ var Complex = cc.Layer.extend({
 		       
 		]
 	},	
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		        {
+		        	x: 1536 -488,
+	    	y: 1536 - 483 - 278,
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    		app.complex.pauseLayer.removeFromParent(true);  
+	    		app.complex.inPause = false;
+	    		app.complex.scheduleUpdate();
+	    		app.complex.pauseTime += new Date() - app.complex.startPause;
+	    	}
+	    },
+	    {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		      h: 278,
+		      w: 278,
+		      click: function () {
+		    	  app.runStage(new Menu(), 3);
+		      }
+		    },
+		    {
+		    	x: 1536 + 291,
+			      y: 1536 - 483 - 278,
+			      h: 278,
+			      w: 278,
+			      click: function () {
+			    	  app.complex.pauseLayer.removeFromParent(true);  
+			    	  cc.loader.loadJson("res/data/complex.json", function(error, data) {
+			  			app.complex.game(data);  
+			  		});
+			      }
+			    }
+	  ]
+	},
+	
+	inPause: false,
+	pause: function () {
+	  this.inPause = true;
+	  this.unscheduleUpdate();
+	  this.startPause = new Date();
+	  this.pauseLayer = new cc.Layer();
+	  this.addChild(this.pauseLayer);
+	  app.renderMenu(this.pauseLayer, this.menuPause, false);
+	},
+	
 	init: function (options) {
 		app.complex = this;
 		app.renderMenu(this, this.menuIntro, true);
@@ -337,7 +397,13 @@ var Complex = cc.Layer.extend({
         timerSec.setColor(cc.color(help.hexToRgb('#ffffff').r, help.hexToRgb('#ffffff').g, help.hexToRgb('#ffffff').b, 255));
         this.worldLayer.addChild(timerSec);
 
-        
+        // Пауза
+  	    var pause = new cc.Sprite('res/coordination/pause.png');
+  	    pause.attr({
+  		  x        : app.localX(1536),
+  		  y        : app.localY(1536 - 69/2)
+  	    });
+  	    this.menu.addChild(pause);
         
         
         
@@ -461,6 +527,7 @@ var Complex = cc.Layer.extend({
         
         // ЗАПУСК ИГРЫ!!! 
         this.pauseTime = 0;
+        this.inPause   = false;
         var startTime = new Date();
         setTimeout(function () {
         	light1.visible = true;
@@ -473,14 +540,14 @@ var Complex = cc.Layer.extend({
         				// Запускаем Таймер
         				startTime = new Date();
         				setIntervalG(function () {
-        					/*if (complex.g.isPause() == false)*/ {
-        						var time = new Date() - startTime;
+        					if (this.inPause == false) {
+        						var time = new Date() - startTime - this.pauseTime;
         						var minute = Math.floor(time/(60*1000));
         						var second = Math.floor((time - minute*(60*1000))/1000);
         						var msecond = time - minute*(60*1000) - second*1000;
         						timerSec.setString(leadZero(minute, 2) + ':' + leadZero(second, 2) + ':' + leadZero(msecond, 3));
         					}
-        				}, 150);
+        				}.bind(this), 150);
 
         				//this.result(-2);
 
