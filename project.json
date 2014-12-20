@@ -16,6 +16,7 @@
         "src/lib/tools.js",
         "src/lib/Box2dWeb-2.1.a.3.min.js",
         "src/ph.js",
+        "src/ph_cp.js",
         "src/assets.js",
         "src/loader.js",
         "src/menu.js",

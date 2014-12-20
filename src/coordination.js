@@ -157,6 +157,9 @@ var Coordination = cc.Layer.extend({
 	  app.renderMenu(this.pauseLayer, this.menuPause, false);
 	},
 	game: function () {
+	  cc.eventManager.removeAllListeners();
+	  cc.sys.garbageCollect();
+	  
 	  app.renderMenu(this, this.menuGame, true);
 	  
 	  var scaleFactor = 1536/640;
@@ -164,14 +167,14 @@ var Coordination = cc.Layer.extend({
 	  this.worldLayer = new cc.Layer();  
 	  this.menu.addChild(this.worldLayer);	
 	  this.world = new physicWorld(this.worldLayer, {
-		gravity  : [0, -15], 
+		gravity  : [0, -10], 
 		//debug    : true
 	  });
+	  
 	  
 	  // Земля - нижняя грань
 	  this.world.addObj({
 		  type: this.world.objType.Static,
-		  //type: this.world.objType.Dynamic,
 		  pos: {
 			  x: app.localX(1536),
 			  y: app.localY(37/2)
@@ -180,7 +183,7 @@ var Coordination = cc.Layer.extend({
 			  box: [3072, 37]
 		  }
 	  });
-	  
+	 
 	  // Нижнее большое колесо
 	  var bigWeel = this.world.addObj({
 		  physic: {
@@ -200,7 +203,7 @@ var Coordination = cc.Layer.extend({
 			  scale  : scaleFactor
 		  }
 	  });
-	  
+	
 	  // Нижняя полка
 	  var board = this.world.addObj({
 		  physic: {density: 30.12,friction: 5.150},
@@ -218,7 +221,7 @@ var Coordination = cc.Layer.extend({
 		  }
 	  });
 	  
-	  
+	 
 	  // Левая маленькая канистра
 	  var jar1 = this.world.addObj({
 		  physic: {density: 0.4, friction: 15},
@@ -235,13 +238,13 @@ var Coordination = cc.Layer.extend({
 			  offsetRegX : 17
 		  }
 	  });
-	  
+	 
 	  // Левая красная канистра
 	  var jar2 = this.world.addObj({
 		  physic: {density: 0.52, friction: 15},
 		  pos: {
 			  x: app.localX(1224),
-			  y: app.localY(37 + (2*86 + 36/2 + 75/2 - 5)*scaleFactor/* + 28*/)
+			  y: app.localY(37 + (2*86 + 36/2 + 75/2 - 5)*scaleFactor)
 		  },
 		  shape: {
 			  box: [66*scaleFactor, 93*scaleFactor]
@@ -252,7 +255,7 @@ var Coordination = cc.Layer.extend({
 		  }
 	  });
 	  
-	 
+	
 	  // Маленькое колесо
 	  this.world.addObj({
 		  physic: {density: 0.52, friction: 15},
@@ -269,13 +272,13 @@ var Coordination = cc.Layer.extend({
 		  }
 	  });
 	  
-	  
+	 
 	  // Правая канистра
 	  var jar3 = this.world.addObj({
 		  physic: {density: 0.700009094, friction: 15},
 		  pos: {
 			  x: app.localX(1834),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2 + 15)*scaleFactor/* + 37*/)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 75/2 + 15)*scaleFactor)
 		  },
 		  shape: {
 			  box: [71*scaleFactor, 101*scaleFactor]
@@ -307,8 +310,8 @@ var Coordination = cc.Layer.extend({
 	  this.world.addObj({
 		  physic: {density: 0.2},
 		  pos: {
-			  x: app.localX(1224 + 33*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 12)*scaleFactor/* + 10*/)
+			  x: app.localX(1224 + 33*scaleFactor/* - 66*scaleFactor*/),
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 12)*scaleFactor)
 		  },
 		  shape: {
 			  polygon: [66*scaleFactor, 0, 33*scaleFactor, 64*scaleFactor, 0, 0]
@@ -318,15 +321,16 @@ var Coordination = cc.Layer.extend({
 			  scale      : scaleFactor,
 			  offsetRegY : 64,
 			  offsetRegX : 0
+			  /*offsetRegX : 66*/
 		  }
 	  });
-      
+     
 	  // Нижняя покрышка
 	  this.world.addObj({
 		  physic: {friction: 5, density: 0.425},
 		  pos: {
 			  x: app.localX(1536),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73/2 + 11)*scaleFactor/* + 10*/)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73/2 + 11)*scaleFactor)
 		  },
 		  shape: {
 			  box: [176*scaleFactor, (73)*scaleFactor]
@@ -336,12 +340,13 @@ var Coordination = cc.Layer.extend({
 			  scale      : scaleFactor
 		  }
 	  });
+	 
 	  // Флаг !!!
 	  var flag = this.world.addObj({
 		  physic: {friction: 2, density: 0.01},
 		  pos: {
 			  x: app.localX(1536 + 136/2*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65 + 117/2 + 18)*scaleFactor/* + 10*/)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65 + 117/2 + 18)*scaleFactor)
 		  },
 		  shape: {
 			  box: [117*scaleFactor, 136*scaleFactor]
@@ -356,12 +361,13 @@ var Coordination = cc.Layer.extend({
 	  });
 	  
 
+
 	  // Верхняя покрышка
 	  this.world.addObj({
 		  physic: {friction: 5, density: 0.1},
 		  pos: {
 			  x: app.localX(1536 + (178/8)*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65/2 + 8)*scaleFactor/* + 10*/)
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 2 + 73 + 2 + 65/2 + 8)*scaleFactor)
 		  },
 		  shape: {
 			  box: [178*scaleFactor, (79 - 15)*scaleFactor]
@@ -377,8 +383,8 @@ var Coordination = cc.Layer.extend({
 	  this.world.addObj({
 		  physic: {density: 0.02},
 		  pos: {
-			  x: app.localX(1870 + 33*scaleFactor),
-			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 12)*scaleFactor/* + 10*/)
+			  x: app.localX(1870 + 33*scaleFactor /*- 66*scaleFactor*/),
+			  y: app.localY(37 + (2*86 + 36/2 - 16 + 2*55 + 12)*scaleFactor)
 		  },
 		  shape: {
 			  polygon: [66*scaleFactor, 0, 33*scaleFactor, 64*scaleFactor, 0, 0]
@@ -388,12 +394,10 @@ var Coordination = cc.Layer.extend({
 			  scale      : scaleFactor,
 			  offsetRegY : 64,
 			  offsetRegX : 0
+			  //offsetRegX : 66
 		  }
 	  });
-	  
-	  //*/
-	  
-	  
+	 //*/
 
 	  // UI
 	  var leftControl = new cc.Sprite('res/coordination/low/left_control.png');
@@ -449,76 +453,109 @@ var Coordination = cc.Layer.extend({
 	  this.applyForce = function (type, extraForce) {
 		  var delta = 20;
 		  if (type == 'left') {
-			  //cc.log('LEFT !');
+			  cc.log('LEFT !');
 			  leftControl.visible = false;
 			  leftControl2.visible = true;
 
 			  rightControl.visible = true;
 			  rightControl2.visible = false;
 
-			  board.body.ApplyImpulse(this.world.vector(0, 50*scaleFactor + ((typeof(extraForce) == 'number')?extraForce:0)), this.world.vector(board.body.GetPosition().x + ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y));
+			  
+			  
+			  //board.body.applyImpulse(cp.v(0, 800000*scaleFactor), cp.v(board.body.getPos().x - ((380/2)*scaleFactor), board.body.getPos().y));
+
+			  board.body.ApplyImpulse(
+			    this.world.vector(0, ((typeof(extraForce) == 'number')?extraForce:(50*scaleFactor))), 
+			    this.world.vector(board.body.GetPosition().x + ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y)
+			  );
 		  } else {
-			  //cc.log('RIGHT !');
+			  cc.log('RIGHT !');
 			  leftControl.visible = true;
 			  leftControl2.visible = false;
 
 			  rightControl.visible = false;
 			  rightControl2.visible = true;
-			  board.body.ApplyImpulse(this.world.vector(0, 50*scaleFactor + ((typeof(extraForce) == 'number')?extraForce:0)), this.world.vector(board.body.GetPosition().x - ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y));
+			  
+			  //board.body.applyImpulse(cp.v(0, -800000*scaleFactor), cp.v(board.body.getPos().x + ((380/2)*scaleFactor), board.body.getPos().y));
+			  
+			  board.body.ApplyImpulse(
+			    this.world.vector(0, ((typeof(extraForce) == 'number')?extraForce:(50*scaleFactor))), 
+			    this.world.vector(board.body.GetPosition().x - ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y)
+			  );
 		  }
 	  }
 
 	  // Текущее значение аксилирометра
 	  this.accelerometerX = 0;
 	  // Уровень нейтрального положения
-	  var zeroLevel = 0.04;
-	  
+	  var zeroLevel = 0.07;
+	
+	  cc.eventManager.removeListeners(cc.EventListener.ACCELERATION);
+	  cc.inputManager.setAccelerometerEnabled(false);
 	  setTimeout(function () {
-	    cc.inputManager.setAccelerometerEnabled(true);
-	    cc.eventManager.addListener({
-		  event: cc.EventListener.ACCELERATION,
-		  callback: function(acc, event){
-			  this.accelerometerX = acc.x;
-		  }.bind(this)
-        }, this); 
-	  }.bind(this), 1500);
+		  cc.inputManager.setAccelerometerEnabled(true);
+		  cc.eventManager.addListener({
+			  event: cc.EventListener.ACCELERATION,
+			  callback: function(acc, event) {
+				  //cc.log(acc.x);
+				  //cc.log(acc.y);
+				  //cc.log(acc.z);
+				  //cc.log(acc.xy);
+
+				  //cc.log('dir = ' + ((acc.x < 0)?'left':'right'));
+				  // Реакция на изминения ориентации устройства
+				  if (acc.x < -zeroLevel || acc.x > zeroLevel) {
+					  cc.log(acc.x);
+					  cc.log('dir = ' + ((acc.x < 0)?'left':'right'));  
+					  this.applyForce(((acc.x < 0)?'left':'right'), Math.abs(acc.x*10)*scaleFactor);
+				  }	else {
+				      cc.log('zero level');
+					  leftControl.visible = true;
+					  rightControl.visible = true;  
+
+					  leftControl2.visible = false;
+					  rightControl2.visible = false;	  
+				  } 
+			  }.bind(this)
+		  }, this); 
+	  }.bind(this), 2000);//*/
+	  
+	  
+	
 	  
 	  // Запуск игры
-	  this.scheduleUpdate();
+	  this.unscheduleUpdate();
+	  setTimeout(function () {
+		this.scheduleUpdate();
+	  }.bind(this), 1000);
+	  
 	  
 	  this.pauseTime = 0;
 	  var startTime = new Date();
 	  var resultTime = 0;
 	  var stopGame = false;
+	
 	  var gameTimer = setIntervalG(function () {
-		  // Реакция на изминения ориентации устройства
-		  if (this.accelerometerX < -zeroLevel || this.accelerometerX > zeroLevel) {
-			  //cc.log('accelerometerX = ' + this.accelerometerX);  
-			  this.applyForce((this.accelerometerX < 0)?'left':'right', Math.abs(this.accelerometerX*10)*scaleFactor);
-		  }	else {
-			  leftControl.visible = true;
-			  rightControl.visible = true;  
-
-			  leftControl2.visible = false;
-			  rightControl2.visible = false;	  
-		  }	  
+	     
 
 		  // Условие окончания игры
 		  if (
-				  (flag.body.GetPosition().y*this.world.BOX2D_METER_TO_PIXELS <  2*136*scaleFactor) 
+				  (flag.body.GetPosition().y*this.world.BOX2D_METER_TO_PIXELS <  2*136*scaleFactor)
+				  //(flag.body.GetPosition().y <  2*136*scaleFactor) 
 		  ) {
 			 cc.eventManager.removeListeners(cc.EventListener.ACCELERATION);
 			 clearAllIntervals();
 			 resultTime = new Date() - startTime - this.pauseTime;
 			 setTimeout(function () {
-			   cc.log(1); 
 			   this.unscheduleUpdate();   
                this.result(resultTime);
              }.bind(this), 5000);
 			 
 		  }
-		  
+		  //cc.log('game');
 	  }.bind(this), 1000/2);
+	  
+	  //*/
 	},
 	update: function (dt) {
 	  if (this.world !== null) {
@@ -526,6 +563,7 @@ var Coordination = cc.Layer.extend({
 	  }	
 	},
 	result: function (time) {
+		 cc.eventManager.removeAllListeners();
 		 var title = '';
 		 var line1 = '';
 		 var line2 = '';
