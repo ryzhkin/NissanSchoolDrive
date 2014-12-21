@@ -453,7 +453,7 @@ var Coordination = cc.Layer.extend({
 	  this.applyForce = function (type, extraForce) {
 		  var delta = 20;
 		  if (type == 'left') {
-			  cc.log('LEFT !');
+			  //cc.log('LEFT !');
 			  leftControl.visible = false;
 			  leftControl2.visible = true;
 
@@ -469,7 +469,7 @@ var Coordination = cc.Layer.extend({
 			    this.world.vector(board.body.GetPosition().x + ((380/2*scaleFactor)*(1/30)), board.body.GetPosition().y)
 			  );
 		  } else {
-			  cc.log('RIGHT !');
+			  //cc.log('RIGHT !');
 			  leftControl.visible = true;
 			  leftControl2.visible = false;
 
@@ -502,9 +502,13 @@ var Coordination = cc.Layer.extend({
 				  //cc.log(acc.z);
 				  //cc.log(acc.xy);
 
+
 				  //cc.log('dir = ' + ((acc.x < 0)?'left':'right'));
+				  
+				  this.applyForce(((acc.x < 0)?'left':'right'), Math.abs(acc.x*10)*scaleFactor);
+				  
 				  // Реакция на изминения ориентации устройства
-				  if (acc.x < -zeroLevel || acc.x > zeroLevel) {
+				  /*if (acc.x < -zeroLevel || acc.x > zeroLevel) {
 					  cc.log(acc.x);
 					  cc.log('dir = ' + ((acc.x < 0)?'left':'right'));  
 					  this.applyForce(((acc.x < 0)?'left':'right'), Math.abs(acc.x*10)*scaleFactor);
@@ -515,7 +519,8 @@ var Coordination = cc.Layer.extend({
 
 					  leftControl2.visible = false;
 					  rightControl2.visible = false;	  
-				  } 
+				  } */
+				  return true;
 			  }.bind(this)
 		  }, this); 
 	  }.bind(this), 2000);//*/
