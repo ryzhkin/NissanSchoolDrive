@@ -294,7 +294,7 @@ var Turn = cc.Layer.extend({
 				path.push(location);
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
-				app.moveByPathConstantSpeed(path, car, 300, function () {
+				app.moveByPathConstantSpeed(path, car, 600, function () {
 					cc.log('Final !!!');  
 					var origDistancePath = getPathDistance(track.path);
 					var userDistancePath = getPathPointsDistance(path);
@@ -315,7 +315,7 @@ var Turn = cc.Layer.extend({
 			   }
 			  }.bind(this)	  
 	  }, this.menu);
-	  }.bind(this), 1000);
+	  }.bind(this), 100);
 	},
 	result: function (percent) {
 	  app.renderMenu(this, this.menuResult, true);	
