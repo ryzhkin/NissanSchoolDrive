@@ -16,27 +16,41 @@ var Video = cc.Layer.extend({
 	    	h: 190,
 	    	w: 190,
 	    	click: function () {
-	    	  app.menu = new Menu();	
-	    	  app.runStage(app.menu, 1);
+	    		app.menu = new Menu();	
+	    		app.runStage(app.menu, 1);
 	    	} 	
 	    }      
-	  ]	
+	    ]	
 	},
+	TOUCH_MOVED: false,
 	touchEvent: function (sender, type) {
 	  switch (type) {
 		case ccui.Widget.TOUCH_BEGAN: {
-			if (typeof(sender.videoURL) == 'string') {
-			  app.playVideo(sender.videoURL);
-		    }	
+			this.TOUCH_MOVED = false;
+			//cc.log("Touch BEGAN " + this.TOUCH_MOVED);
+			/*if (typeof(sender.videoURL) == 'string') {
+			  setTimeout(function () {
+				  cc.log("Touch BEGAN " + this.TOUCH_MOVED);
+				  if (this.TOUCH_MOVED == false) {
+					cc.log('play video > ' + sender.videoURL);  
+					app.playVideo(sender.videoURL);  
+				  }
+			  }.bind(this), 500);	
+		    }*/	
 			break;
 		}
 
 		case ccui.Widget.TOUCH_MOVED:
+			this.TOUCH_MOVED = true;
 			//cc.log("Touch Move");
 			break;
 
 		case ccui.Widget.TOUCH_ENDED:
-			//cc.log("Touch Up");
+			cc.log("Touch Up");
+			if (typeof(sender.videoURL) == 'string') {
+			  cc.log('play video > ' + sender.videoURL);  
+			  app.playVideo(sender.videoURL);  
+		    }
 			break;
 
 		case ccui.Widget.TOUCH_CANCELED:
