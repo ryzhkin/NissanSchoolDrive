@@ -111,25 +111,25 @@ var Complex = cc.Layer.extend({
 		areas: [
 		        {
 		        	x: 1536 -488,
-	    	y: 1536 - 483 - 278,
-	    	h: 278,
-	    	w: 278,
-	    	click: function () {
-	    		app.complex.pauseLayer.removeFromParent(true);  
-	    		app.complex.inPause = false;
-	    		app.complex.scheduleUpdate();
+		        	y: 1536 - 483 - 278,
+		        	h: 278,
+		        	w: 278,
+		        	click: function () {
+		        		app.complex.pauseLayer.removeFromParent(true);  
+		        		app.complex.inPause = false;
+		        		app.complex.scheduleUpdate();
 	    		app.complex.pauseTime += new Date() - app.complex.startPause;
 	    	}
 	    },
 	    {
 	    	x: 1536 - 78,
 	    	y: 1536 - 483 - 278,
-		      h: 278,
-		      w: 278,
-		      click: function () {
-		    	  app.runStage(new Menu(), 3);
-		      }
-		    },
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    		app.runStage(new Menu(), 3);
+	    	}
+	    },
 		    {
 		    	x: 1536 + 291,
 			      y: 1536 - 483 - 278,
@@ -262,21 +262,30 @@ var Complex = cc.Layer.extend({
 			}
 		}
 
-		var carW = 81;
-		var carH = 47;
+		var carW = 60;
+		var carH = 30;
 		var car = (this.world.addObj({
 			physic: {density: 1, friction: 0.5, restitution: 0.2},
 			pos: {
 			  //rotation : track.rotation,
-              x        : app.localX(1536 - track.x),
-              y        : app.localY(1536 - track.y)
+			  x        : app.localX(1536 - track.x),
+              y        : app.localY(1536 - track.y) 
             },
           shape: {
               box: [(carW - 10)*scaleFactor, (carH - 10)*scaleFactor]
+        	  /*polygon: [
+                         -(carW - 10)*scaleFactor/2, -(carH - 10)*scaleFactor/2,
+                         -(carW - 10)*scaleFactor/2, (carH - 10)*scaleFactor/2,
+                         (carW - 10)*scaleFactor/2, (carH - 10)*scaleFactor/2,
+                         (carW - 10)*scaleFactor/2, -(carH - 10)*scaleFactor/2,
+        	           ]*/
           },
           bitmap: 'res/complex/complex-car.png',
           bitmapOptions: {
-              scale      : 1
+              scale      : 0.8,
+              
+              /*offsetRegX : (carW-10)*scaleFactor,
+              offsetRegY : (carH-10)*scaleFactor*/
           }
         }));
         car.body.SetLinearDamping(10);
