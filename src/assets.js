@@ -90,7 +90,9 @@ var assets = {
   theoryAcceleratorBack : 'res/theory/accelerator-bg.jpg',
   theoryTurnBack        : 'res/theory/turn-bg.jpg',
   theoryRollBack        : 'res/theory/turn-bg.jpg',
-  theorySlalomBack      : 'res/theory/slalom-bg.jpg'
+  theorySlalomBack      : 'res/theory/slalom-bg.jpg',
+  
+  
 };
 
 var g_assets = [

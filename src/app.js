@@ -29,6 +29,8 @@ var app = {
 
 	 this.loader = new Loader();
 
+	 cc.log('START GAME');
+	 
 	 this.runStage(this.loader, {
 		 assets: g_assets,
 	   onSuccess: function () {
@@ -41,6 +43,26 @@ var app = {
 	 /*this.menu = new Menu();
 	 this.runStage(this.menu);	*/	
   },
+  
+  // Умная загрузка спрайта
+  loadSmartSprite: function (url) {
+	var low = (cc.configuration.getMaxTextureSize() < 3072)?true:false;
+	//low=true;
+	if (low == true) {
+	  var t = url.split('/');
+	  var f = t.pop();
+	  t = t.join('/') + '/x2/' + f;
+	  cc.log('try low sprite > ' + t);
+	  var s = new cc.Sprite(t);
+	  s.attr({
+		scale: 2	
+	  });
+	  return s;
+	} else {
+	  return (new cc.Sprite(url));	
+	}
+  },
+  
   // Clear stage
   clearStage: function () {
 	  clearAllIntervals();
@@ -72,7 +94,7 @@ var app = {
     return y;
   },
   // Render Menu
-  
+
   renderMenu: function (layer, menu, clearEvents, debug) {
 	  debug = false;
 	  //debug = true;
@@ -96,13 +118,14 @@ var app = {
 	  var winsize = cc.winSize;
 	  var centerpos = cc.p(winsize.width / 2, winsize.height / 2);
 	  if (typeof(menu.back) !== 'undefined') {
-		  var bg = new cc.Sprite(menu.back);
+		  //var bg = new cc.Sprite(menu.back);
+		  var bg = this.loadSmartSprite(menu.back);
 		  if ((typeof(menu.x) !== 'undefined') && (typeof(menu.y) !== 'undefined')) {
 			  bg.attr({
 				  x: menu.x,
 				  y: menu.y,
 				  anchorX: 0,
-				  anchorY: 1
+				  anchorY: 1 
 			  });
 		  } else {
 			  bg.setPosition(centerpos);	

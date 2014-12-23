@@ -17,6 +17,7 @@ var Vision = cc.Layer.extend({
 		        ]
 	},
 	menuGame: {
+		back: assets.visionGameBack,
 		areas: [
 		        {
 		        	x: 1536 - 698,
@@ -506,7 +507,7 @@ var Vision = cc.Layer.extend({
 	  
 	  app.renderMenu(this, this.menuGame, true);
 	  
-	  var back = new cc.Sprite(assets.visionGameBack);
+	  /*var back = new cc.Sprite(assets.visionGameBack);
 	  back.attr({
 		scale: 1,
 		x: app.localX(0),
@@ -514,7 +515,7 @@ var Vision = cc.Layer.extend({
 		anchorX: 0,
 		anchorY: 0
 	  });
-	  this.menu.addChild(back);
+	  this.menu.addChild(back);*/
 	  
 	  // Дорожная разметка
 	  var roadBand = new cc.Sprite('res/vision/band/s1.png');

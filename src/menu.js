@@ -4,7 +4,9 @@ var Menu = cc.Layer.extend({
 		var winsize = cc.winSize;
 		var centerpos = cc.p(winsize.width / 2, winsize.height / 2);
 
-		var spritebg = new cc.Sprite(assets.menuBack);
+		//var spritebg = new cc.Sprite(assets.menuBack);
+		var spritebg = app.loadSmartSprite(assets.menuBack);
+		
 		spritebg.setPosition(centerpos);
 		this.addChild(spritebg);
 		

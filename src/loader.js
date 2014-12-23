@@ -100,7 +100,8 @@ var Loader = cc.Layer.extend({
 		var winsize = cc.winSize;
 		var centerpos = cc.p(winsize.width / 2, winsize.height / 2);	 
 
-		var spritebg = new cc.Sprite('res/loader/loader-background.jpg');
+		//var spritebg = new cc.Sprite('res/loader/loader-background.jpg');
+		var spritebg = app.loadSmartSprite('res/loader/loader-background.jpg');
 		spritebg.setPosition(centerpos);
 		this.addChild(spritebg);
 

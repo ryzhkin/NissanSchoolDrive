@@ -289,7 +289,7 @@ var Memory = cc.Layer.extend({
 	  //app.drawPath(this.menu, app.preparePathPoints(track.path));
 	 
 	  
-	  app.moveByPathConstantSpeed(app.preparePathPoints(track.path), car, 400, function () {
+	  app.moveByPathConstantSpeed(app.preparePathPoints(track.path), car, 600, function () {
 		 cc.log('Final !!!'); 
 	  });
 	  

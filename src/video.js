@@ -3,12 +3,9 @@ var Video = cc.Layer.extend({
 		this._super();
 		var winsize = cc.winSize;
 		var centerpos = cc.p(winsize.width / 2, winsize.height / 2);
-
-		var spritebg = new cc.Sprite(assets.videoBack);
-		spritebg.setPosition(centerpos);
-		this.addChild(spritebg);
 	},
 	menuVideo: {
+      back: assets.videoBack,	
 	  areas: [
 	    {
 	    	x: 606,
