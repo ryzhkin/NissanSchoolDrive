@@ -138,7 +138,7 @@ var Complex = cc.Layer.extend({
 			      click: function () {
 			    	  app.complex.pauseLayer.removeFromParent(true);  
 			    	  cc.loader.loadJson("res/data/complex.json", function(error, data) {
-			  			app.complex.game(data);  
+			    		  app.complex.game(data);  
 			  		});
 			      }
 			    }
@@ -299,11 +299,37 @@ var Complex = cc.Layer.extend({
         }
         
         var joystick = joystickComplex;
+        var maxVelocity = 8;
+        if (cc.sys.platform == cc.sys.IPAD || cc.sys.platform == cc.sys.IPHONE) {
+          maxVelocity = 16;
+          if (cc.sys.platform == cc.sys.IPHONE) {
+        	  maxVelocity = 16*0.75;  
+          }	  
+        } else {
+        	if (cc.director.getWinSizeInPixels().width > 1536) {
+        	  maxVelocity = 8*0.75;
+          }	else {
+        	  maxVelocity = 8;
+          }
+        }
+        
+        /*cc.log('cc.sys.isMobile = ' + cc.sys.isMobile);
+        cc.log('maxVelocity = ' + maxVelocity);
+        
+        cc.log('cc.view.getVisibleSize().width = ' + cc.view.getVisibleSize().width);
+        cc.log('cc.view.getVisibleSize().height = ' + cc.view.getVisibleSize().height);
+        
+        cc.log('cc.director.getWinSize().width = ' + cc.director.getWinSize().width);
+        cc.log('cc.director.getWinSize().height = ' + cc.director.getWinSize().height);
+        
+        cc.log('cc.director.getWinSizeInPixels().width = ' + cc.director.getWinSizeInPixels().width);
+        cc.log('cc.director.getWinSizeInPixels().height = ' + cc.director.getWinSizeInPixels().height);*/
+        
         joystick.init({
         	x           : app.localX(2298),
         	y           : app.localY(1536 - 1307),
         	radius      : 220,
-        	maxVelocity : (cc.sys.platform == cc.sys.IPAD || cc.sys.platform == cc.sys.IPHONE)?16:8
+        	maxVelocity : maxVelocity//(cc.sys.platform == cc.sys.IPAD || cc.sys.platform == cc.sys.IPHONE)?16*0.75:8*0.75
         });
         
         /*
