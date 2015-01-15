@@ -21,6 +21,17 @@ var Theory = cc.Layer.extend({
 		        	 w: 270,
 		        	 h: 270,
 		        	 click: function () {
+		        		 if (typeof(app.theory.onPractice) == 'function') {
+		        			 app.theory.onPractice();
+		        		 }
+		        	 } 
+		         },
+		         {
+		        	 x: 3072/2 -953,
+		        	 y: 1536 - 1090 - 270,
+		        	 w: 270,
+		        	 h: 270,
+		        	 click: function () {
 		        		 if (typeof(app.theory.onBack) == 'function') {
 		        			 app.theory.onBack();
 		        		 }
@@ -70,6 +81,7 @@ var Theory = cc.Layer.extend({
 		this.menuTheory.back = options.back; 
 	  }	
 	  this.onBack = options.onBack;
+	  this.onPractice = options.onPractice;
 	  app.renderMenu(this, this.menuTheory, true);
 	  // Create the scrollview
 	  var maxH = 10000;

@@ -27,7 +27,15 @@ var Roll = cc.Layer.extend({
 	        			   url: 'res/data/theory_roll.html',   
 	        			   onBack: function () {
 	        				   app.runStage(new Roll());
-	        			   }  
+	        			   },
+	        			   onPractice: function () {
+	        				   app.roll = new Roll();
+	        				   app.clearStage();
+	        				   app.game.stage.addChild(app.roll, 10);
+	        				   cc.loader.loadJson("res/data/roll.json", function(error, data) {
+	        					   app.roll.game(data[0]);  
+	        				   });
+	        			   }   
 	        		   });
 	        	   }	
 	           },

@@ -121,7 +121,7 @@ var Video = cc.Layer.extend({
 			   //*/
 			   
 			   var text = new cc.LabelTTF(
-			      videos[i].title,
+			      (i+1) + ' - ' + videos[i].title,
 			      'res/fonts/nissanagmed.ttf',
 			      33
 			   );

@@ -26,7 +26,13 @@ var Accelerator = cc.Layer.extend({
 				onBack: function () {
 				  app.accelerator = new Accelerator();
 				  app.runStage(app.accelerator);
-				}  
+				},
+				onPractice: function () {
+				  app.accelerator = new Accelerator();
+				  app.clearStage();
+				  app.game.stage.addChild(app.accelerator, 10);
+				  app.accelerator.game();
+				}
 			  });
 			}	
 		},

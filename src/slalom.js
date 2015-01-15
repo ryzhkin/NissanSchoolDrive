@@ -73,7 +73,15 @@ var Slalom = cc.Layer.extend({
 		        			 url: 'res/data/theory_slalom.html',   
 		        			 onBack: function () {
 		        				 app.runStage(new Slalom());
-		        			 }  
+		        			 },
+		        			 onPractice: function () {
+		        				   app.slalom = new Slalom();
+		        				   app.clearStage();
+		        				   app.game.stage.addChild(app.slalom, 10);
+		        				   cc.loader.loadJson("res/data/slalom.json", function(error, data) {
+		  		        			 app.slalom.game(data[0]);  
+		  		        		   });
+		        			 }   
 		        		 });
 		        	 }	
 		         },

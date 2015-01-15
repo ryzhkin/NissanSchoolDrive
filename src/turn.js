@@ -25,6 +25,12 @@ var Turn = cc.Layer.extend({
 	    			url: 'res/data/theory_turn.html',   
 	    			onBack: function () {
 	    				app.runStage(new Turn());
+	    			},
+	    			onPractice: function () {
+	    				app.turn = new Turn();
+	    				app.clearStage();
+	    				app.game.stage.addChild(app.turn, 10);
+	    				app.turn.choose();
 	    			}  
 	    		});
 	    	}
