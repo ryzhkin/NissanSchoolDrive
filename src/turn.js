@@ -233,7 +233,7 @@ var Turn = cc.Layer.extend({
 		return points;
 	},
 	game: function (type, track) {
-		
+	  cc.audioEngine.end();	
 	  this.currentTrack = type;	
 	  this.menuGame.back = 'res/turn/turn-type' + type + '.jpg';
 	  app.renderMenu(this, this.menuGame, true);
@@ -279,6 +279,7 @@ var Turn = cc.Layer.extend({
 				  oldX = location.x;
 				  oldY = location.y;
 				  prevLocation = location;
+				  cc.audioEngine.playMusic('res/sounds/engine-for-games2.mp3', false);
 				} 
 			    return true;
 			  },
@@ -305,8 +306,10 @@ var Turn = cc.Layer.extend({
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
 				app.drawPath(this.menu, app.preparePathPoints(track.path), false);
+				
 				app.moveByPathConstantSpeed(path, car, 600, function () {
 					cc.log('Final !!!');  
+					//cc.audioEngine.end();
 					var origDistancePath = getPathDistance(track.path);
 					var userDistancePath = getPathPointsDistance(path);
 					

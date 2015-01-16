@@ -178,6 +178,7 @@ var Roll = cc.Layer.extend({
 		app.renderMenu(this, this.menuHelp, true);
 	},
 	game: function (track) {
+		cc.audioEngine.end();	
 		app.renderMenu(this, this.menuGame, true);
 		//app.drawPath(this.menu, app.preparePathPoints(track.path));
 
@@ -215,6 +216,7 @@ var Roll = cc.Layer.extend({
 				  oldX = location.x;
 				  oldY = location.y;
 				  prevLocation = location;
+				  cc.audioEngine.playMusic('res/sounds/engine-for-games2.mp3', false);
 				  return true;
 			  },
 			  onTouchMoved: function (touch, event) {
@@ -240,6 +242,7 @@ var Roll = cc.Layer.extend({
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
 				app.drawPath(this.menu, app.preparePathPoints(track.path), false);
+				
 				app.moveByPathConstantSpeed(path, car, 600, function () {
 					cc.log('Final !!!');  
 					var origDistancePath = getPathDistance(track.path);

@@ -118,8 +118,8 @@ var Accelerator = cc.Layer.extend({
       ]
 	},
 	menuResult: {
-	  back: assets.acceleratorResult,
-	  areas: [
+		back: assets.acceleratorResult,
+		areas: [
 	    {
 	    	x: 1536 - 953,
 	        y: 1536 - 410 - 270,
@@ -163,7 +163,7 @@ var Accelerator = cc.Layer.extend({
 	        w: 99,
 	        h: 99,
 	        click: function () {
-	          app.share('tw', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
+	        	app.share('tw', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
 	        }
 	    },
 	    {
@@ -183,10 +183,11 @@ var Accelerator = cc.Layer.extend({
 	  app.renderMenu(this, this.menuIntro, true);
 	},
 	help: function () {
+		cc.audioEngine.end();
 		app.renderMenu(this, this.menuHelp, true);
 	},
 	drawSector: function (node, x, y, r, minAngle, maxAngle)  {
-	 /* var t = minAngle;
+		/* var t = minAngle;
 	  minAngle = maxAngle;
 	  maxAngle = t;*/
 	  
@@ -327,6 +328,7 @@ var Accelerator = cc.Layer.extend({
     	   lightGreen.visible = true;
     	   moveTah(Tah);
            startTime = new Date();
+           cc.audioEngine.playMusic('res/sounds/loop.mp3', true);
            var intervalGame = setIntervalG(function () {
                deltaLimit += (Math.random() < 0.5 ? -1 : 1)*Math.random()*10;
                if (deltaLimit < 10) deltaLimit = 10;
@@ -351,6 +353,7 @@ var Accelerator = cc.Layer.extend({
      }.bind(this), 500); 	 
     },
     result: function (time) {
+      cc.audioEngine.end();
       app.renderMenu(this, this.menuResult, true);
       var timeStr = '00:' + leadZero(Math.floor(time/1000), 2) + ':' + leadZero(time -  Math.floor(time/1000)*1000, 3);
       console.log('Stop Game = ' + timeStr);

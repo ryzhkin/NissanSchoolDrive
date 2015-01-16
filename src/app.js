@@ -58,7 +58,7 @@ var app = {
 	  cc.log('try low sprite > ' + t);
 	  var s = new cc.Sprite(t);
 	  s.attr({
-		scale: 2	
+		  scale: 2	
 	  });
 	  return s;
 	} else {
@@ -77,11 +77,13 @@ var app = {
   },
   // Run stage
   runStage: function (stage, options) {
-	if (typeof(stage) !== 'undefined') {  
+	  
+	  if (typeof(stage) !== 'undefined') {  
       this.clearStage();
       this.game.stage.addChild(stage, 10);
       if (typeof(stage.init) == 'function') {
-    	stage.init(options);  
+    	stage.init(options);
+    	cc.audioEngine.end();
       }  
 	}
   },
@@ -99,6 +101,7 @@ var app = {
   // Render Menu
 
   renderMenu: function (layer, menu, clearEvents, debug) {
+	  
 	  debug = false;
 	  //debug = true;
 	  if (typeof(clearEvents) == 'undefined') {
@@ -199,6 +202,7 @@ var app = {
     				  //Check the click area
     				  if (cc.rectContainsPoint(rect, locationInNode)) {       
     					  //cc.log("sprite began... x = " + locationInNode.x + ", y = " + locationInNode.y);
+    					  cc.audioEngine.playEffect('res/sounds/click3.mp3');
     					  area.click(target);
     					  return true;
     				  }
