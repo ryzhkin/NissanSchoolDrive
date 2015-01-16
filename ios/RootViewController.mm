@@ -32,8 +32,8 @@
 @implementation RootViewController
 
 +(void)openLinkWithUrl:(NSString *)url {
-  //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.ya.ru"]];
-    NSURL* url2 = [NSURL URLWithString:url];
+    // [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.ya.ru"]];
+    // NSURL* url2 = [NSURL URLWithString:url];
     std::string *url3 = new std::string([url UTF8String]);
     cocos2d::Application::getInstance()->openURL(*url3);
    
@@ -49,15 +49,35 @@
     
     
     // Register this class as an observer instead
+    /*
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(movieFinishedCallback:)
                                                  name:MPMoviePlayerPlaybackStateDidChangeNotification
                                                object:theMoviPlayer];
+    //*/
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(doneButtonClick:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:theMoviPlayer];
+    //*/
+    
+    /*
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(doneButtonClick:)
+                                                 name: MPMoviePlayerDidEnterFullscreenNotification
+                                               object:theMoviPlayer];
+    //*/
+    
     
     
     theMoviPlayer.controlStyle = MPMovieControlStyleFullscreen;
+    //theMoviPlayer.controlStyle = MPMovieControlStyleEmbedded;
     theMoviPlayer.shouldAutoplay=YES;
     theMoviPlayer.view.transform = CGAffineTransformConcat(theMoviPlayer.view.transform, CGAffineTransformMakeRotation(M_PI_2));
+    theMoviPlayer.fullscreen = YES;
     UIWindow *backgroundWindow = [[UIApplication sharedApplication] keyWindow];
     
     [theMoviPlayer.view setFrame:backgroundWindow.frame];
@@ -66,11 +86,32 @@
 }
 
 
++(void)doneButtonClick:(NSNotification*)aNotification{
+  
+    NSLog(@"yeee!!!");
+    
+    MPMoviePlayerController *player = [aNotification object];
+    [player.view removeFromSuperview];
+    [player release];
+    player = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:MPMoviePlayerPlaybackStateDidChangeNotification
+                                                  object:nil];
+    //*/
+    
+}
+
 + (void)movieFinishedCallback:(NSNotification*)aNotification
 {
+     NSLog(@"test");
+    
     
      MPMoviePlayerController *player = [aNotification object];
-    if (/*player.playbackState == MPMoviePlaybackStatePaused ||*/
+    
+     NSLog(@"test %x", (int)player.playbackState);
+    
+    if (   player.playbackState == MPMoviePlaybackStatePaused ||
            player.playbackState ==   MPMoviePlaybackStateStopped
         /*
         && player.playbackState != MPMoviePlaybackStateSeekingForward
@@ -91,42 +132,7 @@
    
 }
 
-+ (void)movieFinishedCallback2:(NSNotification*)aNotification
-{
-    
-    MPMoviePlayerController *player = [aNotification object];
-    
-        [player.view removeFromSuperview];
-        [player release];
-        player = nil;
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:MPMoviePlayerDidExitFullscreenNotification
-                                                      object:nil];
-        
-        
-   
-    
-    
-}
 
-
-
-/*
-+(void) removeVideo {
-    if (player.playbackState == MPMoviePlaybackStatePaused || player.playbackState ==   MPMoviePlaybackStateStopped) {
-        [player.view removeFromSuperview];
-        [player release];
-        player = nil;
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:MPMoviePlayerPlaybackStateDidChangeNotification
-                                                      object:nil];
-        
-        AudioManager::sharedManager()->playBG();
-    }
-}
-//*/
 
 
 /*
