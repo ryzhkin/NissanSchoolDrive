@@ -53,14 +53,6 @@
                                              selector:@selector(movieFinishedCallback:)
                                                  name:MPMoviePlayerPlaybackStateDidChangeNotification
                                                object:theMoviPlayer];
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(movieFinishedCallback2:)
-                                                 name:MPMoviePlayerDidExitFullscreenNotification
-                                               object:theMoviPlayer];//*/
-    
-    
-    //*/
     
     
     theMoviPlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -78,7 +70,13 @@
 {
     
      MPMoviePlayerController *player = [aNotification object];
-    if (player.playbackState == MPMoviePlaybackStatePaused || player.playbackState ==   MPMoviePlaybackStateStopped) {
+    if (/*player.playbackState == MPMoviePlaybackStatePaused ||*/
+           player.playbackState ==   MPMoviePlaybackStateStopped
+        /*
+        && player.playbackState != MPMoviePlaybackStateSeekingForward
+        && player.playbackState != MPMoviePlaybackStateSeekingBackward
+         */
+        ) {
         [player.view removeFromSuperview];
         [player release];
         player = nil;
