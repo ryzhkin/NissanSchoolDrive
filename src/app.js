@@ -233,7 +233,7 @@ var app = {
 		return points;
   },
   
-  drawPath: function (parent, path) {
+  drawPath: function (parent, path, showPoint) {
 		var pathLine = new cc.DrawNode();
 		parent.addChild(pathLine);
 
@@ -244,21 +244,23 @@ var app = {
 					pathLine.drawSegment(
 							path[i], 
 							path[i + 1], 
-							2, 
-							cc.color(26, 252, 22, 255)
+							10, 
+							cc.color(250, 119, 1, 200)
 					);
 				}	
 				if ((i+2) < path.length) {	
 					pathLine.drawSegment(
 							path[i + 1], 
 							path[i + 2], 
-							2, 
-							cc.color(26, 252, 22, 255)
+							10, 
+							cc.color(250, 119, 1, 200)
 					);
 				}	
 
 			}  
-			pathLine.drawDot(path[i], 10, cc.color(242, 120, 14, 255));
+			if (showPoint !== false) {
+			  pathLine.drawDot(path[i], 10, cc.color(242, 120, 14, 255));	
+			}
 			i++;  
 		}
   },

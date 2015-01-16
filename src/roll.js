@@ -187,7 +187,7 @@ var Roll = cc.Layer.extend({
 			y: app.localY(1536 - track.y),
 			rotation : track.rotation
 		});
-		this.menu.addChild(car);
+		this.menu.addChild(car, 100);
 
 		/* app.moveByPath(app.preparePathPoints(track.path), car, 5, function () {
 			cc.log('Final !!!');  
@@ -198,7 +198,7 @@ var Roll = cc.Layer.extend({
 		var oldY = car.y;
 		var mDelta = 20;
 
-
+		var prevLocation = null;
 		var pathLine = new cc.DrawNode();
 		this.menu.addChild(pathLine);
 
@@ -214,13 +214,17 @@ var Roll = cc.Layer.extend({
 				var location = touch.getLocation(); 
 				  oldX = location.x;
 				  oldY = location.y;
+				  prevLocation = location;
 				  return true;
 			  },
 			  onTouchMoved: function (touch, event) {
 				if (endGame == false) { 
 				  var location = touch.getLocation(); 
 				  // Рисуем линию
-				  pathLine.drawDot(location, 25, cc.color(255, 131, 22, 20));
+				  //pathLine.drawDot(location, 25, cc.color(255, 131, 22, 20));
+ 				  // Рисуем линию
+				  pathLine.drawSegment(prevLocation, location, 15, cc.color(249, 216, 99, 60));
+				  prevLocation = location;
 				  if (Math.abs(location.x - oldX) > mDelta && Math.abs(location.y - oldY) > mDelta) {
 				    path.push(location);
 				    oldX = location.x;
@@ -235,6 +239,7 @@ var Roll = cc.Layer.extend({
 				path.push(location);
 				cc.log('onTouchEnded'); 
 				cc.log(path.length);
+				app.drawPath(this.menu, app.preparePathPoints(track.path), false);
 				app.moveByPathConstantSpeed(path, car, 600, function () {
 					cc.log('Final !!!');  
 					var origDistancePath = getPathDistance(track.path);
