@@ -223,5 +223,24 @@ var help = {
 				g: parseInt(result[2], 16),
 				b: parseInt(result[3], 16)
 			} : null;
+		},
+		// Wraps a string to a given number of characters
+		/**
+		 * str       - входная строка
+		 * int_width - заданное кол-во символов в строке
+		 * str_break  - символ разделитель для переноса строки
+		 * 
+		 */
+		wordwrap: function( str, int_width, str_break, cut ) {	
+			var i, j, s, r = str.split("\n");
+			if(int_width > 0) for(i in r){
+				for(s = r[i], r[i] = ""; s.length > int_width;
+				j = cut ? int_width : (j = s.substr(0, int_width).match(/\S*$/)).input.length - j[0].length || int_width,
+						r[i] += s.substr(0, j) + ((s = s.substr(j)).length ? str_break : "")
+				);
+				r[i] += s;
+			}
+			return r.join("\n");
 		}
+
 }

@@ -37,6 +37,7 @@ import android.view.WindowManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.View;
 import android.widget.VideoView;
 
@@ -128,6 +129,12 @@ public class AppActivity extends Cocos2dxActivity{
       //intent.setData(Uri.parse(url));
       //intent.setDataAndType(Uri.parse(url), "video/mp4");
       baseContext.startActivity(intent);
+    }
+
+    public static boolean isTablet() {
+      return (baseContext.getResources().getConfiguration().screenLayout
+            & Configuration.SCREENLAYOUT_SIZE_MASK)
+            >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 

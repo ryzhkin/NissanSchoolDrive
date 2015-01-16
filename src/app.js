@@ -42,6 +42,9 @@ var app = {
 	 
 	 /*this.menu = new Menu();
 	 this.runStage(this.menu);	*/	
+	 
+	 
+	 cc.log('isTablet = ' + this.isTablet());
   },
   
   // Умная загрузка спрайта
@@ -82,16 +85,16 @@ var app = {
       }  
 	}
   },
-  
+
   //Calc local game X coordinate 
   localX: function (x) {
-	var xOffset = (-3072 + cc.view.getDesignResolutionSize().width)/2;
-	x = xOffset + x;
-	return x;
+	  var xOffset = (-3072 + cc.view.getDesignResolutionSize().width)/2;
+	  x = xOffset + x;
+	  return x;
   },
   //Calc local game Y coordinate
   localY: function (y) {
-    return y;
+	  return y;
   },
   // Render Menu
 
@@ -99,11 +102,11 @@ var app = {
 	  debug = false;
 	  //debug = true;
 	  if (typeof(clearEvents) == 'undefined') {
-		clearEvents = true;  
+		  clearEvents = true;  
 	  }
 	  if (clearEvents == true) {
-	    clearAllIntervals();
-	    cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+		  clearAllIntervals();
+		  cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
 	  }
 	  cc.spriteFrameCache.removeSpriteFrames();
 	  cc.textureCache.removeAllTextures();
@@ -137,7 +140,7 @@ var app = {
 		  //cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
 		  menu.areas.forEach(function (area) {
 			  if (typeof(area.img) == 'string') {
-				var clickArea = new cc.Sprite(area.img);
+				  var clickArea = new cc.Sprite(area.img);
 				layer.menu.addChild(clickArea);
 				clickArea.attr({
 					x: this.localX(area.x),
@@ -416,6 +419,37 @@ var app = {
 	   }
 	 }
 	 this.openURL(url);
+  },
+
+  // Если определено устройство с большим физическим экраном - считаем планшетом и возвращаем true
+  isTablet: function () {
+	 var tablet = true;
+	 
+	 switch (cc.sys.platform) {
+	  case cc.sys.WINDOWS: {
+		  //cc.log("Windows platform");
+		  break;	
+	  }
+	  case cc.sys.ANDROID: {
+		  //cc.log("ANDROID platform");
+		  tablet = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "isTablet", "()Z");
+		  break;	
+	  }
+	  case cc.sys.IPAD: {
+		 tablet = true; 
+		 break; 
+	  }
+	  case cc.sys.IPHONE: {
+		tablet = false;
+	   	break;	
+	  }
+	  default: {
+	    //cc.log("UNKNOW platform"); 	
+	    break; 	
+	  }
+	}
+	//tablet = false;
+	return tablet; 
   }
 }
 

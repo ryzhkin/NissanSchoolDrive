@@ -115,7 +115,7 @@ var Theory = cc.Layer.extend({
 	  var currentY = maxH;
 	  cc.loader.loadTxt(
 			  (typeof(options.url) !== 'undefined')?options.url:'res/data/theory_accelerator.html', 
-			  function (error, data) {
+					  function (error, data) {
 				  var txt = '';
 				  var prevTag = '';
 				  var liCounter = 1;
@@ -141,14 +141,14 @@ var Theory = cc.Layer.extend({
 						  case 'h2': {
 							  txtH = 35;
 							  buttomPadding = 10;
-							  topPadding = 50;
+							  topPadding = 10;
 							  break;	
 						  }
 						  case 'li': {
 							  fontName = 'res/fonts/nissanaglig.ttf';
 							  txtH = 35;
 							  buttomPadding = 10;
-							  leftPadding   = 50;
+							  leftPadding   = 0;
 							  currentY = currentY - 35;	
 							  if (prevTag == 'li') {
 								  liCounter++;
@@ -180,30 +180,45 @@ var Theory = cc.Layer.extend({
 						  }
 						  // Text render
 						  if (txt !== '') {
+							  
+							  
+							  txtH = txtH*((app.isTablet())?1:1.5);
+							  buttomPadding = buttomPadding*((app.isTablet())?1:1.5);
+							  topPadding = topPadding*((app.isTablet())?1:1.5);
+							  //*/
 
+							  var testTxt = txt.replace("\n", "").replace(/\s+/g,' ').substring(0, 3);
 							  var line = new cc.LabelTTF(
-									  txt,
+									  testTxt,
 									  fontName,
 									  txtH
 							  );
-							  line.setPosition(leftPadding, currentY - topPadding);
-							  //*/
-							  /* 
-	    	    	var line = new ccui.Text();
-	    	    	line.attr({
-	    	    		  textAlign : cc.TEXT_ALIGNMENT_LEFT,
-	    	    		  string    : txt,
-	    	    		  fontName  : fontName,
-	    	    		  fontSize  : 30,
-	    	    		  x         : leftPadding,
-	    	    		  y         : currentY - topPadding
-	    	    	});//*/
-							  line.setAnchorPoint(0, 1);
-							  line.setColor(cc.color(0, 0, 0, 255));
-							  //scrollView.addChild(line);  
-							  panel.addChild(line);
-							  currentY = currentY - (txtH*(txt.split("\n").length + 1) + buttomPadding + topPadding);  
-							  //scrollView.setInnerContainerSize(cc.size(1456, currentY));	
+							  var lineW = line.getContentSize().width;
+							  var charW = Math.round(lineW/testTxt.length);
+							  var txtL = Math.round(((tag == 'li')?1000:1580)/charW);
+							  
+							  txt = txt.replace("\n", "").replace(/\s+/g,' ');
+							  var lines = help.wordwrap(txt, txtL, '|', false);
+							  lines = lines.split("|");
+							 /*
+							  cc.log('+---------------+');
+							  cc.log('L = ' + txt.length);
+	 						  cc.log('txtL = ' + txtL);
+	 						  //*/
+							  for (var i = 0; i < lines.length; i++) {
+									//cc.log('> ' + lines[i]); 
+									var line = new cc.LabelTTF(
+									  lines[i],
+									  fontName,
+									  txtH
+									);
+									line.setPosition(leftPadding, currentY - topPadding);
+									line.setAnchorPoint(0, 1);
+									line.setColor(cc.color(0, 0, 0, 255));
+									panel.addChild(line);
+									currentY = currentY - (txtH + buttomPadding + topPadding);  
+							  }
+	
 						  }
 						  txt = '';
 						  prevTag = tag;
