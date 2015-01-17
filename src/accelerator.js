@@ -106,7 +106,7 @@ var Accelerator = cc.Layer.extend({
 	          app.runStage(app.accelerator);
             }
         },
-        {
+        /*{
         	x     : 1536 + 614,
         	y     : 1536 - 1016 - 426,
         	w     : 292,
@@ -114,7 +114,7 @@ var Accelerator = cc.Layer.extend({
         	click : function () {
         		app.accelerator.updateTah();
         	}
-        }
+        }*/
       ]
 	},
 	menuResult: {
@@ -168,19 +168,19 @@ var Accelerator = cc.Layer.extend({
 	    },
 	    {
 	    	x: 1536 + 121,
-	        y: 1536 - 1165 - 99,
-	        w: 99,
-	        h: 99,
-	        click: function () {
-	          app.share('od', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
-	        }
+	    	y: 1536 - 1165 - 99,
+	    	w: 99,
+	    	h: 99,
+	    	click: function () {
+	    		app.share('od', 'Я прошел урок "Управление газом" в Школе вождения Nissan!');
+	    	}
 	    }
-	  ]
+	    ]
 	},
-	
+
 	init: function () {
-	  app.accelerator = this;	
-	  app.renderMenu(this, this.menuIntro, true);
+		app.accelerator = this;	
+		app.renderMenu(this, this.menuIntro, true);
 	},
 	help: function () {
 		cc.audioEngine.end();
@@ -190,65 +190,65 @@ var Accelerator = cc.Layer.extend({
 		/* var t = minAngle;
 	  minAngle = maxAngle;
 	  maxAngle = t;*/
-	  
-		
-	 /* cc.log('minAngle = ' + minAngle);	
-	  cc.log('maxAngle = ' + maxAngle);*/
-	  
-		
-		
- 	  minAngle = (-1)*minAngle + 90;
-	  maxAngle = (-1)*maxAngle + 90;
-	  
-	  var t = minAngle;
-	  minAngle = maxAngle;
-	  maxAngle = t;
-	  
-	  /*cc.log('minAngle = ' + minAngle);	
+
+
+		/* cc.log('minAngle = ' + minAngle);	
 	  cc.log('maxAngle = ' + maxAngle);*/
 
-	  //minAngle = /*(-1)*minAngle + 90*/180 + 30 - 45;
-	  //maxAngle = /*(-1)*maxAngle + 90*/180 + 30;
-	  //minAngle = 165;
-	  //maxAngle = 210;
-	  var dAngle = 5;
-	  var verts = [];	
+
+
+		minAngle = (-1)*minAngle + 90;
+		maxAngle = (-1)*maxAngle + 90;
+
+		var t = minAngle;
+		minAngle = maxAngle;
+		maxAngle = t;
+
+		/*cc.log('minAngle = ' + minAngle);	
+	  cc.log('maxAngle = ' + maxAngle);*/
+
+		//minAngle = /*(-1)*minAngle + 90*/180 + 30 - 45;
+		//maxAngle = /*(-1)*maxAngle + 90*/180 + 30;
+		//minAngle = 165;
+		//maxAngle = 210;
+		var dAngle = 5;
+		var verts = [];	
 	  verts.push(cc.p(x, y));
 	  while (minAngle <= maxAngle) {
-		verts.push(cc.p(x + r*Math.cos((Math.PI/180)*minAngle), y + r*Math.sin((Math.PI/180)*minAngle)));  
-	    minAngle += dAngle;  
+		  verts.push(cc.p(x + r*Math.cos((Math.PI/180)*minAngle), y + r*Math.sin((Math.PI/180)*minAngle)));  
+		  minAngle += dAngle;  
 	  }
 	  verts.push(cc.p(x, y));
 	  node.clear();
 	  node.drawPoly(verts, cc.color(255,255,255, 100), 1, cc.color(255,255,255, 100));
 	},
-	
+
 	game: function () {
-  	 app.renderMenu(this, this.menuGame, true);
-  	 
-  	 var lightYellow = new cc.Sprite(assets.acceleratorYellowLight);
-  	 lightYellow.attr({
-  		visible : false,
-  		x: app.localX(1536 - 232),
-		y: app.localY(1536 - 312),
-		anchorX: 0,
-		anchorY: 1	 
-  	 });
-  	 this.menu.addChild(lightYellow);
-  	 
-  	var lightGreen = new cc.Sprite(assets.acceleratorGreenLight);
-  	lightGreen.attr({
-  		visible : false,
- 		x: app.localX(1536 - 96),
-		y: app.localY(1536 - 312),
-		anchorX: 0,
-		anchorY: 1	 
- 	 });
- 	 this.menu.addChild(lightGreen);
- 	 
- 	var lightRed = new cc.Sprite(assets.acceleratorRedLight);
-  	lightRed.attr({
-  		visible : false,
+		app.renderMenu(this, this.menuGame, true);
+
+		var lightYellow = new cc.Sprite(assets.acceleratorYellowLight);
+		lightYellow.attr({
+			visible : false,
+			x: app.localX(1536 - 232),
+			y: app.localY(1536 - 312),
+			anchorX: 0,
+			anchorY: 1	 
+		});
+		this.menu.addChild(lightYellow);
+
+		var lightGreen = new cc.Sprite(assets.acceleratorGreenLight);
+		lightGreen.attr({
+			visible : false,
+			x: app.localX(1536 - 96),
+			y: app.localY(1536 - 312),
+			anchorX: 0,
+			anchorY: 1	 
+		});
+		this.menu.addChild(lightGreen);
+
+		var lightRed = new cc.Sprite(assets.acceleratorRedLight);
+		lightRed.attr({
+			visible : false,
  		x: app.localX(1536 + 36),
 		y: app.localY(1536 - 312),
 		anchorX: 0,
@@ -319,6 +319,9 @@ var Accelerator = cc.Layer.extend({
   	 var Tah = startLimit + 22;
      var startTime = new Date();
      var timeOuts = [];
+     
+     var acceleratorInterval = null;
+     
      // Начало игры
      setTimeout(function () {
        lightRed.visible = true;
@@ -329,6 +332,61 @@ var Accelerator = cc.Layer.extend({
     	   moveTah(Tah);
            startTime = new Date();
            cc.audioEngine.playMusic('res/sounds/loop.mp3', true);
+           
+           // Обработчик нажатия на педаль
+           cc.eventManager.addListener({
+ 			  event: cc.EventListener.TOUCH_ONE_BY_ONE,
+ 			  // When "swallow touches" is true, then returning 'true' from the onTouchBegan method will "swallow" the touch event, preventing other listeners from using it.
+ 			  swallowTouches: true,
+ 			  //onTouchBegan event callback function                      
+ 			  onTouchBegan: function (touch, event) { 
+ 				  var target = event.getCurrentTarget();  
+ 				  var s = target.getContentSize();
+ 				  var rect = cc.rect(0, 0, s.width, s.height);
+ 				  
+ 				  //Get the position of the current point relative to the button
+ 				  var locationInNode = target.convertToNodeSpace(touch.getLocation());    
+ 				  //Check the click area
+ 				  if (cc.rectContainsPoint(rect, locationInNode)) {       
+ 					 cc.audioEngine.playEffect('res/sounds/click3.mp3');
+ 					 pedal.runAction(new cc.Sequence([
+ 					                                 new cc.ScaleTo(0.1, 0.9, 0.9)
+ 					                        		]
+ 					                        		));
+ 					
+ 			         acceleratorInterval = setIntervalG(function () {
+ 			        	Tah += 4;
+ 	 			        moveTah(Tah);	 
+ 			         }.bind(this), 600);
+ 					 
+ 					 return true;
+ 				  }
+ 				  return false;
+ 			  },
+ 			 onTouchEnded: function (touch, event) { 
+				  var target = event.getCurrentTarget();  
+				  var s = target.getContentSize();
+				  var rect = cc.rect(0, 0, s.width, s.height);
+				  
+				  //Get the position of the current point relative to the button
+				  var locationInNode = target.convertToNodeSpace(touch.getLocation());    
+				  //Check the click area
+				  if (cc.rectContainsPoint(rect, locationInNode)) {       
+					  cc.audioEngine.playEffect('res/sounds/click3.mp3');
+					  pedal.runAction(new cc.Sequence([
+                                                      new cc.ScaleTo(0.1, 1, 1)
+					                        		]
+					                        		));
+					  clearInterval(acceleratorInterval);
+					  return true;
+				  }
+				  return false;
+			  },
+ 			  
+ 		   }, pedal);
+           
+           
+           
            var intervalGame = setIntervalG(function () {
                deltaLimit += (Math.random() < 0.5 ? -1 : 1)*Math.random()*10;
                if (deltaLimit < 10) deltaLimit = 10;
