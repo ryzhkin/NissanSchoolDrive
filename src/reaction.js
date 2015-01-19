@@ -237,7 +237,7 @@ var Reaction = cc.Layer.extend({
 		                       new cc.ScaleTo(1.7, 0.44, 0.44 - 0.1),
 		                       cc.callFunc(function () {
 		                    	   if (folstart == true) {
-	                    	    	 app.reaction.result(endTime - startTime);
+	                    	    	 app.reaction.result(endTime - startTime - 2500);
 		                    	   } else {
 		                    		 light5.visible = true;
 		                 			 app.reaction.result(-1);
@@ -264,6 +264,7 @@ var Reaction = cc.Layer.extend({
       var startTime = new Date();
       var timeOuts = [];
       this.timeOuts = timeOuts;
+      
       // Начало игры
       timeOuts.push(setTimeout(function () {
     	  light1.visible = true;
