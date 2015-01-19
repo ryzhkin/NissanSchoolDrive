@@ -19,22 +19,74 @@ var Memory = cc.Layer.extend({
 		        ]
 	},
 	menuGame: {
-		back: 'res/memory/memory-track1.jpg'	
+		back: 'res/memory/memory-track1.jpg',
+		areas: [
+		        // Пауза
+		        {
+		        	x: 1536 - 250/2,
+		        	y: 1536 - 140,
+		        	h: 140,
+		        	w: 250,
+		        	click: function () {
+		        		cc.log('PAUSE!!!');
+		        		app.memory.pause();
+		        	}
+		        }
+		        ]
 	},
-	menuQuestions: {
-	  back: assets.memoryQuestions,
-	  areas: [
-	          // Вопрос №1       
-	   {
-		   x: 1178 - 100/2,
-		   y: 986 - 100/2,
-		   h: 100,
-		   w: 100,
-		   options: {
-			   question: 1,
-			   value: 12   
-		   },
-		   click: function (target) {
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		  {
+		   	x: 1536 -488,
+		   	y: 1536 - 483 - 278,
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    	  app.memory.pauseLayer.removeFromParent(true);  
+	    	  app.memory.scheduleUpdate();
+	    	  app.memory.isPause = false;
+	    	  app.memory.car.resume();
+	    	  app.memory.pauseTime += new Date() - app.memory.startPause;
+	    	}
+	     },
+	     {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		      app.runStage(new Menu(), 3);
+		    }
+	     },
+		 {
+		   	x: 1536 + 291,
+		    y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		    	app.memory.pauseLayer.removeFromParent(true);  
+		    	cc.loader.loadJson("res/data/memory.json", function(error, data) {
+		    		app.memory.game(data);  
+		    	});
+		    }
+		 }
+	  ]
+	},
+    menuQuestions: {
+		back: assets.memoryQuestions,
+		areas: [
+		        // Вопрос №1       
+		        {
+		        	x: 1178 - 100/2,
+		        	y: 986 - 100/2,
+		        	h: 100,
+		        	w: 100,
+		        	options: {
+		        		question: 1,
+		        		value: 12   
+		        	},
+		        	click: function (target) {
 			   app.memory.click(target);			   
 		   }
 	   },
@@ -260,6 +312,19 @@ var Memory = cc.Layer.extend({
 	    }
 	  ]
 	},
+    
+	isPause: false,
+    pauseTime: 0,
+	pause: function () {
+      this.unscheduleUpdate();
+  	  this.startPause = new Date();
+  	  this.isPause = true;
+  	  this.car.pause();
+  	  this.pauseLayer = new cc.Layer();
+  	  this.addChild(this.pauseLayer);
+  	  app.renderMenu(this.pauseLayer, this.menuPause, false);
+    },
+    
     init: function (options) {
       app.memory = this;
       app.renderMenu(this, this.menuIntro, true);
@@ -271,7 +336,20 @@ var Memory = cc.Layer.extend({
 	  
 	  this.menuGame.back = 'res/memory/' + track.track; 	
 	  app.renderMenu(this, this.menuGame, true);
+	  
+	  // Пауза
+	  this.pauseTime = 0;
+	  this.isPause = false;
+	  var pause = new cc.Sprite('res/coordination/pause.png');
+	  pause.attr({
+		  x        : app.localX(1536),
+		  y        : app.localY(1536 - 69/2)
+	  });
+	  this.menu.addChild(pause, 1);
+	  
+	  
 	  var car = new cc.Sprite(assets.car);
+	  this.car = car;
 	  car.attr({
 		  x        : app.localX(1536 + track.x),
 		  y        : app.localY(1536 - track.y),
@@ -309,15 +387,15 @@ var Memory = cc.Layer.extend({
 	  var gameTime  = 5030;
 	  
 	  var timerID = setIntervalG(function () {
-		  var delta = gameTime - (new Date() - startTime);
-
-		  if (delta < 0) {
-			  clearInterval(timerID);
-			  
-			  this.questions(track);
-			  cc.log('End game !!!');
-		  } else {
-			  timerSec.setString('00:' + leadZero(Math.floor(delta/1000), 2) + ':' + leadZero(delta -  Math.floor(delta/1000)*1000, 3));
+		  if (this.isPause == false) {
+			  var delta = gameTime - (new Date() - startTime) + this.pauseTime;
+			  if (delta < 0) {
+				  clearInterval(timerID);
+				  this.questions(track);
+				  cc.log('End game !!!');
+			  } else {
+				  timerSec.setString('00:' + leadZero(Math.floor(delta/1000), 2) + ':' + leadZero(delta -  Math.floor(delta/1000)*1000, 3));
+			  }
 		  }
 	  }.bind(this), 10);
 	    

@@ -57,6 +57,17 @@ var Circle = cc.Layer.extend({
 		        	click : function () {
 		        		app.runStage(new Circle());
 		        	}
+		        },
+		        // Пауза
+		        {
+		        	x: 1536 - 250/2,
+		        	y: 1536 - 140,
+		        	h: 140,
+		        	w: 250,
+		        	click: function () {
+		        		cc.log('PAUSE!!!');
+		        		app.circle.pause();
+		        	}
 		        }
 		        ]
 	},
@@ -147,6 +158,66 @@ var Circle = cc.Layer.extend({
 
 	     ]
 	},
+	
+
+	
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		  {
+			  x: 1536 -488,
+			  y: 1536 - 483 - 278,
+			  h: 278,
+			  w: 278,
+			  click: function () {
+	    	  app.circle.pauseLayer.removeFromParent(true);  
+	    	  app.circle.scheduleUpdate();
+	    	  app.circle.isPause = false;
+	    	  app.circle.car.resume();
+	    	  app.circle.pauseTime += new Date() - app.circle.startPause;
+	    	  cc.audioEngine.resumeMusic();
+	    	  app.circle.retFromPause = true;
+	    	}
+	     },
+	     {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		      app.runStage(new Menu(), 2);
+		    }
+	     },
+		 {
+		   	x: 1536 + 291,
+		    y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		    	app.circle.pauseLayer.removeFromParent(true);  
+		    	cc.loader.loadJson("res/data/circle.json", function(error, data) {
+     			   app.circle.game(data[0]);  
+     		   });	
+		    }
+		 }
+	  ]
+	},
+	
+	isPause: false,
+    pauseTime: 0,
+	pause: function () {
+	  this.unscheduleUpdate();
+	  this.startPause = new Date();
+	  this.isPause = true;
+	  this.car.pause();
+	  this.pauseLayer = new cc.Layer();
+	  this.addChild(this.pauseLayer);
+	  app.renderMenu(this.pauseLayer, this.menuPause, false);
+	  cc.audioEngine.pauseMusic();
+	},
+	
+	
+	
 	init: function () {
 		app.circle = this;	
 		app.renderMenu(this, this.menuIntro, true);	
@@ -157,7 +228,20 @@ var Circle = cc.Layer.extend({
 	game: function (track) {
 		cc.audioEngine.end();	
 		app.renderMenu(this, this.menuGame, true);
+		
+		// Пауза
+		  this.pauseTime = 0;
+		  this.isPause = false;
+		  var pause = new cc.Sprite('res/coordination/pause.png');
+		  pause.attr({
+			  x        : app.localX(1536),
+			  y        : app.localY(1536 - 69/2)
+		  });
+		  this.menu.addChild(pause, 1);
+		
+		
 		var car = new cc.Sprite(assets.car);
+		this.car = car;
 		car.attr({
 			x: app.localX(1536 + track.x),
 			y: app.localY(1536 - track.y),
@@ -187,12 +271,17 @@ var Circle = cc.Layer.extend({
 			swallowTouches: true,
 			//onTouchBegan event callback function                      
 			onTouchBegan: function (touch, event) { 
+				if (app.circle.retFromPause !== true) { 
 				  var location = touch.getLocation(); 
 				  oldX = location.x;
 				  oldY = location.y;
 				  prevLocation = location;
 				  cc.audioEngine.playMusic('res/sounds/engine-for-games2.mp3', false);
 				  return true;
+				} else {
+					app.circle.retFromPause = false;
+					return false;
+				}
 			  },
 			  onTouchMoved: function (touch, event) {
 				 if (endGame == false) {
@@ -210,7 +299,7 @@ var Circle = cc.Layer.extend({
 				 } 
 			  },
 			  onTouchEnded: function (touch, event) {
-				if (endGame == false) { 
+				if (endGame == false && getPathPointsDistance(path) > 0) { 
 				endGame = true;
 				var location = touch.getLocation();
 				path.push(location);

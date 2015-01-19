@@ -49,7 +49,7 @@ var Roll = cc.Layer.extend({
 	        		   app.runStage(app.menu, 2);
 	        	   }	
 	           }
-	    ]
+	           ]
 	},
 	menuGame: {
 		back: assets.rollGameBack,
@@ -79,6 +79,17 @@ var Roll = cc.Layer.extend({
 		        	h     : 268,
 		        	click : function () {
 		        		app.runStage(new Roll());
+		        	}
+		        },
+		        // Пауза
+		        {
+		        	x: 1536 - 250/2,
+		        	y: 1536 - 140,
+		        	h: 140,
+		        	w: 250,
+		        	click: function () {
+		        		cc.log('PAUSE!!!');
+		        		app.roll.pause();
 		        	}
 		        }
 		        ]
@@ -170,6 +181,62 @@ var Roll = cc.Layer.extend({
 
 	     ]
 	},
+	
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		  {
+		   	x: 1536 -488,
+		   	y: 1536 - 483 - 278,
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    	  app.roll.pauseLayer.removeFromParent(true);  
+	    	  app.roll.scheduleUpdate();
+	    	  app.roll.isPause = false;
+	    	  app.roll.car.resume();
+	    	  app.roll.pauseTime += new Date() - app.roll.startPause;
+	    	  cc.audioEngine.resumeMusic();
+	    	  app.roll.retFromPause = true;
+	    	}
+	     },
+	     {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		      app.runStage(new Menu(), 2);
+		    }
+	     },
+		 {
+		   	x: 1536 + 291,
+		    y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		    	app.roll.pauseLayer.removeFromParent(true);  
+		    	cc.loader.loadJson("res/data/roll.json", function(error, data) {
+     			   app.roll.game(data[0]);  
+     		   });	
+		    }
+		 }
+	  ]
+	},
+	
+	isPause: false,
+    pauseTime: 0,
+	pause: function () {
+	  this.unscheduleUpdate();
+	  this.startPause = new Date();
+	  this.isPause = true;
+	  this.car.pause();
+	  this.pauseLayer = new cc.Layer();
+	  this.addChild(this.pauseLayer);
+	  app.renderMenu(this.pauseLayer, this.menuPause, false);
+	  cc.audioEngine.pauseMusic();
+	},
+	
 	init: function () {
 		app.roll = this;	
 		app.renderMenu(this, this.menuIntro, true);	
@@ -180,9 +247,22 @@ var Roll = cc.Layer.extend({
 	game: function (track) {
 		cc.audioEngine.end();	
 		app.renderMenu(this, this.menuGame, true);
+		
+		// Пауза
+		  this.pauseTime = 0;
+		  this.isPause = false;
+		  var pause = new cc.Sprite('res/coordination/pause.png');
+		  pause.attr({
+			  x        : app.localX(1536),
+			  y        : app.localY(1536 - 69/2)
+		  });
+		  this.menu.addChild(pause, 1);
+		
+		
 		//app.drawPath(this.menu, app.preparePathPoints(track.path));
 
 		var car = new cc.Sprite(assets.car);
+		this.car = car;
 		car.attr({
 			x: app.localX(1536 + track.x),
 			y: app.localY(1536 - track.y),
@@ -211,13 +291,18 @@ var Roll = cc.Layer.extend({
 			// When "swallow touches" is true, then returning 'true' from the onTouchBegan method will "swallow" the touch event, preventing other listeners from using it.
 			swallowTouches: true,
 			//onTouchBegan event callback function                      
-			onTouchBegan: function (touch, event) { 
-				var location = touch.getLocation(); 
-				  oldX = location.x;
-				  oldY = location.y;
-				  prevLocation = location;
-				  cc.audioEngine.playMusic('res/sounds/engine-for-games2.mp3', false);
-				  return true;
+			onTouchBegan: function (touch, event) {
+				  if (app.roll.retFromPause !== true) { 
+				    var location = touch.getLocation(); 
+				    oldX = location.x;
+				    oldY = location.y;
+				    prevLocation = location;
+				    cc.audioEngine.playMusic('res/sounds/engine-for-games2.mp3', false);
+				    return true;
+				  } else {
+					app.roll.retFromPause = false;
+					return false;
+				  }
 			  },
 			  onTouchMoved: function (touch, event) {
 				if (endGame == false) { 
@@ -235,7 +320,7 @@ var Roll = cc.Layer.extend({
 				}  
 			  },
 			  onTouchEnded: function (touch, event) {
-			   if (endGame == false) {
+			   if (endGame == false && getPathPointsDistance(path) > 100) {
 				endGame = true;
 				var location = touch.getLocation();
 				path.push(location);

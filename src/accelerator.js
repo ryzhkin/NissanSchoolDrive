@@ -20,9 +20,9 @@ var Accelerator = cc.Layer.extend({
 			w: 306,
 			h: 306,
 			click: function () {
-			  app.runStage(new Theory(), {
-				back: assets.theoryAcceleratorBack,
-				url: 'res/data/theory_accelerator.html',   
+				app.runStage(new Theory(), {
+					back: assets.theoryAcceleratorBack,
+					url: 'res/data/theory_accelerator.html',   
 				onBack: function () {
 				  app.accelerator = new Accelerator();
 				  app.runStage(app.accelerator);
@@ -91,19 +91,19 @@ var Accelerator = cc.Layer.extend({
 		    	   y     : 1536 - 760 - 268,
 		    	   w     : 268,
 		    	   h     : 268,
-           click : function () {
-        	  app.menu = new Menu();	
- 	    	  app.runStage(app.menu, 2);
-           }
-        },
-        {
-            x     : 1536 - 955,
-            y     : 1536 - 1102 - 268,
-            w     : 268,
-            h     : 268,
-            click : function () {
-              app.accelerator = new Accelerator();
-	          app.runStage(app.accelerator);
+		    	   click : function () {
+		    		   app.menu = new Menu();	
+		    		   app.runStage(app.menu, 2);
+		    	   }
+		       },
+		       {
+		    	   x     : 1536 - 955,
+		    	   y     : 1536 - 1102 - 268,
+		    	   w     : 268,
+		    	   h     : 268,
+		    	   click : function () {
+		    		   app.accelerator = new Accelerator();
+		    		   app.runStage(app.accelerator);
             }
         },
         /*{
@@ -115,6 +115,18 @@ var Accelerator = cc.Layer.extend({
         		app.accelerator.updateTah();
         	}
         }*/
+        // Пауза
+        {
+        	x: 1536 - 250/2,
+        	y: 1536 - 140,
+        	h: 140,
+        	w: 250,
+        	click: function () {
+        		cc.log('PAUSE!!!');
+        		app.accelerator.pause();
+        	}
+        }
+        
       ]
 	},
 	menuResult: {
@@ -178,6 +190,59 @@ var Accelerator = cc.Layer.extend({
 	    ]
 	},
 
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		  {
+		   	x: 1536 -488,
+		   	y: 1536 - 483 - 278,
+	    	h: 278,
+	    	w: 278,
+	    	click: function () {
+	    	  app.accelerator.pauseLayer.removeFromParent(true);  
+	    	  app.accelerator.scheduleUpdate();
+	    	  app.accelerator.isPause = false;
+	    	  //app.accelerator.car.resume();
+	    	  app.accelerator.pauseTime += new Date() - app.accelerator.startPause;
+	    	  cc.audioEngine.resumeMusic();
+	    	}
+	     },
+	     {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		      app.runStage(new Menu(), 2);
+		    }
+	     },
+		 {
+		   	x: 1536 + 291,
+		    y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		    	app.accelerator.pauseLayer.removeFromParent(true);  
+		    	app.accelerator.game();
+		    }
+		 }
+	  ]
+	},
+	
+	isPause: false,
+    pauseTime: 0,
+	pause: function () {
+		this.unscheduleUpdate();
+	  	this.startPause = new Date();
+	  	this.isPause = true;
+	  	//  this.car.pause();
+	  	this.pauseLayer = new cc.Layer();
+	  	this.addChild(this.pauseLayer);
+	  	app.renderMenu(this.pauseLayer, this.menuPause, false);
+	  	cc.audioEngine.pauseMusic();
+	},
+	
+	
 	init: function () {
 		app.accelerator = this;	
 		app.renderMenu(this, this.menuIntro, true);
@@ -223,8 +288,19 @@ var Accelerator = cc.Layer.extend({
 	  node.drawPoly(verts, cc.color(255,255,255, 100), 1, cc.color(255,255,255, 100));
 	},
 
+	
+	
 	game: function () {
 		app.renderMenu(this, this.menuGame, true);
+		// Пауза
+		this.pauseTime = 0;
+		var pause = new cc.Sprite('res/coordination/pause.png');
+		pause.attr({
+			  x        : app.localX(1536),
+			  y        : app.localY(1536 - 69/2)
+		});
+		this.menu.addChild(pause, 1);
+		
 
 		var lightYellow = new cc.Sprite(assets.acceleratorYellowLight);
 		lightYellow.attr({
@@ -275,9 +351,9 @@ var Accelerator = cc.Layer.extend({
 		anchorX: 7/14,
 		anchorY: 1 - 112/123
  	 });
- 	 this.menu.addChild(arrowSpeed);
- 	 
- 	 var pedal = new cc.Sprite(assets.acceleratorPedal);
+  	 this.menu.addChild(arrowSpeed);
+
+  	 var pedal = new cc.Sprite(assets.acceleratorPedal);
  	 pedal.attr({
  		x: app.localX(1536 + 614),
 		y: app.localY(1536 - 1016),
@@ -388,6 +464,7 @@ var Accelerator = cc.Layer.extend({
            
            
            var intervalGame = setIntervalG(function () {
+        	   if (this.isPause == false) {
                deltaLimit += (Math.random() < 0.5 ? -1 : 1)*Math.random()*10;
                if (deltaLimit < 10) deltaLimit = 10;
                startLimit += 5 + (Math.random() < 0.5 ? -1 : 1)*Math.random()*2;
@@ -395,14 +472,17 @@ var Accelerator = cc.Layer.extend({
                if (((startLimit + deltaLimit) >= 120) || (Tah < startLimit) || Tah > (startLimit + deltaLimit)) {
                  clearInterval(intervalGame);
                  clearInterval(intervalTahDown);
-                 this.result(new Date() - startTime);
+                 this.result(new Date() - startTime - this.pauseTime);
                }
+        	   }
              }.bind(this), 1000);
 
              var intervalTahDown = setIntervalG(function () {
-                Tah = Tah - 2;
-                if (Tah < -120) Tah = -120;
-                moveTah(Tah);
+            	if (this.isPause == false) {
+                  Tah = Tah - 2;
+                  if (Tah < -120) Tah = -120;
+                  moveTah(Tah);
+            	}
              }, 2000);
            
     	   

@@ -75,24 +75,24 @@ var Slalom = cc.Layer.extend({
 		        				 app.runStage(new Slalom());
 		        			 },
 		        			 onPractice: function () {
-		        				   app.slalom = new Slalom();
-		        				   app.clearStage();
-		        				   app.game.stage.addChild(app.slalom, 10);
-		        				   cc.loader.loadJson("res/data/slalom.json", function(error, data) {
-		  		        			 app.slalom.game(data[0]);  
-		  		        		   });
+		        				 app.slalom = new Slalom();
+		        				 app.clearStage();
+		        				 app.game.stage.addChild(app.slalom, 10);
+		        				 cc.loader.loadJson("res/data/slalom.json", function(error, data) {
+		        					 app.slalom.game(data[0]);  
+		        				 });
 		        			 }   
 		        		 });
 		        	 }	
 		         },
 		         {
 		        	 x: 3072/2 + 215,
-	        	   y: 1536 - 1174 - 306,
-	        	   w: 306,
-	        	   h: 306,
-	        	   click: function () {
-	        		   app.menu = new Menu();	
-	        		   app.runStage(app.menu, 2);
+		        	 y: 1536 - 1174 - 306,
+		        	 w: 306,
+		        	 h: 306,
+		        	 click: function () {
+		        		 app.menu = new Menu();	
+		        		 app.runStage(app.menu, 2);
 	        	   }	
 	           }
 	           ]
@@ -125,6 +125,17 @@ var Slalom = cc.Layer.extend({
 		        	h     : 268,
 		        	click : function () {
 		        		app.runStage(new Slalom());
+		        	}
+		        },
+		     // Пауза
+		        {
+		        	x: 1536 - 250/2,
+		        	y: 1536 - 140,
+		        	h: 140,
+		        	w: 250,
+		        	click: function () {
+		        		cc.log('PAUSE!!!');
+		        		app.slalom.pause();
 		        	}
 		        }
 		        ]
@@ -165,8 +176,8 @@ var Slalom = cc.Layer.extend({
 		        	click: function () {
 			  	
 			  app.runStage(new Menu(), 2);
-		    }
-	      },
+		        	}
+		        },
 	     {
 		   x: 1536 - 953,
 		   y: 1536 - 750 - 270,
@@ -223,9 +234,80 @@ var Slalom = cc.Layer.extend({
 	help: function () {
 	  app.renderMenu(this, this.menuHelp, true);	
 	},
+	
+	
+	menuPause: {
+		back: 'res/coordination/pause-back.png',
+		areas: [
+		  {
+			  x: 1536 -488,
+			  y: 1536 - 483 - 278,
+			  h: 278,
+			  w: 278,
+			  click: function () {
+	    	  app.slalom.pauseLayer.removeFromParent(true);  
+	    	  app.slalom.scheduleUpdate();
+	    	  app.slalom.isPause = false;
+	    	  app.slalom.car.resume();
+	    	  app.slalom.pauseTime += new Date() - app.slalom.startPause;
+	    	  cc.audioEngine.resumeMusic();
+	    	  app.slalom.retFromPause = true;
+	    	}
+	     },
+	     {
+	    	x: 1536 - 78,
+	    	y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		      app.runStage(new Menu(), 2);
+		    }
+	     },
+		 {
+		   	x: 1536 + 291,
+		    y: 1536 - 483 - 278,
+		    h: 278,
+		    w: 278,
+		    click: function () {
+		    	app.slalom.pauseLayer.removeFromParent(true);  
+		    	cc.loader.loadJson("res/data/slalom.json", function(error, data) {
+       			 app.slalom.game(data[0]);  
+       		 });	
+		    }
+		 }
+	  ]
+	},
+	
+	isPause: false,
+    pauseTime: 0,
+	pause: function () {
+	  this.unscheduleUpdate();
+	  this.startPause = new Date();
+	  this.isPause = true;
+	  this.car.pause();
+	  this.pauseLayer = new cc.Layer();
+	  this.addChild(this.pauseLayer);
+	  app.renderMenu(this.pauseLayer, this.menuPause, false);
+	  cc.audioEngine.pauseMusic();
+	},
+	
+	
 	game: function (track) {
 	  app.renderMenu(this, this.menuGame, true);
+	  
+  	  // Пауза
+	  this.pauseTime = 0;
+	  this.isPause = false;
+	  var pause = new cc.Sprite('res/coordination/pause.png');
+	  pause.attr({
+		  x        : app.localX(1536),
+		  y        : app.localY(1536 - 69/2)
+	  });
+	  this.menu.addChild(pause, 1);
+	
+	  
 	  var car = new cc.Sprite(assets.car);
+	  this.car = car;
 	  car.attr({
 		  x        : app.localX(1536 + track.x),
 			y        : app.localY(1536 - track.y),
@@ -259,7 +341,7 @@ var Slalom = cc.Layer.extend({
 			//onTouchBegan event callback function                      
 			onTouchBegan: function (touch, event) { 
 				 var location = touch.getLocation();
-				 if (joystick.check(location.x, location.y)) {
+				 if (joystick.check(location.x, location.y) && (app.slalom.isPause == false) ) {
 	                 joystick.active = true;
 	                 car.update(joystick.get(location.x, location.y));
 	                 cc.log('YES');
