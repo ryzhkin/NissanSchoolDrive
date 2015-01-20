@@ -178,9 +178,11 @@ var Reaction = cc.Layer.extend({
 	  app.renderMenu(this, this.menuIntro, true);
 	},
 	game: function () {
-	  this.pauseTime = 0;	
 	  app.renderMenu(this, this.menuGame, true);
+	  
 	  // Пауза
+	  this.pauseTime = 0;
+	  this.isPause = false;
 	  var pause = new cc.Sprite('res/coordination/pause.png');
 	  pause.attr({
 		  x        : app.localX(1536 - 36),
