@@ -5,11 +5,20 @@ var Vision = cc.Layer.extend({
 	menuIntro: {
 		back: assets.visionIntroBack,
 		areas: [
+{
+	x: 3072/2 - 294,
+	y: 147 - 140,
+	h: 140,
+	w: 580,
+	click: function () {
+		app.runStage(new Menu(), 3);
+	}	
+},
 		        {
-		        	x: 1536 + 506,
-		        	y: 1536 - 1270 - 140,
+		        	x: 3072/2 + 360,
+		        	y: 147 - 140,
 		        	h: 140,
-		        	w: 396,
+		        	w: 580,
 		        	click: function () {
 		        		app.vision.game();  
 		        	}	
